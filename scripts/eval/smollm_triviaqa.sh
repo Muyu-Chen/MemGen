@@ -14,8 +14,8 @@ export NCCL_P2P_DISABLE=1
 export NCCL_ASYNC_DISABLE=1
 
 REASONER_MODEL="HuggingFaceTB/SmolLM3-3B"
-WEAVER_MODEL="models/Qwen2.5-1.5B-Instruct"   
-TRIGGER_MODEL="models/Qwen2.5-1.5B-Instruct"
+WEAVER_MODEL="Qwen/Qwen2.5-1.5B-Instruct"   
+TRIGGER_MODEL="Qwen/Qwen2.5-1.5B-Instruct"
 TRIGGER_ACTIVE=False
 
 DATASET_NAME="triviaqa"

@@ -1,6 +1,6 @@
 model: 
   # base llm
-  model_name: models/Qwen2.5-1.5B-Instruct
+  model_name: Qwen/Qwen2.5-1.5B-Instruct
   load_model_path: null
   
   # max prompt/inference augmentation num
@@ -9,7 +9,7 @@ model:
 
   # weaver configs
   weaver:
-    model_name: models/Qwen2.5-1.5B-Instruct
+    model_name: Qwen/Qwen2.5-1.5B-Instruct
     prompt_latents_len: 8
     inference_latents_len: 8
     
@@ -23,7 +23,7 @@ model:
 
   # trigger configs
   trigger:
-    model_name: models/Qwen2.5-1.5B-Instruct
+    model_name: Qwen/Qwen2.5-1.5B-Instruct
     active: False
    
     lora_config:
