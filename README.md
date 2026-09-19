@@ -1,115 +1,143 @@
-# MemGen: Weaving Generative Latent Memory for Self-Evolving Agents
+# MemGen Reproduction
 
+This is a fork of [MemGen](https://github.com/bingreeky/MemGen) (ICLR 2026) for reproduction purposes.
 
-## 👋 Introduction
-This repo is the official implementation of [**[ICLR 2026] MemGen: Weaving Generative Latent Memory for Self-Evolving Agents**](https://arxiv.org/pdf/2509.24704).
+Original README: [README-Origin.md](./README-Origin.md)
 
-Inspired by the human brain’s ability to dynamically integrate memory and reasoning, MemGen introduces a novel framework that empowers AI agents to evolve through experience—without relying on rigid parameter updates or external databases.
+## Directory Structure
 
-Unlike traditional approaches, MemGen generates latent memory tokens directly within the model’s reasoning stream. It features:
-- A Memory Trigger that decides when to recall memory.
-- A Memory Weaver that synthesizes past experiences into compact, latent sequences—seamlessly enriching ongoing reasoning.
-
-![alt text](assets/memgen.png)
-
-
-## ❓ FAQ
-
-#### Q1: Why does the code encounter issues when running on multiple GPUs?
-
-**A:** DDP is supported, but FSDP is not currently supported. Thank you for your understanding.
-
-
-#### Q2: Where is the multi-turn GRPO code (e.g., for AlfWorld and TriviaQA)?
-
-**A:** We plan to release the MemGen-GRPO eval/train scripts and checkpoints after releasing those for MemGen-SFT. Thank you for your patience and understanding.
-
-
-#### Q3: What improvements are included in the latest MemGen codebase?
-
-**A:** In the previous version, single-turn training did not use the ChatML template (for both the baseline and MemGen), which led to lower performance. In addition, we identified a small but impactful formatting issue: for the 1.5B model, whether the prompt ends with `\boxed{}` followed by `.` or `\n` significantly affects performance. In particular, appending  `\n` after *“Put your answer within \boxed{}”* can noticeably degrade results compared with appending `.`. While surprising, this behavior was consistent in our tests. The updated codebase consistently applies the ChatML template across all datasets and resolves these formatting inconsistencies. We still observe stable performance gains from MemGen under this unified setup.
-
-We apologize for any inconvenience caused by the earlier version.
-
-## 🌎 Setup
-
-Create and activate the MemGen environment:  
-Option 1: Install via `requirements.txt`
 ```
-conda create -n memgen python=3.10
-conda activate memgen
+.
+├── memgen/                  # MemGen source code (from original repo)
+├── configs/                 # Training & eval configs
+├── scripts/                 # Training & eval shell scripts
+├── main.py                  # Entry point
+├── requirements.txt         # Python dependencies
+├── reproduction/            # Reproduction scripts & logs
+│   ├── ab_compare.py        # A/B comparison: Base Model vs MemGen
+│   ├── test_cpu.py          # CPU end-to-end smoke test
+│   ├── test_ab.py           # Earlier A/B test variant
+│   ├── REPRODUCTION.md      # Full reproduction log
+│   ├── SETUP_REPORT.md      # Environment setup report
+│   ├── ENV_NOTES.md         # Environment notes & gotchas
+│   └── first-step.md        # Reproduction plan
+└── models/                  # (download separately, see below)
+    ├── Qwen2.5-1.5B-Instruct/
+    └── memgen-checkpoints/
+```
+
+## Environment Setup
+
+```bash
+# Python 3.11+ recommended
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# .venv\Scripts\activate   # Windows
+
 pip install -r requirements.txt
+# Additional: tensorboard is required but not listed in requirements.txt
+pip install tensorboard
 ```
 
-Option 2: Install via `memgen.yml`
-```
-conda env create -f memgen.yml
-conda activate memgen
-```
+### Key Dependencies
 
-Option 3: Set Up Search Environment  
-Please follow the instructions in the [Search-R1](https://github.com/PeterGriffinJin/Search-R1?tab=readme-ov-file#retriever-environment-optional) to configure the retriever environment.
+| Package | Version |
+|---------|---------|
+| torch | 2.7.1 (CUDA version for GPU) |
+| transformers | 4.55.4 |
+| accelerate | 1.10.1 |
+| peft | 0.17.1 |
+| trl | 0.21.0 |
+| datasets | 4.0.0 |
 
-## 🤗 Quick Evaluation
+## Model Download
 
-Below are several MemGen models based on Qwen2.5-1.5B-Instruct and SmolLM3-3B across multiple datasets. We are currently in the process of carefully validating additional checkpoints to ensure they are fully reproducible and can be released in a clean, one-click setup. We appreciate your patience as we complete this verification process.
+### 1. Base Model
 
-| model | dataset | mode | link | eval_script | train_script |
-|-------|---------|------|------|-------------|--------------|
-| Qwen2.5-1.5B-Instruct | KodCode | weaver-sft | [huggingface link](https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/kodcode/weaver-sft) | `scripts/eval/qwen2_5_kodcode_sft.sh` | `scripts/train/qwen2_5_kodcode_sft.sh` |
-| Qwen2.5-1.5B-Instruct | KodCode | weaver-grpo | [huggingface link](https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/kodcode/weaver-grpo) | `scripts/eval/qwen2_5_kodcode_grpo.sh` | `scripts/train/qwen2_5_kodcode_grpo.sh` |
-| Qwen2.5-1.5B-Instruct | GSM8K | weaver-sft | [huggingface link](https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft) | `scripts/eval/qwen2_5_gsm8k_sft.sh` | `scripts/train/qwen2_5_gsm8k_sft.sh` |
-| Qwen2.5-1.5B-Instruct | GSM8K | weaver-grpo | [huggingface link](https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/gsm8k/weaver-grpo) | `scripts/eval/qwen2_5_gsm8k_grpo.sh` | `scripts/train/qwen2_5_gsm8k_grpo.sh` |
-| Qwen2.5-1.5B-Instruct | TriviaQA | weaver-sft | [huggingface link](https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/triviaqa/weaver-sft) | `scripts/eval/qwen2_5_triviaqa.sh` | `scripts/train/qwen2_5_triviaqa.sh` |
-| SmolLM3-3B | KodCode | weaver-sft | [huggingface link](https://huggingface.co/Kana-s/MemGen/tree/main/SmolLM3-3B/kodcode/weaver-sft) | `scripts/eval/smollm_kodcode.sh` | `scripts/train/smollm_kodcode.sh` |
-| SmolLM3-3B | TriviaQA | weaver-sft | [huggingface link](https://huggingface.co/Kana-s/MemGen/tree/main/SmolLM3-3B/triviaqa/weaver-sft) | `scripts/eval/smollm_triviaqa.sh` | `scripts/train/smollm_triviaqa.sh` |
+The base model `Qwen/Qwen2.5-1.5B-Instruct` will be **automatically downloaded** from HuggingFace Hub when running scripts. No manual download needed.
 
+If you prefer to download manually (e.g., for offline use):
 
-If you prefer to evaluate the vanilla model instead of MemGen, simply modify `memgen/model/modeling_memgen.py` by replacing the current `generate` function (Lines 452–629) with the commented alternative `generate` implementation (Lines 379–450), and then run the standard evaluation script.
-
-
-## ▶️ How to Run
-MemGen consists of **two modules**: *Weaver* and *Trigger*. We follow a two-stage training approach, training each module separately.
-
-If you would like to reproduce results for a specific dataset + model, please refer to the table above. If the corresponding checkpoint is not yet available, we kindly ask for your patience as we are actively preparing more comprehensive releases.
-
-### Weaver Model
-- **Train the Weaver model**
-    ```bash
-    bash weaver_train.sh
-    ```
-
-- **Evaluate the Weaver model**  
-    Before running, make sure to update `LOAD_MODEL_PATH` in `eval.sh` to point to the trained checkpoint: `<weaver_dir>`
-    ```bash
-    bash eval.sh
-    ```
-
-### Trigger Model
-- **Train the Trigger model**
-    ```bash
-    bash trigger_train.sh
-    ```
-- **Evaluate the Trigger model**  
-    Before running, make sure to update `LOAD_MODEL_PATH` in `eval.sh` to point to the trained checkpoint: `<trigger_dir>`
-    ```bash
-    bash eval.sh
-    ```
-
-
-
-## 🫡 Citation
-If you find this repository helpful, a citation to our paper would be greatly appreciated:
-```
-@article{zhang2025memgen,
-  title={MemGen: Weaving Generative Latent Memory for Self-Evolving Agents},
-  author={Zhang, Guibin and Fu, Muxin and Yan, Shuicheng},
-  journal={arXiv preprint arXiv:2509.24704},
-  year={2025}
-}
+```bash
+# Using huggingface-cli
+huggingface-cli download Qwen/Qwen2.5-1.5B-Instruct --local-dir models/Qwen2.5-1.5B-Instruct
 ```
 
-## 🙏 Acknowledgement
-- We sincerely thank [Search-R1](https://github.com/PeterGriffinJin/Search-R1) for open-sourcing their search web environment.
-- We sincerely thank the previous latent reasoning works such as [LatentSeek](https://arxiv.org/abs/2505.13308), [SoftCoT](https://arxiv.org/abs/2502.12134), [R3Mem](https://arxiv.org/abs/2502.15957v1) and so on.
-- We also extend our heartfelt thanks to [LAVIS](https://github.com/salesforce/LAVIS) for their code framework design.
+If using a local copy, update `REASONER_MODEL`, `WEAVER_MODEL`, `TRIGGER_MODEL` in the eval scripts to point to the local path.
+
+### 2. MemGen Checkpoints
+
+Download from [Kana-s/MemGen](https://huggingface.co/Kana-s/MemGen/tree/main) and place in `models/memgen-checkpoints/`:
+
+```bash
+# Example: GSM8K weaver-sft checkpoint
+# Download from: https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft
+
+# Final directory structure should be:
+# models/memgen-checkpoints/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft/pn=1_pl=8_in=3_il=8/model/
+#   ├── projs.bin
+#   ├── weaver.bin
+#   ├── trigger.bin
+#   ├── config.json
+#   ├── weaver/weaver/adapter_model.safetensors
+#   └── trigger/trigger/adapter_model.safetensors
+```
+
+### Available Checkpoints
+
+| Base Model | Dataset | Method | HF Link |
+|---|---|---|---|
+| Qwen2.5-1.5B-Instruct | GSM8K | weaver-sft | [link](https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft) |
+| Qwen2.5-1.5B-Instruct | GSM8K | weaver-grpo | [link](https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/gsm8k/weaver-grpo) |
+| Qwen2.5-1.5B-Instruct | KodCode | weaver-sft | [link](https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/kodcode/weaver-sft) |
+| Qwen2.5-1.5B-Instruct | TriviaQA | weaver-sft | [link](https://huggingface.co/Kana-s/MemGen/tree/main/Qwen2.5-1.5B-Instruct/triviaqa/weaver-sft) |
+| SmolLM3-3B | KodCode | weaver-sft | [link](https://huggingface.co/Kana-s/MemGen/tree/main/SmolLM3-3B/kodcode/weaver-sft) |
+| SmolLM3-3B | TriviaQA | weaver-sft | [link](https://huggingface.co/Kana-s/MemGen/tree/main/SmolLM3-3B/triviaqa/weaver-sft) |
+
+## Running Evaluation
+
+```bash
+# GSM8K eval (Qwen2.5-1.5B-Instruct, weaver-sft)
+bash scripts/eval/qwen2_5_gsm8k_sft.sh
+
+# Other datasets / methods — see scripts/eval/
+```
+
+Edit `CUDA_VISIBLE_DEVICES` in the script to control which GPU(s) to use.
+
+## Known Issues
+
+### LoRA Adapter Name Mismatch
+
+The official checkpoints save LoRA weights with `adapter_name="default"` (keys end in `.lora_A.weight`), but `from_pretrained()` loads with `adapter_name="weaver"` / `"trigger"` (expects `.lora_A.weaver.weight`). This causes `PeftModel.from_pretrained()` to **silently skip all LoRA weights**.
+
+**Workaround**: Manually load the safetensors and remap the keys:
+
+```python
+# .lora_A.weight → .lora_A.weaver.weight
+# .lora_B.weight → .lora_B.weaver.weight
+```
+
+See `reproduction/ab_compare.py` for a working implementation.
+
+### flash_attention_2
+
+`modeling_memgen.py` hardcodes `attn_implementation="flash_attention_2"` and `torch_dtype=torch.bfloat16`. This requires:
+- NVIDIA GPU with Ampere or newer architecture
+- CUDA-compatible `flash-attn` package installed
+
+For CPU or older GPUs, you need to modify the attention implementation in `from_config()`.
+
+## CPU Validation Results
+
+Tested on Intel 8840H (no GPU) with 2 GSM8K questions:
+
+| | Base Model | MemGen |
+|---|---|---|
+| Output (100 tokens) | Generic steps, no answer | Correct solutions |
+| Q1 | Outline only | $18 |
+| Q2 | Outline only | \boxed{3} |
+
+**Conclusion**: MemGen checkpoint loads successfully and weaver latent memory effectively changes reasoner behavior.
+
+See `reproduction/REPRODUCTION.md` for full details.
