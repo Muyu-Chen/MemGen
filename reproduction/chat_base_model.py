@@ -25,7 +25,7 @@ def main():
     parser = argparse.ArgumentParser(description="Chat with base model")
     parser.add_argument("--model", type=str, default=DEFAULT_MODEL,
                         help="Model name or path (default: %(default)s)")
-    parser.add_argument("--max-new-tokens", type=int, default=512)
+    parser.add_argument("--max-new-tokens", type=int, default=256)
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--top-p", type=float, default=0.9)
     args = parser.parse_args()

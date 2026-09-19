@@ -163,7 +163,7 @@ def main():
     parser = argparse.ArgumentParser(description="Chat with MemGen (Base + Weaver)")
     parser.add_argument("--base-model", type=str, default=DEFAULT_BASE_MODEL)
     parser.add_argument("--checkpoint", type=str, default=DEFAULT_CHECKPOINT)
-    parser.add_argument("--max-new-tokens", type=int, default=512)
+    parser.add_argument("--max-new-tokens", type=int, default=256)
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--top-p", type=float, default=0.9)
     args = parser.parse_args()

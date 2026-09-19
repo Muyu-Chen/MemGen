@@ -133,22 +133,22 @@ python reproduction/chat_memgen.py
 
 **简单题（Base 可能也能做对）：**
 ```
-Janet's ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells every duck egg at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?
+Janet 养了 16 只鸭子，每天下 16 个蛋。她每天早上吃 3 个，每天烤 muffin 用掉 4 个。剩下的蛋她在农贸市场以每个 2 美元的价格出售。她每天在农贸市场能赚多少钱？
 ```
 
 **中等题（Base 容易出错）：**
 ```
-A robe takes 2 bolts of blue fiber and half that much white fiber. How many bolts in total does it take?
+一件袍子需要 2 卷蓝色纤维和蓝色纤维一半数量的白色纤维。总共需要多少卷纤维？
 ```
 
 **复杂题（Base 大概率失败）：**
 ```
-Josh has a piggy bank. He starts with $10 in the bank. Every week, he adds $5 to the piggy bank. After 4 weeks, he takes out half of the money to buy a new game. The next week, he adds $5 again. How much money is in the piggy bank now?
+Josh 有一个存钱罐，里面有 10 美元。他每周往存钱罐里加 5 美元。4 周后，他取出一半的钱买了一个新游戏。下一周，他又加了 5 美元。现在存钱罐里有多少钱？
 ```
 
 **多步推理（最能看出差异）：**
 ```
-There are 20 students in a class. 3/5 of the students are girls. If 2/3 of the girls and all of the boys are on the honor roll, how many students are on the honor roll?
+一个班级有 20 名学生。3/5 的学生是女生。如果 2/3 的女生和所有男生都在荣誉榜上，荣誉榜上有多少名学生？
 ```
 
 建议先跑最后一题，Base Model 大概率给不出完整答案，MemGen 应能正确推理出 **12 人**。
