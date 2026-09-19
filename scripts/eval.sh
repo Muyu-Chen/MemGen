@@ -13,11 +13,11 @@ export NCCL_P2P_DISABLE=1
 export NCCL_ASYNC_DISABLE=1
 
 # options:
-# - Qwen/Qwen2.5-1.5B-Instruct
+# - models/Qwen2.5-1.5B-Instruct
 # - HuggingFaceTB/SmolLM3-3B
-REASONER_MODEL="Qwen/Qwen2.5-1.5B-Instruct"
-WEAVER_MODEL="Qwen/Qwen2.5-1.5B-Instruct"   
-TRIGGER_MODEL="Qwen/Qwen2.5-1.5B-Instruct"
+REASONER_MODEL="models/Qwen2.5-1.5B-Instruct"
+WEAVER_MODEL="models/Qwen2.5-1.5B-Instruct"   
+TRIGGER_MODEL="models/Qwen2.5-1.5B-Instruct"
 TRIGGER_ACTIVE=False
 
 

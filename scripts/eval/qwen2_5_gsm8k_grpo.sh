@@ -13,9 +13,9 @@ export NCCL_IB_DISABLE=1
 export NCCL_P2P_DISABLE=1
 export NCCL_ASYNC_DISABLE=1
 
-REASONER_MODEL="Qwen/Qwen2.5-1.5B-Instruct"
-WEAVER_MODEL="Qwen/Qwen2.5-1.5B-Instruct"   
-TRIGGER_MODEL="Qwen/Qwen2.5-1.5B-Instruct"
+REASONER_MODEL="models/Qwen2.5-1.5B-Instruct"
+WEAVER_MODEL="models/Qwen2.5-1.5B-Instruct"   
+TRIGGER_MODEL="models/Qwen2.5-1.5B-Instruct"
 TRIGGER_ACTIVE=False
 
 DATASET_NAME="gsm8k"
@@ -27,7 +27,7 @@ INFERENCE_LATENTS_LEN=8
 
 BATCH_SIZE=4
 
-LOAD_MODEL_PATH="MemGen/Qwen2.5-1.5B-Instruct/gsm8k/weaver-grpo/pn=1_pl=8_in=0_il=8"
+LOAD_MODEL_PATH="models/memgen-checkpoints/Qwen2.5-1.5B-Instruct/gsm8k/weaver-grpo/pn=1_pl=8_in=0_il=8"
 
 # evaluate
 python -m accelerate.commands.launch \
