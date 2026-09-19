@@ -6,8 +6,9 @@ from typing import Union
 from peft import PeftModel
 import torch
 import torch.nn as nn
+from safetensors.torch import load_file as safe_load_file
 from transformers import (
-    AutoModelForCausalLM, 
+    AutoModelForCausalLM,
     AutoTokenizer,
     GenerationConfig,
     DynamicCache
@@ -27,6 +28,51 @@ from memgen.utils import (
     fix_model_parameters,
     log_trainable_params
 )
+
+
+def _remap_lora_adapter_key(key: str, adapter_name: str) -> str:
+    """Remap LoRA checkpoint keys from adapter_name='default' to a named adapter.
+
+    Checkpoints saved via PeftModel.save_pretrained use adapter_name='default',
+    producing keys like ``...lora_A.weight``.  MemGen creates adapters with
+    ``adapter_name='weaver'`` / ``'trigger'``, so the model expects keys like
+    ``...lora_A.weaver.weight``.  Without remapping, PeftModel.from_pretrained
+    silently drops every LoRA weight.
+    """
+    for lora_part in [".lora_A.weight", ".lora_B.weight"]:
+        if key.endswith(lora_part):
+            middle = lora_part.replace(".weight", "")
+            return key[: -len(lora_part)] + f"{middle}.{adapter_name}.weight"
+    return key
+
+
+def _load_lora_adapter_into_model(peft_model, adapter_dir, adapter_name):
+    """Manually load a LoRA adapter checkpoint with key remapping.
+
+    Replaces ``PeftModel.from_pretrained(..., adapter_name=...)`` which silently
+    fails when the checkpoint was saved with ``adapter_name='default'``.
+    """
+    adapter_path = os.path.join(adapter_dir, "adapter_model.safetensors")
+    ckpt_sd = safe_load_file(adapter_path, device="cpu")
+
+    model_sd = peft_model.state_dict()
+    remapped = {}
+    for k, v in ckpt_sd.items():
+        new_key = _remap_lora_adapter_key(k, adapter_name)
+        if new_key in model_sd:
+            remapped[new_key] = v
+
+    missing, unexpected = peft_model.load_state_dict(remapped, strict=False)
+    lora_missing = [k for k in missing if "lora_" in k]
+    if lora_missing:
+        logging.warning(
+            "Adapter '%s': %d LoRA keys missing after remapping (e.g. %s)",
+            adapter_name, len(lora_missing), lora_missing[:3],
+        )
+    logging.info(
+        "Adapter '%s': loaded %d/%d keys from %s",
+        adapter_name, len(remapped), len(ckpt_sd), adapter_path,
+    )
 
 class MemGenModel(PreTrainedModel, MemGenLoraSwitchMixin, MemGenGenerationMixin):
     config_class = MemGenConfig
@@ -766,17 +812,20 @@ class MemGenModel(PreTrainedModel, MemGenLoraSwitchMixin, MemGenGenerationMixin)
         trigger_state = torch.load(trigger_path, map_location="cpu")
         model.trigger.output_layer.load_state_dict(trigger_state["output_layer"])
 
-        model.weaver.model = PeftModel.from_pretrained(
-            model.weaver.model.base_model,
+        # __init__ already created PeftModel with named adapters ("weaver"/"trigger").
+        # The checkpoint was saved with adapter_name="default", so we manually load
+        # the safetensors and remap keys to match the named adapters.
+        _load_lora_adapter_into_model(
+            model.weaver.model,
             os.path.join(load_directory, "weaver", "weaver"),
-            adapter_name=MemGenWeaver.adapter_name,
+            MemGenWeaver.adapter_name,
         )
         model.weaver.model.set_adapter(MemGenWeaver.adapter_name)
 
-        model.trigger.model = PeftModel.from_pretrained(
-            model.trigger.model.base_model,
+        _load_lora_adapter_into_model(
+            model.trigger.model,
             os.path.join(load_directory, "trigger", "trigger"),
-            adapter_name=MemGenTrigger.adapter_name,
+            MemGenTrigger.adapter_name,
         )
         model.trigger.model.set_adapter(MemGenTrigger.adapter_name)
 

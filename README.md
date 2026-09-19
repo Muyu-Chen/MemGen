@@ -15,6 +15,8 @@ Original README: [README-Origin.md](./README-Origin.md)
 ├── requirements.txt         # Python dependencies
 ├── reproduction/            # Reproduction scripts & logs
 │   ├── ab_compare.py        # A/B comparison: Base Model vs MemGen
+│   ├── chat_base_model.py   # Interactive chat: base model only
+│   ├── chat_memgen.py       # Interactive chat: MemGen (base + weaver)
 │   ├── test_cpu.py          # CPU end-to-end smoke test
 │   ├── test_ab.py           # Earlier A/B test variant
 │   ├── REPRODUCTION.md      # Full reproduction log
@@ -105,20 +107,46 @@ bash scripts/eval/qwen2_5_gsm8k_sft.sh
 
 Edit `CUDA_VISIBLE_DEVICES` in the script to control which GPU(s) to use.
 
-## Known Issues
+## Interactive Chat
 
-### LoRA Adapter Name Mismatch
+Two scripts for hands-on comparison — type a question, get an answer:
 
-The official checkpoints save LoRA weights with `adapter_name="default"` (keys end in `.lora_A.weight`), but `from_pretrained()` loads with `adapter_name="weaver"` / `"trigger"` (expects `.lora_A.weaver.weight`). This causes `PeftModel.from_pretrained()` to **silently skip all LoRA weights**.
+```bash
+# Activate venv first
+source .venv/bin/activate        # Linux/Mac
+# .venv\Scripts\activate         # Windows
 
-**Workaround**: Manually load the safetensors and remap the keys:
+# 1. Base model only (Qwen2.5-1.5B-Instruct, no MemGen)
+python reproduction/chat_base_model.py
 
-```python
-# .lora_A.weight → .lora_A.weaver.weight
-# .lora_B.weight → .lora_B.weaver.weight
+# 2. MemGen (Base + Weaver latent memory, GSM8K checkpoint)
+python reproduction/chat_memgen.py
 ```
 
-See `reproduction/ab_compare.py` for a working implementation.
+Both scripts support `--max-new-tokens`, `--temperature`, `--top-p`. The MemGen script also supports `--checkpoint` to point to a different checkpoint.
+
+Type `clear` to reset conversation history, `quit` to exit.
+
+## Known Issues
+
+### LoRA Adapter Name Mismatch (Fixed)
+
+**Root cause**: The official checkpoints save LoRA weights with `adapter_name="default"` (keys end in `.lora_A.weight`), but `MemGenModel.__init__` creates PeftModel with `adapter_name="weaver"` / `"trigger"` (keys expect `.lora_A.weaver.weight`). When `from_pretrained()` calls `PeftModel.from_pretrained(..., adapter_name="weaver")`, PEFT silently skips all 112 LoRA weights because the key names don't match.
+
+**Symptom**: Model loads without error, but weaver/trigger LoRA weights remain at random initialization. Outputs are identical to the base model — the latent memory has no effect.
+
+**Fix applied**: Replaced `PeftModel.from_pretrained()` in `modeling_memgen.py:from_pretrained()` with manual safetensors loading + key remapping:
+
+```
+.lora_A.weight → .lora_A.weaver.weight  (for weaver adapter)
+.lora_B.weight → .lora_B.weaver.weight
+.lora_A.weight → .lora_A.trigger.weight (for trigger adapter)
+.lora_B.weight → .lora_B.trigger.weight
+```
+
+The fix is in `memgen/model/modeling_memgen.py` (functions `_remap_lora_adapter_key` and `_load_lora_adapter_into_model`).
+
+**Verification**: `reproduction/ab_compare.py` confirms that after the fix, MemGen outputs differ from the base model (correct solutions vs generic outlines on GSM8K).
 
 ### flash_attention_2
 
