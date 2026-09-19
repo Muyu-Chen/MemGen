@@ -16,7 +16,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
-DEFAULT_MODEL = "Qwen/Qwen2.5-1.5B-Instruct"
+DEFAULT_MODEL = os.path.join(_PROJECT_ROOT, "models/Qwen2.5-1.5B-Instruct")
+if not os.path.isdir(DEFAULT_MODEL):
+    DEFAULT_MODEL = "Qwen/Qwen2.5-1.5B-Instruct"
 
 
 def main():

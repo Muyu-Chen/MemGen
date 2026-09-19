@@ -27,7 +27,9 @@ from memgen.model.modeling_memgen import MemGenModel
 from memgen.model.modeling_memgen import _remap_lora_adapter_key
 from safetensors.torch import load_file as safe_load_file
 
-DEFAULT_BASE_MODEL = "Qwen/Qwen2.5-1.5B-Instruct"
+DEFAULT_BASE_MODEL = os.path.join(_PROJECT_ROOT, "models/Qwen2.5-1.5B-Instruct")
+if not os.path.isdir(DEFAULT_BASE_MODEL):
+    DEFAULT_BASE_MODEL = "Qwen/Qwen2.5-1.5B-Instruct"
 DEFAULT_CHECKPOINT = os.path.join(
     _PROJECT_ROOT,
     "models/memgen-checkpoints/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft/pn=1_pl=8_in=3_il=8/model",
