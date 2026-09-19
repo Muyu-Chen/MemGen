@@ -12,7 +12,8 @@ import os
 import time
 import copy
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "MemGen"))
+_PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
@@ -20,8 +21,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 from memgen.model.configuration_memgen import MemGenConfig
 from memgen.model.modeling_memgen import MemGenModel
 
-BASE_MODEL_PATH = "models/Qwen2.5-1.5B-Instruct"
-CHECKPOINT_PATH = "models/memgen-checkpoints/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft/pn=1_pl=8_in=3_il=8/model"
+BASE_MODEL_PATH = os.path.join(_PROJECT_ROOT, "models/Qwen2.5-1.5B-Instruct")
+CHECKPOINT_PATH = os.path.join(_PROJECT_ROOT, "models/memgen-checkpoints/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft/pn=1_pl=8_in=3_il=8/model")
 
 # 2 GSM8K test questions (from the official test set) — kept small for CPU speed
 GSM8K_QUESTIONS = [

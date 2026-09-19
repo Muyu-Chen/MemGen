@@ -8,7 +8,8 @@ import time
 import json
 import re
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "MemGen"))
+_PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
@@ -17,8 +18,8 @@ from datasets import load_dataset
 from memgen.model.configuration_memgen import MemGenConfig
 from memgen.model.modeling_memgen import MemGenModel
 
-BASE_MODEL_PATH = "models/Qwen2.5-1.5B-Instruct"
-MEMGEN_CKPT_PATH = "models/memgen-checkpoints/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft/pn=1_pl=8_in=3_il=8/model"
+BASE_MODEL_PATH = os.path.join(_PROJECT_ROOT, "models/Qwen2.5-1.5B-Instruct")
+MEMGEN_CKPT_PATH = os.path.join(_PROJECT_ROOT, "models/memgen-checkpoints/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft/pn=1_pl=8_in=3_il=8/model")
 NUM_SAMPLES = 5
 MAX_NEW_TOKENS = 128
 
