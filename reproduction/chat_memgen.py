@@ -176,7 +176,7 @@ def main():
     print("  Commands: 'quit'/'exit' to stop, 'clear' to reset history.")
     print("=" * 60)
 
-    messages = []
+    messages = [{"role": "system", "content": "请用中文回答用户的问题。"}]
 
     while True:
         try:
@@ -191,7 +191,7 @@ def main():
             print("Bye!")
             break
         if user_input.lower() == "clear":
-            messages.clear()
+            messages = [{"role": "system", "content": "请用中文回答用户的问题。"}]
             print("[History cleared]")
             continue
 

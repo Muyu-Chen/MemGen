@@ -127,6 +127,32 @@ python reproduction/chat_memgen.py
 
 输入 `clear` 重置对话历史，`quit` 退出。
 
+### 推荐测试题目
+
+以下题目可有效展示 Base Model 与 MemGen 的差异（MemGen 使用 GSM8K 检查点）：
+
+**简单题（Base 可能也能做对）：**
+```
+Janet's ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells every duck egg at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?
+```
+
+**中等题（Base 容易出错）：**
+```
+A robe takes 2 bolts of blue fiber and half that much white fiber. How many bolts in total does it take?
+```
+
+**复杂题（Base 大概率失败）：**
+```
+Josh has a piggy bank. He starts with $10 in the bank. Every week, he adds $5 to the piggy bank. After 4 weeks, he takes out half of the money to buy a new game. The next week, he adds $5 again. How much money is in the piggy bank now?
+```
+
+**多步推理（最能看出差异）：**
+```
+There are 20 students in a class. 3/5 of the students are girls. If 2/3 of the girls and all of the boys are on the honor roll, how many students are on the honor roll?
+```
+
+建议先跑最后一题，Base Model 大概率给不出完整答案，MemGen 应能正确推理出 **12 人**。
+
 ## 已知问题
 
 ### LoRA Adapter 名称不匹配（已修复）
