@@ -6,26 +6,61 @@
 
 ## 目录结构
 
+模型权重放在仓库之外，与仓库目录同级：
+
 ```
-.
-├── memgen/                  # MemGen 源码（来自原始仓库）
-├── configs/                 # 训练 & 评估配置
-├── scripts/                 # 训练 & 评估脚本
+.                          # 工作区根（不是 git 仓库）
+├── MemGen/                # ← git 仓库，以下各层都在这里
+├── models/                # （需单独下载，见下文，不纳入版本控制）
+│   ├── Qwen2.5-1.5B-Instruct/
+│   └── memgen-checkpoints/
+└── .venv/
+```
+
+```
+MemGen/
 ├── main.py                  # 入口文件
+├── memgen/                  # MemGen 源码（模型、trainer、配置定义）
+├── configs/                 # 训练 & 评估配置（latent_memory、zero2）
+├── scripts/                 # 训练 & 评估脚本（train / eval）
+├── data/                    # 数据集构建器与环境基类（gsm8k / kodcode / triviaqa / gpqa）
+├── interactions/            # 评估时的交互生成循环（single / multi-turn）
+├── common/                  # 通用工具（config、logger）
+├── assets/                  # 图片资源
+├── memgen.yml               # conda 环境定义
 ├── requirements.txt         # Python 依赖
-├── reproduction/            # 复现脚本 & 日志
-│   ├── ab_compare.py        # A/B 对比：基础模型 vs MemGen
-│   ├── chat_base_model.py   # 交互对话：仅基础模型
-│   ├── chat_memgen.py       # 交互对话：MemGen（基础模型 + Weaver）
-│   ├── test_cpu.py          # CPU 端到端冒烟测试
-│   ├── test_ab.py           # 早期 A/B 测试
-│   ├── REPRODUCTION.md      # 完整复现日志
-│   ├── SETUP_REPORT.md      # 环境配置报告
-│   ├── ENV_NOTES.md         # 环境注意事项
-│   └── first-step.md        # 复现计划
-└── models/                  # （需单独下载，见下文）
-    ├── Qwen2.5-1.5B-Instruct/
-    └── memgen-checkpoints/
+├── README-Origin.md         # 原始仓库 README
+└── reproduction/            # 复现脚本 & 记录
+    ├── first-step.md                    # 复现计划（准备阶段）
+    ├── SETUP_REPORT.md                  # 环境配置报告
+    ├── ENV_NOTES.md                     # 与官方 requirements.txt 的环境偏差
+    ├── REPRODUCTION.md                  # 复现过程与结果日志
+    ├── MEMGEN_ARCHITECTURE_EXPLAINED.md # 工作流程与架构解析
+    ├── chat_base_model.py               # 交互对话：仅基础模型
+    ├── chat_memgen.py                   # 交互对话：基础模型 + Weaver 潜在记忆
+    ├── ab_compare.py                    # A/B 对比：基础模型 vs MemGen
+    ├── test_ab.py                       # 早期 A/B 测试（CPU）
+    ├── test_cpu.py                      # CPU 端到端冒烟测试
+    ├── eval_gsm8k_cpu.py                # CPU 上 GSM8K 子集准确率对比
+    ├── full_memgen_diagnostic.py        # Base / Weaver-only / 完整 MemGen 三模式对比
+    ├── sanity_check_bilingual.py        # 2×2：语言（中/英）× 模型（Base/MemGen）
+    ├── quick_always0_check.py           # 直接查看 always_0 的原始输出
+    ├── verify_always0_control.py        # always_0 monkey-patch vs 纯基础模型
+    ├── trigger_instrumentation.py       # 逐增强点记录 Trigger logits/softmax/决策
+    ├── trigger_three_way_probe.py       # always_0 / trained / always_1 三方对照
+    ├── verify_tensor_trace.py           # 单题 tensor 级数据流验证
+    ├── memgen_full_trace.py             # 单题深度 instrumentation
+    ├── phase1_results/                  # Trigger 阶段一产物（4 个 json/jsonl）
+    └── wholeProcess/                    # 一次官方 inference 的完整执行取证
+        ├── README.md                    # 任务书
+        ├── FULL_EXECUTION_TRACE.md      # 主文档：逐步执行 trace
+        ├── PARAMETER_FLOW.md            # 参数与张量流向
+        ├── CORRECTIONS_NEEDED.md        # 对既有文档的更正清单
+        ├── trace_memgen.py              # 运行入口
+        ├── hooks.py                     # forward hook / wrapper 采集层
+        ├── fingerprint_checkpoint.py    # checkpoint 训练痕迹指纹
+        ├── logs/                        # 运行日志与环境/参数/张量快照
+        └── results/                     # 样本输出
 ```
 
 ## 环境配置

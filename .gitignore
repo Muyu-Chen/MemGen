@@ -4,7 +4,7 @@ stuff/
 .cursor/
 interactions/
 outputs/
-logs/
+/logs/
 *.log
 debug_log*.txt
 
