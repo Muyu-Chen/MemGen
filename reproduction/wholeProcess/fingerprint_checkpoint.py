@@ -15,8 +15,9 @@ import os
 import torch
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, os.pardir, os.pardir))
-CKPT = os.path.join(ROOT, "models", "memgen-checkpoints", "Qwen2.5-1.5B-Instruct",
+REPO = os.path.abspath(os.path.join(HERE, os.pardir, os.pardir))
+WORKSPACE_ROOT = os.path.abspath(os.path.join(REPO, os.pardir))
+CKPT = os.path.join(WORKSPACE_ROOT, "models", "memgen-checkpoints", "Qwen2.5-1.5B-Instruct",
                     "gsm8k", "weaver-sft", "pn=1_pl=8_in=3_il=8", "model")
 HIDDEN = 1536
 

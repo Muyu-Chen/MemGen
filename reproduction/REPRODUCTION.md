@@ -19,7 +19,7 @@
 ## Environment
 
 - **Python**: 3.11.9
-- **venv path**: `E:\MemoryProject\MemGen\Reproduct\.venv`
+- **venv path**: `../.venv` （相对于 MemGen 源码仓库根目录）
 - **torch**: 2.7.1+cpu (CPU-only, 无 CUDA)
 - **transformers**: 4.55.4
 - **accelerate**: 1.10.1
@@ -35,7 +35,7 @@
 
 ## Model Paths
 
-- **Base model**: `E:\MemoryProject\MemGen\Reproduct\models\Qwen2.5-1.5B-Instruct`
+- **Base model**: `../models/Qwen2.5-1.5B-Instruct` （相对于 MemGen 源码仓库根目录）
   - 来源: HuggingFace `Qwen/Qwen2.5-1.5B-Instruct`
   - 大小: 2.9 GB
   - 文件完整: config.json, model.safetensors, tokenizer.json, tokenizer_config.json, vocab.json, merges.txt, generation_config.json

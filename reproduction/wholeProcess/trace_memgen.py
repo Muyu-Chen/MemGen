@@ -27,16 +27,18 @@ import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, os.pardir, os.pardir))          # .../Reproduct
-REPO = os.environ.get("MEMGEN_REPO", os.path.join(ROOT, "MemGen"))
+REPO = os.environ.get(
+    "MEMGEN_REPO", os.path.abspath(os.path.join(HERE, os.pardir, os.pardir)))
+WORKSPACE_ROOT = os.path.abspath(os.path.join(REPO, os.pardir))
 sys.path.insert(0, REPO)
 sys.path.insert(0, HERE)
 
 BASE_MODEL = os.environ.get(
-    "MEMGEN_BASE_MODEL", os.path.join(ROOT, "models", "Qwen2.5-1.5B-Instruct"))
+    "MEMGEN_BASE_MODEL",
+    os.path.join(WORKSPACE_ROOT, "models", "Qwen2.5-1.5B-Instruct"))
 CKPT = os.environ.get(
     "MEMGEN_CKPT",
-    os.path.join(ROOT, "models", "memgen-checkpoints", "Qwen2.5-1.5B-Instruct",
+    os.path.join(WORKSPACE_ROOT, "models", "memgen-checkpoints", "Qwen2.5-1.5B-Instruct",
                  "gsm8k", "weaver-sft", "pn=1_pl=8_in=3_il=8", "model"))
 
 LOGS = os.path.join(HERE, "logs")

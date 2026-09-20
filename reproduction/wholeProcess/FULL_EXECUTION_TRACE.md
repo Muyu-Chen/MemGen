@@ -615,12 +615,13 @@ She sells the 9 eggs for $2 each, so she makes 9 * $2 = $<<9*2=18>>18 every day 
 ## 9. 复现方式
 
 ```bash
-cd E:/MemoryProject/MemGen/Reproduct/reproduction/wholeProcess
-../../.venv/Scripts/python.exe trace_memgen.py --max-new-tokens 256      # 约 60 s
-../../.venv/Scripts/python.exe fingerprint_checkpoint.py                 # 只读 checkpoint 文件
+# 从 MemGen 源码仓库根目录开始
+cd reproduction/wholeProcess
+../../../.venv/Scripts/python.exe trace_memgen.py --max-new-tokens 256   # 约 60 s
+../../../.venv/Scripts/python.exe fingerprint_checkpoint.py              # 只读 checkpoint 文件
 ```
 
-默认路径写死为本机本地模型（`Reproduct/models/...`），可用环境变量覆盖：
+默认路径由脚本位置推导：源码仓库是 `../../`，模型目录是仓库同级的 `../../../models/`。可用环境变量覆盖：
 `MEMGEN_REPO`、`MEMGEN_BASE_MODEL`、`MEMGEN_CKPT`；
 GPU 环境下 base model 的 hub id 是 `Qwen/Qwen2.5-1.5B-Instruct`。
 

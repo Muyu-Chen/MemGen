@@ -2,9 +2,9 @@
 
 `https://github.com/bingreeky/MemGen`
 
-今晚只完成准备工作，不开始正式训练，也不要修改 MemGen 的算法源码。
-```
-E:\MemoryProject\MemGen\Reproduct>python --version
+今晚只完成准备工作，不开始正式训练，也不要修改 MemGen 的算法源码。从工作区根目录（源码仓库 `MemGen/` 的上一层）运行：
+```powershell
+.\.venv\Scripts\python.exe --version
 Python 3.11.9
 ```
 需要完成：

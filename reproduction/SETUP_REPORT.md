@@ -11,7 +11,7 @@
 |------|-----|
 | MemGen commit | `970cc95af99b5008610e6b281619d181bc9b5ab9` |
 | Python 版本 | 3.11.9 |
-| venv 路径 | `E:\MemoryProject\MemGen\Reproduct\.venv` |
+| venv 路径 | `../.venv` （相对于 MemGen 源码仓库根目录） |
 | torch 版本 | 2.7.1+cpu |
 | transformers 版本 | 4.55.4 |
 
@@ -66,15 +66,15 @@
 
 ## 文件清单
 
-```
-E:\MemoryProject\MemGen\Reproduct\
-├── .gitignore              # 排除 venv, models, MemGen 等大文件目录
-├── .venv/                  # Python 虚拟环境
-├── first-step.md           # 原始任务说明
-├── ENV_NOTES.md            # 环境偏差记录
-├── REPRODUCTION.md         # 复现日志 (详细)
-├── SETUP_REPORT.md         # 本报告
+```text
+.                              # 工作区根目录（不是 Git 仓库）
+├── .venv/                      # Python 虚拟环境
 ├── models/
 │   └── Qwen2.5-1.5B-Instruct/  # Base model (2.9 GB)
-└── MemGen/                 # 官方仓库克隆 (未修改)
+└── MemGen/                     # MemGen 源码 Git 仓库
+    └── reproduction/
+        ├── first-step.md       # 原始任务说明
+        ├── ENV_NOTES.md        # 环境偏差记录
+        ├── REPRODUCTION.md     # 复现日志（详细）
+        └── SETUP_REPORT.md     # 本报告
 ```
