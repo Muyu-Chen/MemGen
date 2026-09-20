@@ -1,5 +1,32 @@
 # CORRECTIONS_NEEDED —— 本次 trace 与既有文档的冲突清单
 
+> ## ✅ 落实状态（2026-09-20 更新）
+>
+> 本清单的 A 组 6 条与 B 组 10 条**已全部应用**到旧文档，每条下方标注了改动位置。
+> 原始清单文字保留不删改，便于追溯；只有 A1 的一处数字描述被发现不够准确，
+> 已在原文用「**勘误**」标出并给出实测值。
+>
+> | 项 | 状态 | 落实到 |
+> |---|---|---|
+> | A1 | ✅ 已改 | `MEMGEN_ARCHITECTURE_EXPLAINED.md`：流程图第 4 步 + Step 3 + 新增章节「Trigger 门控的真实判据」+ 配置参数节的 `delimiters` 注释 |
+> | A2 | ✅ 已改 | `REPRODUCTION.md`：发现 #6 观察项划掉并指向新增的**发现 #8** |
+> | A3 | ✅ 已改 | `MEMGEN_ARCHITECTURE_EXPLAINED.md`：配置参数节的「修正」块 |
+> | A4 | ✅ 已改 | `MEMGEN_ARCHITECTURE_EXPLAINED.md`：新增章节「达到 max_inference_aug_num 后循环整体跳出」 |
+> | A5 | ✅ 已改 | `REPRODUCTION.md`：发现 #1 顶部加配置标注 + `active=False` 实测对照块；发现 #6 标题原已注明 `active=True` |
+> | A6 | ✅ 已改 | `MEMGEN_ARCHITECTURE_EXPLAINED.md`：新增小节「yaml 与 checkpoint config 互相矛盾」 |
+> | B1–B10 | ✅ 已补 | `MEMGEN_ARCHITECTURE_EXPLAINED.md`：新增章节「执行级 trace 补充的关键事实」（11 条，含 B 组全部 + latent 非词表近似） |
+> | C | — | 无需改动，结论仍成立 |
+>
+> 另外顺带修正了两处与本清单无关但已过期的表述：
+> - `REPRODUCTION.md` 头部 `Working tree: clean (no modifications)` →
+>   改为注明现已含 `modeling_memgen.py` 与 `memgen/utils.py` 两处本地修改
+>   （`git diff --stat 970cc95 HEAD -- memgen/` 实测确认仅这两个文件）。
+> - `MEMGEN_ARCHITECTURE_EXPLAINED.md` 头部只提 tensor trace →
+>   补充第二轮执行级 trace 作为验证来源。
+>
+> **本清单中一处行号勘误**：bf16 转换在 `runner.py:224`（不是 225）；
+> 旧文档已按 224 写入。
+
 按 README 第 10 节要求：**不直接修改旧文档**，先把需要改的地方列在这里。
 每条都给出：旧表述（文件:行号）→ 实测事实 → 证据位置。
 
@@ -9,7 +36,7 @@
 
 ## A. 需要改正的描述
 
-### A1. "遇 delimiter 再问 Trigger" 在代码层面不成立（最重要）
+### A1. "遇 delimiter 再问 Trigger" 在代码层面不成立（最重要）　✅ 已落实
 
 > `MEMGEN_ARCHITECTURE_EXPLAINED.md:32`
 > `-> 4. Reasoner Generation（逐 token，遇 delimiter 再问 Trigger，最多 3 次）`
@@ -22,20 +49,30 @@
 
 本题 111 个生成步里，只有 **2 步**的 token id 落在该集合（都是 `,`=11）；
 id 13（句号）与 id 198（换行）各出现 **0 次**。
-而生成的文本里有 3 处"句号+换行"——它们被 BPE 合并成**单个 token id 624**，
-既不等于 13 也不等于 198，因此**系统性漏检**。
+而生成的文本里有 3 处含句号/换行的位置因 BPE 合并而漏检。
+
+> **勘误（本清单原文写「3 处『句号+换行』被合并成 id 624」，不够准确）**
+> `logs/delimiter_check.txt` 实测是 **2 处 id 624（`.\n`）+ 1 处 id 7110（`.\`，在 `\boxed` 之前）**：
+> ```
+> step  38  id= 624  tok='.Ċ'
+> step  66  id= 624  tok='.Ċ'
+> step 105  id=7110  tok='.\'
+> ```
+> 结论方向不变，而且**更强**：漏检不限于「句号+换行」，
+> 任何与句号粘连成单 token 的后续字符（`\n`、`\`、`T`…）都会绕过门控。
+> 已按准确版本写入 `MEMGEN_ARCHITECTURE_EXPLAINED.md` 与 `REPRODUCTION.md` 发现 #8。
 
 建议改成：*每个 token 之后检查；只有当该 token 的 id 恰好是 `,`/`.`/`\n` 单独成 token 的三个 id
 (11/13/198) 之一时，才成为 augmentation candidate。句子边界常因 BPE 合并而漏检。*
 
-### A2. "增强通常发生在句子边界"
+### A2. "增强通常发生在句子边界"　✅ 已落实（`REPRODUCTION.md` 发现 #6 → 新增发现 #8）
 
 > `REPRODUCTION.md:317`
 
 实测相反：本次 2 次 inference augmentation 都发生在**逗号**后，3 处句子边界一次都没触发（见 A1）。
 建议改为"发生在独立成 token 的 delimiter 之后，实测以逗号为主"。
 
-### A3. "prompt 最多增强 1 次" 的原因写错了
+### A3. "prompt 最多增强 1 次" 的原因写错了　✅ 已落实
 
 > `MEMGEN_ARCHITECTURE_EXPLAINED.md:362`
 > `max_prompt_aug_num = 1   # prompt 最多增强 1 次`
@@ -46,7 +83,7 @@ id 13（句号）与 id 198（换行）各出现 **0 次**。
 这一个循环位置上（`modeling_memgen.py:568`），与这个配置值无关。
 把它写成"推理时的上限"会误导后续设计。
 
-### A4. "最多 3 次" 漏掉了循环会整体跳出
+### A4. "最多 3 次" 漏掉了循环会整体跳出　✅ 已落实（新增独立章节）
 
 > `MEMGEN_ARCHITECTURE_EXPLAINED.md:32`
 
@@ -56,7 +93,7 @@ id 13（句号）与 id 198（换行）各出现 **0 次**。
 本次 count 只到 2，所以该分支未被触发（`reasoner_forward_bulk_path` 事件数 0），
 但这条路径真实存在且会显著改变行为。
 
-### A5. Trigger 的 softmax 数值混用了两种配置
+### A5. Trigger 的 softmax 数值混用了两种配置　✅ 已落实
 
 > `REPRODUCTION.md:127` `Softmax P(augment=1): 0.968 ~ 0.999, 中位数 0.989`
 > `REPRODUCTION.md:307-309` 的逐题 softmax 表
@@ -67,7 +104,7 @@ id 13（句号）与 id 198（换行）各出现 **0 次**。
 两套数字必须按配置分开标注，否则读者会以为"未训练的 Trigger 自信地输出 0.99"，
 而实际上 `active=False` 时连模型都没进。
 
-### A6. LoRA 配置与 augmentation 上限的取值来源要写清
+### A6. LoRA 配置与 augmentation 上限的取值来源要写清　✅ 已落实（新增冲突表小节）
 
 `configs/latent_memory/gsm8k.yaml` 与 released checkpoint 的 `config.json` **互相矛盾**：
 
@@ -83,7 +120,7 @@ id 13（句号）与 id 198（换行）各出现 **0 次**。
 
 ---
 
-## B. 旧文档缺失、但对设计自有模型很关键的点
+## B. 旧文档缺失、但对设计自有模型很关键的点　✅ 全部 10 条已补入架构文档
 
 1. **Trigger 看不到 latent。** `_should_augment` 只用 `current_input_ids` 并自行重算 mask
    （`modeling_utils.py:264,270`），而 latent 没有 token id。实测 Trigger 输入长 96/108/173，

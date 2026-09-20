@@ -1,10 +1,19 @@
 # MemGen Reproduction Log
 
+> **最新进展（2026-09-20）**：官方 inference 路径的**执行级全量 trace** 已完成，
+> 见 [`wholeProcess/`](./wholeProcess/)。它推翻/修正了本文档与
+> `MEMGEN_ARCHITECTURE_EXPLAINED.md` 中的若干描述，改动清单见
+> [`wholeProcess/CORRECTIONS_NEEDED.md`](./wholeProcess/CORRECTIONS_NEEDED.md)，
+> 已就地改正并在正文标注。受影响最大的是**发现 #6 的一条观察**（见新增的发现 #8）
+> 与 **Trigger softmax 数值的配置归属**（见发现 #1 的配置标注）。
+
 ## Version Info
 
 - **MemGen commit**: `970cc95af99b5008610e6b281619d181bc9b5ab9`
 - **Branch**: main
-- **Working tree**: clean (no modifications)
+- **Working tree**: clone 时 clean；**现已包含本地修改**——
+  `memgen/model/modeling_memgen.py`（LoRA adapter name remap 修复）与
+  `memgen/utils.py`（tensorboard import 改 try/except），详见文末「已修复的 bug」
 - **Date cloned**: 2026-09-19
 
 ## Environment
@@ -120,11 +129,28 @@ run.train_trigger False
 
 #### 1. checkpoint_trigger 在全部 candidate 上输出 1
 
+> **⚠️ 配置标注（必读）**：下列 softmax 数值来自 **`trigger.active=True`** 的
+> instrumented 运行，即真实跑了 LoRA + `output_layer` 前向。
+> **官方 eval 配置是 `active=False`**（`scripts/eval/qwen2_5_gsm8k_sft.sh:19`），
+> 此时 `trigger.py:37-40` 直接返回常量 `logits=[0.0, 1.0]`，
+> softmax 恒为 **`[0.268941, 0.731059]`**，且 `trigger.model` **零次 forward**。
+> 两套数字不可混用——详见下方「发现 #6」与
+> [`MEMGEN_ARCHITECTURE_EXPLAINED.md`](./MEMGEN_ARCHITECTURE_EXPLAINED.md) 的「Trigger 的两种模式」。
+
 ```
-checkpoint_trigger 统计（22 个 candidate）:
+checkpoint_trigger 统计（22 个 candidate，active=True）:
 - Decision=0: 0 次 (0%)
 - Decision=1: 22 次 (100%)
 - Softmax P(augment=1): 0.968 ~ 0.999, 中位数 0.989
+```
+
+对照：官方 `active=False` 路径下（`wholeProcess/` 全量 trace，3 次 Trigger 调用）：
+
+```
+logits（最后位置）= [0.0, 1.0]      <- 硬编码常量，与输入无关
+softmax            = [0.268941, 0.731059]
+argmax             = 1
+trigger.model forward 次数 = 0      <- module census 实测
 ```
 
 **准确的结论**：
@@ -314,7 +340,7 @@ Weaver-only ≡ Full MemGen（**字节级完全相同**），
 - 全部 14 次调用决策均为 1（augment），无一例外
 - 最低置信度: Q2 第 3 次调用 P=0.635（仍选择 augment）
 - Prompt 位置 (i=0) 的置信度普遍较高 (>0.97)
-- 增强通常发生在句子边界（delimiter 位置）
+- ~~增强通常发生在句子边界（delimiter 位置）~~ —— **此条已推翻，见下方「发现 #8」**
 
 **解读注意**：这些 logits 来自**随机初始化的 `output_layer`**（见发现 #2 证据 B）。
 一个随机线性头作用在 Qwen hidden states 上，恰好在这 14 个样本上都偏向 class 1。
@@ -339,9 +365,49 @@ Weaver-only ≡ Full MemGen（**字节级完全相同**），
    `HFValidationError`；改为 `os.path.join(_PROJECT_ROOT, "models/...")` 绝对路径。
 2. 误用不存在的 `MemGenForCausalLM`；正确类名是 `MemGenModel`。
 
+#### 8. 增强点不在句子边界，而在「独立成 token 的 delimiter」之后（推翻发现 #6 的一条观察）
+
+来源：`wholeProcess/` 的官方路径全量 trace（GSM8K `test[0]`，111 个生成步）。
+证据文件 `wholeProcess/logs/delimiter_check.txt`。
+
+**机制**：`_check_ends_with_delimiter`（`modeling_utils.py:153-175`）**不 decode、不做字符串比较**，
+只取最后一个非 pad token 的 **id**，判断是否属于 `_get_delimiter_token_ids`
+（`modeling_utils.py:145-151`）预先算好的集合。Qwen2.5 tokenizer 下该集合 = **{11, 13, 198}**
+（`,` / `.` / `\n` 各自单独成 token 时的 id）。
+
+**实测**：111 步中最后一个 token 的 id 分布
+
+| id | 字符 | 命中次数 |
+|---|---|---|
+| 11 | `,` | **2** |
+| 13 | `.` | **0** |
+| 198 | `\n` | **0** |
+
+而**文本里确实含句号/换行、却因 BPE 合并而漏检**的有 3 步：
+
+```
+step  38  id= 624  tok='.Ċ'    <- "." + "\n" 合并成一个 token
+step  66  id= 624  tok='.Ċ'    <- 同上
+step 105  id=7110  tok='.\'    <- "." + "\" 合并（\boxed 之前）
+```
+
+**结论**：
+
+- 本次运行的 2 次 inference augmentation **都发生在逗号之后**，三处真正的句子边界**一次都没触发**。
+- 发现 #6 里「增强通常发生在句子边界」这条观察**不成立**：增强点的分布由
+  **tokenizer 的合并行为**决定，而不是由语义上的句子结构决定。
+  任何与句号粘连的 token（`.\n`、`.\`、`.T`…）都会绕过门控。
+- 发现 #6 表格里记录的增强位置（如 Q0 的 `[12, 68, 84]`）应据此重新理解：
+  它们是「id 落在 {11,13,198} 的位置」，不是「句子结束的位置」。
+
+> 设计自有模型时，若想让记忆注入真正对齐推理步骤边界，这个判据必须换成显式机制，
+> 不能沿用 token-id 集合匹配。
+
 ### 架构分析（已由 tensor trace 实证验证）
 
 完整的 MemGen 工作流程解析见 [`MEMGEN_ARCHITECTURE_EXPLAINED.md`](./MEMGEN_ARCHITECTURE_EXPLAINED.md)。
+官方 inference 路径的**执行级全量 trace**（module / tensor / parameter 三层，
+含 18 条问答与参数普查）见 [`wholeProcess/FULL_EXECUTION_TRACE.md`](./wholeProcess/FULL_EXECUTION_TRACE.md)。
 
 `reproduction/verify_tensor_trace.py` 对 Weaver 模块注册 forward pre-hook，
 抓取子模块**实际收到**的张量后做逐元素比对，单题（`"What is 2+3?"`）验证结果 **4/4 PASS**：
@@ -497,6 +563,26 @@ remap 后: matched LoRA keys = 112 / 112   -> 全部加载
 MemGen reproduction 的**理解性目标已达成**：完整数据流已由 tensor trace 实证验证（4/4 PASS），
 组件训练状态已用权重证据确认，性能结论已按语义准确率重新校准。
 
+**2026-09-20 补充**：又完成了一次**官方 inference 路径的执行级全量 trace**
+（[`wholeProcess/`](./wholeProcess/)），把理解从「数据流对不对」推进到
+「每个 module / tensor / parameter 在这一次前向里到底发生了什么」。三个量化结论：
+
+| 指标 | 实测值 |
+|---|---|
+| 加载的参数总量 | 4,640,256,516 |
+| 本次前向**实际执行**到的 | 2,860,986,370 |
+| **加载却从未执行**的 | **1,779,270,146（38.34%）** |
+| `requires_grad=True` 的参数量 | 9,113,604 |
+| 其中 Trigger LoRA + `output_layer`（带梯度但**零次执行**） | 2,182,146 |
+| 单个最大闲置张量 | Weaver `embed_tokens.weight`，233,373,696 |
+
+即：**`requires_grad` 与「是否被用到」两个方向都不相关**——
+唯一在做预测的 Reasoner（1,543,714,304 参数、`requires_grad` 全为 False）承担了全部 111 步生成，
+而带梯度的 Trigger（base 1.5437 B + LoRA + head）在官方 `active=False` 配置下一次前向都没跑。
+判据：「used」= 所属 module 在本次 `generate()` 中执行过 forward，
+或该张量对象被 identity 证明被读取（`prompt_query_latents` 这类裸 `nn.Parameter`）。
+证据：`wholeProcess/logs/parameter_usage.json`。
+
 按当前计划，不再进行更大规模的性能复现，转入自有模型设计。
 自有方向的切入点已由上述架构事实明确：
 
@@ -507,3 +593,12 @@ MemGen:   visible context embeddings -> fresh latent -> append
 
 即让 Reasoner 的**内部认知状态**直接更新一个**持久可变的记忆状态**。
 MemGen 的 Weaver 从未接触过 Reasoner 的 hidden state，这是真实的结构性差异。
+
+`wholeProcess/` 的 trace 另外暴露出三个同样可切入的空白：
+
+1. **门控与内容脱钩** —— 决定「是否注入」的 Trigger 只看 token id 序列，
+   决定「注入什么」的 Weaver 看到的是含 latent 的 embedding 序列，两者视图不同构。
+2. **注入点由 tokenizer 决定** —— `.\n` 被 BPE 合并成 id 624 就绕过门控（发现 #8），
+   「在推理步骤边界增强」在实现层面并不成立。
+3. **append-only、无容量约束** —— latent 只追加不覆写，K=8 个槽位两两余弦 0.72~0.77，
+   行 norm 约为 token embedding 的 60 倍，插入后即主导后续表示。
