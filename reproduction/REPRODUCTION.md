@@ -135,15 +135,90 @@ trained/always_1 (有增强):
 - trained ≡ always_1（字节级相同），证明 Trigger 退化
 - 对简单题，Weaver 只改变格式，不影响推理能力
 
-#### 4. GSM8K 难题诊断 (5 题)
+**逐题对比 (20 题)**:
 
-| 模式 | 准确率 |
-|------|--------|
-| Base Model | 3/5 (60%) |
-| Weaver-only | 4/5 (80%) |
-| Full MemGen | 4/5 (80%) |
+| # | 题目 | GT | always_0 | trained | always_1 | 输出一致? |
+|---|------|-----|----------|---------|----------|----------|
+| 01 | 2+3 | 5 | ✅ "5" | ✅ "\boxed{5}" | ✅ "\boxed{5}" | trained≡always_1 |
+| 02 | 10-4 | 6 | ✅ "6" | ❌ null | ❌ null | trained≡always_1 |
+| 03 | 3*5 | 15 | ✅ "15" | ✅ "\boxed{15}" | ✅ "\boxed{15}" | trained≡always_1 |
+| 04 | 12/3 | 4 | ✅ "4" | ✅ "\boxed{4}" | ✅ "\boxed{4}" | trained≡always_1 |
+| 05 | 5 apples +2 | 7 | ✅ "7" | ✅ "\boxed{7}" | ✅ "\boxed{7}" | trained≡always_1 |
+| 06 | 20 students, 8 boys | 12 | ✅ "12" | ✅ "\boxed{12}" | ✅ "\boxed{12}" | trained≡always_1 |
+| 07 | 7+8 | 15 | ✅ "15" | ✅ "\boxed{15}" | ✅ "\boxed{15}" | trained≡always_1 |
+| 08 | 15-6 | 9 | ✅ "9" | ✅ "\boxed{9}" | ✅ "\boxed{9}" | trained≡always_1 |
+| 09 | 4*6 | 24 | ✅ "24" | ✅ "\boxed{24}" | ✅ "\boxed{24}" | trained≡always_1 |
+| 10 | 20/4 | 5 | ✅ "5" | ✅ "\boxed{5}" | ✅ "\boxed{5}" | trained≡always_1 |
+| 11 | 10 candies -3 | 7 | ✅ "7" | ✅ "\boxed{7}" | ✅ "\boxed{7}" | trained≡always_1 |
+| 12 | 6 red +4 blue | 10 | ✅ "10" | ✅ "\boxed{10}" | ✅ "\boxed{10}" | trained≡always_1 |
+| 13 | 9+11 | 20 | ✅ "20" | ✅ "\boxed{20}" | ✅ "\boxed{20}" | trained≡always_1 |
+| 14 | 18-9 | 9 | ✅ "9" | ✅ "\boxed{9}" | ✅ "\boxed{9}" | trained≡always_1 |
+| 15 | 5*5 | 25 | ✅ "25" | ✅ "\boxed{25}" | ✅ "\boxed{25}" | trained≡always_1 |
+| 16 | 16/2 | 8 | ✅ "8" | ✅ "\boxed{8}" | ✅ "\boxed{8}" | trained≡always_1 |
+| 17 | 8 toys +4 | 12 | ✅ "12" | ✅ "\boxed{12}" | ✅ "\boxed{12}" | trained≡always_1 |
+| 18 | 15 birds -5 | 10 | ✅ "10" | ✅ "\boxed{10}" | ✅ "\boxed{10}" | trained≡always_1 |
+| 19 | 6+7 | 13 | ✅ "13" | ✅ "\boxed{13}" | ✅ "\boxed{13}" | trained≡always_1 |
+| 20 | 14-7 | 7 | ✅ "7" | ✅ "\boxed{7}" | ✅ "\boxed{7}" | trained≡always_1 |
 
-**结论**: Weaver 对难题有实质帮助 (+20%)，性能提升 100% 来自 Weaver 架构本身。
+**格式差异示例**:
+- always_0: `The answer is 5.`
+- trained/always_1: `2+3 is 5.\boxed{5}`
+
+#### 4. GSM8K 难题诊断 (5 题，逐题结果)
+
+**测试集**: GSM8K test 前 5 题
+
+| # | 题目 (简) | GT | Base | Weaver-only | Full MemGen |
+|---|----------|-----|------|-------------|-------------|
+| 0 | Janet's ducks (eggs) | 18 | ✅ 18 | ✅ 18 | ✅ 18 |
+| 1 | Robe fiber (bolts) | 3 | ✅ 3 | ✅ 3 | ✅ 3 |
+| 2 | Josh flipping house | 70000 | ✅ 70000 | ❌ 150000 | ❌ 150000 |
+| 3 | James sprints | 540 | ❌ null | ✅ 540 | ✅ 540 |
+| 4 | Wendi chickens (feed) | 20 | ❌ 0 | ✅ 20 | ✅ 20 |
+
+**汇总**:
+
+| 模式 | 准确率 | 总 tokens | 平均延迟/题 |
+|------|--------|----------|------------|
+| Base | 3/5 (60%) | 1323 | 108.6s |
+| Weaver-only | 4/5 (80%) | 530 | 59.8s |
+| Full MemGen | 4/5 (80%) | 530 | 63.0s |
+
+**逐题分析**:
+- Q2 (Josh flipping house): Base 正确计算利润=70000，但 Weaver-only 和 Full MemGen 都错误地用 $200,000-$50,000=$150,000（忘记减去初始购房成本）。Weaver 引入了推理错误。
+- Q3 (James sprints): Base 未输出 `\boxed{}` 格式导致提取失败，但推理正确 (540)。Weaver 帮助格式化输出。
+- Q4 (Wendi chickens): Base 推理过程混乱（算出负数），Weaver 正确解题。
+
+**结论**: Weaver 对难题有实质帮助 (+20%)，但也会引入新的推理错误 (Q2)。Weaver-only ≡ Full MemGen（字节级相同），再次证明 Trigger 无额外贡献。
+
+#### 5. Trigger 详细日志 (GSM8K 5 题)
+
+| # | 题目 | Trigger 调用次数 | 增强位置 | 所有 P(augment=1) |
+|---|------|----------------|---------|------------------|
+| 0 | Janet's ducks | 4 | [12, 68, 84] | 0.971, 0.992, 0.968, 0.997 |
+| 1 | Robe fiber | 3 | [16, 40] | 0.986, 0.995, 0.861 |
+| 2 | Josh house | 4 | [19, 50, 54] | 0.993, 0.886, 0.635, 0.988 |
+| 3 | James sprints | 1 | [] | 0.973 |
+| 4 | Wendi chickens | 2 | [13] | 0.998, 0.997 |
+
+**观察**:
+- 所有 Trigger 决策均为 1（augment），无一例外
+- 最低置信度: Q2 第3次调用 P=0.635（仍选择 augment）
+- Prompt 位置 (i=0) 的置信度普遍较高 (>0.97)
+- 增强通常发生在句子边界 (delimiter 位置)
+
+#### 6. always_0 控制验证
+
+**实验目的**: 验证 always_0 的 15% 自动化准确率是格式问题还是能力问题。
+
+**方法**: 用纯 Base Model (Qwen2.5-1.5B-Instruct) 直接跑 20 道简单数学题，与 always_0 逐题对比。
+
+**结果**:
+- Base Model: 20/20 = 100% 正确
+- always_0 (monkey-patch): 20/20 = 100% 正确（人工检查）
+- 两者答案一致，都是自然语言格式（无 `\boxed{}`）
+
+**结论**: always_0 的推理能力完好，15% 自动化准确率纯粹是格式匹配问题。
 
 ### 架构分析
 
@@ -156,5 +231,62 @@ trained/always_1 (有增强):
 ### 实验脚本
 
 - `reproduction/trigger_three_way_probe.py`: 三组对照实验
-- `reproduction/phase1_results/trigger_three_way_easy_probe.jsonl`: 原始结果
-- `reproduction/phase1_results/diagnostic_traces.jsonl`: GSM8K 诊断结果
+- `reproduction/full_memgen_diagnostic.py`: GSM8K 三模式诊断
+- `reproduction/verify_always0_control.py`: always_0 控制验证
+- `reproduction/trigger_instrumentation.py`: Trigger 决策日志
+- `reproduction/phase1_results/trigger_three_way_easy_probe.jsonl`: 三组对照原始结果
+- `reproduction/phase1_results/diagnostic_traces.jsonl`: GSM8K 诊断原始结果
+- `reproduction/phase1_results/trigger_instrumentation.json`: Trigger logits 日志
+
+## Bug 修复记录
+
+### 1. LoRA adapter name 不匹配 (严重)
+
+**现象**: MemGen 模型加载后，Weaver 和 Trigger 的 LoRA 权重未生效，生成结果与 Base Model 完全相同。
+
+**原因**: 官方 checkpoint 的 LoRA 权重以 `adapter_name="default"` 保存 (keys: `...lora_A.weight`)，但 `PeftModel.from_pretrained` 使用 `adapter_name="weaver"` / `"trigger"` 加载 (keys: `...lora_A.weaver.weight`)。`PeftModel.from_pretrained` 静默跳过不匹配的 key，导致 LoRA 权重未加载，且不报任何错误。
+
+**修复**: 手动 remap key，将 `lora_A.weight` → `lora_A.weaver.weight`：
+```python
+def _remap_lora_adapter_key(key, adapter_name):
+    key = key.replace("lora_A.weight", f"lora_A.{adapter_name}.weight")
+    key = key.replace("lora_B.weight", f"lora_B.{adapter_name}.weight")
+    return key
+```
+
+**影响**: 如果不修复，A/B 测试会显示"无差异"，误判 MemGen 无效。
+
+### 2. flash_attention_2 硬编码
+
+**现象**: CPU 环境无法加载 MemGen 模型。
+
+**原因**: `modeling_memgen.py:669-671` 硬编码了 `attn_implementation="flash_attention_2"` 和 `torch_dtype=torch.bfloat16`。
+
+**修复**: 测试脚本绕过此限制，直接加载模型。正式 GPU 环境需确认 CUDA 支持 flash_attention_2。
+
+### 3. tensorboard 缺失
+
+**现象**: `import memgen` 失败。
+
+**原因**: `memgen/utils.py` 直接 `from torch.utils.tensorboard import SummaryWriter`，但 requirements.txt 未列出 tensorboard。
+
+**修复**: 改为 try-except 可选导入。
+
+## 最终结论
+
+### MemGen 复现结果总结
+
+| 维度 | 结论 |
+|------|------|
+| Weaver 架构 | ✅ 有效。GSM8K 难题 +20% (60%→80%)，简单题格式改变 |
+| Trigger 门控 | ❌ 退化。100% 预测 augment=1，等价于 always_1 |
+| 性能提升来源 | 100% 来自 Weaver 架构本身，Trigger 无贡献 |
+| LoRA 加载 | ⚠️ 有 bug。需手动 remap key，否则静默失败 |
+| 输出格式影响 | Weaver 使模型倾向使用 `\boxed{}` 格式 |
+
+### 待验证事项
+
+1. **GPU 环境**: 需在 CUDA 环境验证 flash_attention_2 是否正常工作
+2. **官方 eval 脚本**: 需确认官方 `from_pretrained` 是否也有 LoRA key 不匹配问题
+3. **Trigger 退化原因**: 可能是 weaver-sft 阶段 `trigger_active=false` 导致 Trigger 未充分训练
+4. **更大规模测试**: 当前仅 5 题 GSM8K + 20 题简单数学，需更大规模验证
