@@ -1,0 +1,241 @@
+{
+  "question": "What is 2+3?",
+  "prompt_len": 40,
+  "steps": [
+    {
+      "step": "1. prompt tokens",
+      "input_ids_shape": [
+        1,
+        40
+      ],
+      "first_10_ids": [
+        151644,
+        872,
+        198,
+        50,
+        3948,
+        279,
+        6888,
+        3491,
+        448,
+        6169
+      ],
+      "last_5_ids": [
+        151645,
+        198,
+        151644,
+        77091,
+        198
+      ],
+      "decoded_last_5": [
+        "<|im_end|>",
+        "\n",
+        "<|im_start|>",
+        "assistant",
+        "\n"
+      ]
+    },
+    {
+      "step": "2. Reasoner input embeddings",
+      "shape": [
+        1,
+        40,
+        1536
+      ],
+      "equals_embedding_table_lookup": true,
+      "note": "True => Weaver sees input embeddings, NOT Reasoner hidden states",
+      "stats": {
+        "shape": [
+          1,
+          40,
+          1536
+        ],
+        "mean": 0.000164,
+        "std": 0.024937,
+        "absmax": 0.300781,
+        "first3": [
+          0.006927,
+          0.012573,
+          -0.004974
+        ]
+      }
+    },
+    {
+      "step": "3. reasoner_to_weaver projection",
+      "in_shape": [
+        1,
+        40,
+        1536
+      ],
+      "out_shape": [
+        1,
+        40,
+        1536
+      ],
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "is_linear_map_of_embeddings": true,
+      "stats": {
+        "shape": [
+          1,
+          40,
+          1536
+        ],
+        "mean": -0.000733,
+        "std": 0.020924,
+        "absmax": 0.080168,
+        "first3": [
+          -0.007603,
+          -0.00472,
+          -0.024013
+        ]
+      }
+    },
+    {
+      "step": "4. Weaver concat layout (empirically verified)",
+      "query_latents_K": 8,
+      "context_len": 40,
+      "concatenated_len": 48,
+      "layout": "[context(40), query_latents(8)]",
+      "head_is_context": true,
+      "tail_is_query_latents": true,
+      "CORRECTED": "order is [context, Q] -- NOT [Q, context]"
+    },
+    {
+      "step": "5. Weaver forward output",
+      "last_hidden_state_shape": [
+        1,
+        48,
+        1536
+      ],
+      "stats": {
+        "shape": [
+          1,
+          48,
+          1536
+        ],
+        "mean": -0.064108,
+        "std": 2.623458,
+        "absmax": 94.309715,
+        "first3": [
+          -2.678415,
+          -0.465984,
+          -0.882422
+        ]
+      }
+    },
+    {
+      "step": "6. latent extraction slice (empirically verified)",
+      "extracted_shape": [
+        1,
+        8,
+        1536
+      ],
+      "matches_LAST_K": true,
+      "matches_FIRST_K": false,
+      "CORRECTED": "takes hidden_states[:, -K:, :] (LAST K) -- NOT the first K",
+      "why_it_works": "causal attention: Q sits at the end, so it attends to the full context"
+    },
+    {
+      "step": "7. weaver_to_reasoner projection",
+      "in_shape": [
+        1,
+        8,
+        1536
+      ],
+      "out_shape": [
+        1,
+        8,
+        1536
+      ],
+      "stats": {
+        "shape": [
+          1,
+          8,
+          1536
+        ],
+        "mean": -0.028814,
+        "std": 1.724742,
+        "absmax": 6.851033,
+        "first3": [
+          -2.286637,
+          -0.678411,
+          -0.2978
+        ]
+      }
+    },
+    {
+      "step": "8. append latent memory to Reasoner input",
+      "before_shape": [
+        1,
+        40,
+        1536
+      ],
+      "after_shape": [
+        1,
+        48,
+        1536
+      ],
+      "attention_mask_after": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        "...",
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "context_retained": true,
+      "latent_appended_at_tail": true
+    },
+    {
+      "step": "9. Reasoner next token (first step after augmentation)",
+      "logits_shape": [
+        1,
+        151936
+      ],
+      "next_token_id": 17,
+      "next_token": "'2'",
+      "top5": [
+        [
+          "'2'",
+          0.5681
+        ],
+        [
+          "'The'",
+          0.1643
+        ],
+        [
+          "'Adding'",
+          0.0453
+        ],
+        [
+          "'We'",
+          0.0236
+        ],
+        [
+          "'To'",
+          0.023
+        ]
+      ]
+    }
+  ],
+  "verified_input_embeddings_not_hidden_states": true,
+  "verified_concat_is_context_then_query": true,
+  "verified_extract_last_K": true,
+  "verified_extract_NOT_first_K": true,
+  "full_generation": "2+3 is 5.\\boxed{5}",
+  "augmentation_positions": [
+    0
+  ]
+}
