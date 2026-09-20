@@ -1,4 +1,4 @@
-"""Generate raw D MemGen outputs. This module deliberately does no scoring."""
+"""Generate raw MemGen condition outputs. This module deliberately does no scoring."""
 
 from __future__ import annotations
 
@@ -34,6 +34,8 @@ from memgen.model.modeling_memgen import MemGenModel
 CONDITION_LABELS = {
     "official": "D_memgen_official",
     "random50": "R_memgen_random50_inference",
+    "no_inference": "N_memgen_no_inference",
+    "scheduled_single": "H_memgen_human_single",
 }
 
 
@@ -44,6 +46,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--condition", choices=tuple(CONDITION_LABELS), default="official")
     parser.add_argument("--random-probability", type=float, default=0.5)
     parser.add_argument("--random-seed", type=int, default=20260920)
+    parser.add_argument("--policy-file", type=Path)
+    parser.add_argument("--sample-ids", nargs="*")
     parser.add_argument("--max-samples", type=int, default=20)
     parser.add_argument("--time-budget-minutes", type=float, default=110.0)
     parser.add_argument("--max-new-tokens", type=int, default=512)
@@ -111,6 +115,76 @@ def install_random_inference_gate(model, sample_seed: int, probability: float):
     return original, events
 
 
+def install_deterministic_inference_gate(
+    model, mode: str, selected_candidate_ordinal: int | None = None
+):
+    """Install a prompt-on gate that records candidates and makes fixed decisions."""
+    if mode not in {"no_inference", "scheduled_single"}:
+        raise ValueError(f"unsupported deterministic gate mode: {mode}")
+    events: list[dict] = []
+    original = model._should_augment
+    candidate_ordinal = 0
+
+    def deterministic_should_augment(
+        input_ids,
+        sentence_augment_count,
+        do_sample,
+        temperature,
+        is_prompt=False,
+    ):
+        nonlocal candidate_ordinal
+        del do_sample, temperature
+        batch_size = input_ids.size(0)
+        if is_prompt:
+            decision = torch.ones(
+                (batch_size,), dtype=torch.long, device=input_ids.device
+            )
+            events.append(
+                {
+                    "is_prompt": True,
+                    "sequence_length": int(input_ids.shape[1]),
+                    "decisions": [1] * batch_size,
+                }
+            )
+            return decision
+
+        aug_vector = torch.full(
+            (batch_size,), -100, dtype=torch.long, device=input_ids.device
+        )
+        candidates = model._check_ends_with_delimiter(
+            input_ids, model.tokenizer, model.delimiters
+        ).squeeze(1)
+        candidates &= sentence_augment_count < model.config.max_inference_aug_num
+        candidate_indices = candidates.nonzero(as_tuple=True)[0]
+        for batch_index in candidate_indices.tolist():
+            candidate_ordinal += 1
+            decision = 0
+            if (
+                mode == "scheduled_single"
+                and selected_candidate_ordinal is not None
+                and candidate_ordinal == selected_candidate_ordinal
+            ):
+                decision = 1
+            aug_vector[batch_index] = decision
+            visible_prefix = model.tokenizer.decode(
+                input_ids[batch_index].detach().cpu().tolist(),
+                skip_special_tokens=True,
+            )
+            events.append(
+                {
+                    "is_prompt": False,
+                    "candidate_ordinal": candidate_ordinal,
+                    "sequence_length": int(input_ids.shape[1]),
+                    "decision": decision,
+                    "visible_prefix": visible_prefix,
+                }
+            )
+        return aug_vector
+
+    model._should_augment = deterministic_should_augment
+    return original, events
+
+
 def load_model(tokenizer, dtype):
     config = MemGenConfig.from_pretrained(CHECKPOINT_PATH)
     print(
@@ -155,8 +229,20 @@ def main() -> None:
     manifest_path = args.manifest.resolve()
     run_dir = args.run_dir.resolve()
     raw_path = run_dir / "raw" / f"{condition}.raw.jsonl"
-    samples = load_manifest(manifest_path, args.max_samples)
+    samples = load_manifest(manifest_path)
+    if args.sample_ids:
+        requested = set(args.sample_ids)
+        samples = [sample for sample in samples if sample["sample_id"] in requested]
+        missing = requested - {sample["sample_id"] for sample in samples}
+        if missing:
+            raise ValueError(f"sample ids not found in manifest: {sorted(missing)}")
+    samples = samples[: args.max_samples]
     meta = json.loads(meta_path_for(manifest_path).read_text(encoding="utf-8"))
+    policy = None
+    if args.condition == "scheduled_single":
+        if args.policy_file is None:
+            raise ValueError("--policy-file is required for scheduled_single")
+        policy = json.loads(args.policy_file.resolve().read_text(encoding="utf-8"))
 
     torch.set_num_threads(args.threads)
     dtype = resolve_torch_dtype(args.dtype)
@@ -189,6 +275,14 @@ def main() -> None:
                 args.random_probability if args.condition == "random50" else None
             ),
             "random_seed": args.random_seed if args.condition == "random50" else None,
+            "policy_file": (
+                str(args.policy_file.resolve()) if args.policy_file is not None else None
+            ),
+            "policy_sha256": (
+                sha256_file(args.policy_file.resolve())
+                if args.policy_file is not None
+                else None
+            ),
         },
     )
 
@@ -222,10 +316,25 @@ def main() -> None:
         random_gate_seed = None
         random_gate_events = []
         original_should_augment = None
+        selected_candidate_ordinal = None
+        human_rationale = None
         if args.condition == "random50":
             random_gate_seed = args.random_seed + int(sample["source_index"])
             original_should_augment, random_gate_events = install_random_inference_gate(
                 model, random_gate_seed, args.random_probability
+            )
+        elif args.condition == "no_inference":
+            original_should_augment, random_gate_events = install_deterministic_inference_gate(
+                model, "no_inference"
+            )
+        elif args.condition == "scheduled_single":
+            selection = policy["selections"].get(sample["sample_id"])
+            if selection is None:
+                raise ValueError(f"policy has no selection for {sample['sample_id']}")
+            selected_candidate_ordinal = selection.get("candidate_ordinal")
+            human_rationale = selection.get("rationale")
+            original_should_augment, random_gate_events = install_deterministic_inference_gate(
+                model, "scheduled_single", selected_candidate_ordinal
             )
         started = time.perf_counter()
         try:
@@ -281,6 +390,8 @@ def main() -> None:
             ),
             "random_gate_seed": random_gate_seed,
             "random_gate_events": random_gate_events,
+            "selected_candidate_ordinal": selected_candidate_ordinal,
+            "human_selection_rationale": human_rationale,
             "prompt_augmented": bool(mask_values and mask_values[0] == 1),
             "inference_augmentation_count": len(inference_aug_positions),
             "inference_augmentation_positions": inference_aug_positions,

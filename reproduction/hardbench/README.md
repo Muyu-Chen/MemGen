@@ -13,6 +13,11 @@ MemGen 有利的题，而是让 Base、风格控制、MemGen 以及后续自有�
 - **R**：与 D 使用同一 checkpoint；prompt augmentation 仍始终开启，但每个
   inference delimiter 候选点以固定 seed 的 Bernoulli(0.5) 决定是否注入。
   这是随机稀疏／剂量对照，不代表训练后的 Trigger。
+- **N**：与 D 使用同一 checkpoint；prompt augmentation 开启，但所有 inference
+  候选点都不注入。它用于隔离 prompt memory 与 inference memory 的作用。
+- **H**：与 N 相同，但根据预先冻结的 policy 在人工选择的一个候选点注入一次。
+  policy 保存候选序号、选择理由和 SHA-256；选择时只看题目与 N 的可见前缀，
+  不看 gold 或 N 的评分。
 
 题目来自 GSM8K test，按 gold rationale 中 `<<...>>` 计算标注的数量筛选。
 正式试点默认要求至少 6 步（当前 test split 共 87 题）。筛选不使用任何模型
@@ -52,3 +57,30 @@ completion token IDs、prompt、耗时、截断状态和（MemGen）增强位置
 ```
 
 重复相同命令会根据 `(condition, sample_id)` 跳过已有记录，可以安全续跑。
+
+## 人工单点 Trigger 诊断
+
+`trigger_intervention_v1` 只使用试点中 D 失败且至少有一个 inference 候选点的
+7 道题。先运行 N 并在不评分的情况下冻结
+`policies/human_single_v1.json`，再运行 H：
+
+```powershell
+$sampleIds = @(
+  'gsm8k_test_0710', 'gsm8k_test_0063', 'gsm8k_test_0423',
+  'gsm8k_test_1088', 'gsm8k_test_0611', 'gsm8k_test_0976',
+  'gsm8k_test_0754'
+)
+
+..\.venv\Scripts\python.exe reproduction\hardbench\run_memgen.py `
+  --condition no_inference `
+  --run-dir reproduction\hardbench\runs\trigger_intervention_v1 `
+  --sample-ids $sampleIds --max-samples 7
+
+..\.venv\Scripts\python.exe reproduction\hardbench\run_memgen.py `
+  --condition scheduled_single `
+  --policy-file reproduction\hardbench\policies\human_single_v1.json `
+  --run-dir reproduction\hardbench\runs\trigger_intervention_v1 `
+  --sample-ids $sampleIds --max-samples 7
+```
+
+完整样本列表、人工选择、逐题结果与局限见 `TRIGGER_INTERVENTION_REPORT.md`。

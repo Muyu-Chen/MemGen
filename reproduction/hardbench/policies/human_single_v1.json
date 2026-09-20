@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "policy_name": "human_single_v1",
+  "created_at": "2026-09-20",
+  "selection_scope": "Seven pilot questions that MemGen-always failed and that exposed at least one inference-time trigger candidate.",
+  "selection_basis": "Question text plus the visible prefix at each candidate in N_memgen_no_inference only. Gold answers and N-condition scores were not consulted before this file was fixed.",
+  "intervention_rule": "Invoke memory at exactly one selected inference candidate and skip every other inference candidate. Prompt augmentation remains enabled.",
+  "selections": {
+    "gsm8k_test_0710": {
+      "candidate_ordinal": 7,
+      "rationale": "All four item costs and the subtotal are complete; this is the clean phase boundary immediately before applying the loyalty discount."
+    },
+    "gsm8k_test_0063": {
+      "candidate_ordinal": 3,
+      "rationale": "The first-half total and discounted monthly rate are available; invoke before integrating the six discounted months into the annual total."
+    },
+    "gsm8k_test_0423": {
+      "candidate_ordinal": 1,
+      "rationale": "The prefix has just entered an incorrect savings allocation. This is the earliest available correction point, although it is not a clean semantic boundary."
+    },
+    "gsm8k_test_1088": {
+      "candidate_ordinal": 3,
+      "rationale": "The weekday weekly total is complete; invoke at the transition to adding the separate Saturday and Sunday learning time."
+    },
+    "gsm8k_test_0611": {
+      "candidate_ordinal": 1,
+      "rationale": "The first candidate appears just before the model commits to treating the five-month initial funding as a per-month amount, so it is the earliest viable correction point."
+    },
+    "gsm8k_test_0976": {
+      "candidate_ordinal": 1,
+      "rationale": "Invoke before resolving the cross-day gingerbread and apple-pie quantities, where the visible reasoning is about to conflate Saturday and Sunday."
+    },
+    "gsm8k_test_0754": {
+      "candidate_ordinal": 1,
+      "rationale": "Invoke at the start of the first sticker-to-button conversion, before the model can confuse stickers traded with buttons received."
+    }
+  }
+}

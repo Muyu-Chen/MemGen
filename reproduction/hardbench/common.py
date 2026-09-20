@@ -106,6 +106,8 @@ def build_messages(
         "A_base_zero_shot",
         "D_memgen_official",
         "R_memgen_random50_inference",
+        "N_memgen_no_inference",
+        "H_memgen_human_single",
     }:
         return target
     if condition == "B_base_3shot":
