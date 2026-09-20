@@ -1,0 +1,519 @@
+== environment ==
+{
+  "timestamp_utc": "2026-09-20T18:48:19Z",
+  "git": {
+    "repo_path": "E:\\MemoryProject\\MemGen\\Reproduct\\MemGen",
+    "commit": "7e067fa6429f8e8e88eaf9c468f093f6a0bdcae3",
+    "commit_subject": "docs: correct MemGen data-flow description against source and add tensor trace",
+    "branch": "main",
+    "working_tree_dirty": false,
+    "working_tree_changes": [],
+    "remotes": [
+      "origin\thttps://github.com/Muyu-Chen/MemGen.git (fetch)",
+      "origin\thttps://github.com/Muyu-Chen/MemGen.git (push)",
+      "upstream\thttps://github.com/bingreeky/MemGen.git (fetch)",
+      "upstream\thttps://github.com/bingreeky/MemGen.git (push)"
+    ]
+  },
+  "hardware": {
+    "cpu": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD",
+    "cpu_name": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD",
+    "physical_threads": 16,
+    "torch_num_threads": 8,
+    "ram": {
+      "total_gib": 27.81,
+      "available_gib": 14.33
+    },
+    "device": "cpu",
+    "cuda_available": false
+  },
+  "software": {
+    "python": "3.11.9",
+    "torch": "2.7.1+cpu",
+    "transformers": "4.55.4",
+    "peft": "0.17.1",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "model_sources": {
+    "base_model_local_path": "E:\\MemoryProject\\MemGen\\Reproduct\\models\\Qwen2.5-1.5B-Instruct",
+    "base_model_hub_id_in_official_yaml": "Qwen/Qwen2.5-1.5B-Instruct",
+    "checkpoint_local_path": "E:\\MemoryProject\\MemGen\\Reproduct\\models\\memgen-checkpoints\\Qwen2.5-1.5B-Instruct\\gsm8k\\weaver-sft\\pn=1_pl=8_in=3_il=8\\model",
+    "checkpoint_hub_repo": "Kana-s/MemGen",
+    "config_authority": "checkpoint config.json (MemGenConfig.from_pretrained)"
+  },
+  "inference_choices": {
+    "dtype_requested": "bfloat16",
+    "attn_implementation_requested": "eager",
+    "batch_size": 1,
+    "max_new_tokens": 256,
+    "official_max_response_length_in_yaml": 1024,
+    "deviations_from_official_code": [
+      "attn_implementation: flash_attention_2 -> eager (no CUDA on this host)",
+      "batch_size: 8 (interaction.batch_size in gsm8k.yaml) -> 1 (CPU runtime)",
+      "max_new_tokens: 1024 -> 256 (CPU runtime)"
+    ]
+  }
+}
+== build: MemGenConfig.from_pretrained(checkpoint) ==
+   config.prompt_latents_len = 8
+   config.inference_latents_len = 8
+   config.max_prompt_aug_num = 1
+   config.max_inference_aug_num = 3
+   config.trigger_active = False
+   config.weaver_lora_config = {'bias': 'none', 'lora_alpha': 32, 'lora_dropout': 0.1, 'r': 16, 'target_modules': ['q_proj', 'v_proj'], 'task_type': 'CAUSAL_LM'}
+   config.trigger_lora_config = {'bias': 'none', 'lora_alpha': 32, 'lora_dropout': 0.1, 'r': 16, 'target_modules': ['q_proj', 'v_proj'], 'task_type': 'CAUSAL_LM'}
+   config.torch_dtype(json) = torch.bfloat16
+== build: tokenizer (official from_config uses the BASE model tokenizer) ==
+== build: three INDEPENDENT base-model instances (official from_config does exactly three from_pretrained calls, modeling_memgen.py:715-717) ==
+   reasoner: Qwen2ForCausalLM loaded in 0.1s params=1,543,714,304
+   weaver: Qwen2ForCausalLM loaded in 0.1s params=1,543,714,304
+   trigger: Qwen2ForCausalLM loaded in 0.0s params=1,543,714,304
+== build: MemGenModel.from_pretrained (official loader) ==
+[timing] model construction: 4.3s  rss=497.7 MiB
+
+== Step A: prompt construction ==
+  raw question: "Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?"
+  prompt builder: data/gsm8k/builder.py:GSM8KBuilder._preprocess (official code)
+  user content  : "Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \\boxed{}.Question: Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\n"
+  chat template source: memgen/model/modeling_memgen.py:137 sets tokenizer.chat_template = CONVERSATION_TEMPLATE (memgen/utils.py)
+  final prompt text:
+<|im_start|>user
+Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \boxed{}.Question: Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?
+<|im_end|>
+<|im_start|>assistant
+
+  tokenization: apply_chat_template(padding_side='left') as in runner.py:268-275
+  input_ids shape [1, 96], attention_mask sum 96
+
+== generation config actually used ==
+  {"max_new_tokens": 256, "do_sample": false, "temperature": 0.0, "eos_token_id": 151645, "pad_token_id": 151643, "use_cache": true, "weaver_do_sample": false, "trigger_do_sample": false}
+
+== Step B onward: MemGenModel.generate ==
+
+[timing] generate: 18.5s for 111 traced steps
+completion (skip_special_tokens=True):
+Janet’s ducks lay 16 eggs per day, so she has 16 - 3 = <<16-3=13>>13 eggs left after breakfast.
+She has 13 - 4 = <<13-4=9>>9 eggs left after baking muffins for her friends.
+She sells the 9 eggs for $2 each, so she makes 9 * $2 = $<<9*2=18>>18 every day at the farmers' market.\boxed{18}
+
+== supplementary: is the Weaver latent context-conditioned? (real augment_prompt) ==
+{
+  "same_input_repeat": {
+    "mean_row_cosine": 1.0,
+    "relative_l2_difference": 0.0,
+    "latent_norm_a": 282.318,
+    "latent_norm_b": 282.318,
+    "bitwise_identical": true
+  },
+  "same_tokens_reversed_order": {
+    "mean_row_cosine": 0.970883,
+    "relative_l2_difference": 0.245388,
+    "latent_norm_a": 282.318,
+    "latent_norm_b": 289.426
+  },
+  "conclusion": "latent is context-conditioned"
+}
+[written] E:\MemoryProject\MemGen\Reproduct\reproduction\wholeProcess\logs\environment.json
+[written] E:\MemoryProject\MemGen\Reproduct\reproduction\wholeProcess\logs\tensor_shapes.json
+[written] E:\MemoryProject\MemGen\Reproduct\reproduction\wholeProcess\logs\parameter_usage.json
+[written] E:\MemoryProject\MemGen\Reproduct\reproduction\wholeProcess\results\sample_output.json
+
+==============================================================================
+EXECUTION EVENT STREAM (ordered)
+==============================================================================
+[   1] generate_entry: {"input_ids_shape": [1, 96], "attention_mask_shape": [1, 96], "n_pad_positions": 0, "pad_token_id": 151643, "eos_token_id": 151645, "real_token_count": 96, "full_input_ids": [151644, 872, 198, 50, 3948, 279, 6888, 3491, 448, 6169, 32711, 11, 323, 1281, 2704, 311, 2182, 279, 66959, 96704, 640, 4766, 1124, 79075, 46391, 14582, 25, 53665, 748, 77778, 10962, 220, 16, 21, 18805, 817, 1899, 13, 2932, 49677, 2326, 369, 17496, 1449, 6556, 323, 293, 2050, 54304, 1330, 369, 1059, 4780, 1449, 1899, 448, 3040, 13, 2932, 30778, 279, 26313, 518, 279, 20336, 6, 3081, 7298, 369, 400, 17, 817, 7722, 35985, 18636, 13, 2585, 1753, 304, 11192, 1558, 1340, 1281, 1449, 1899, 518, 279, 20336, 6, 3081, 5267, 151645, 198, 151644, 77091, 198], "full_attention_mask": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+[   2] trigger        #1 active=False logits=[0.0, 1.0] softmax=[0.268941, 0.731059] argmax=1 path=hardcoded_branch
+[   3] gate           is_prompt=True last_tok="'\\n'" delimiter=True -> 1 (candidate_accepted_insert)
+[   4] reasoner_to_weaver [1, 96, 1536] bfloat16 -> [1, 96, 1536] mean=8.7e-05/-0.000649 std=0.02472/0.020747 norm=9.492642/7.970778
+[   5] weaver_augment #1 bank=prompt_query_latents K=8 ctx_len=96 weaver_in=[1, 104, 1536] concat=[context, query_latents] extract_lastK=True extract_firstK=False latent_norm=282.318146
+[   6] weaver_to_reasoner [1, 8, 1536] bfloat16 -> [1, 8, 1536] mean=-0.108695/-0.030948 std=2.544604/1.630598 norm=282.318146/180.77887
+[   7] latent_vs_vocabulary: {"which": "M0 (first inserted latent block, in Reasoner space)", "latent_shape": [1, 8, 1536], "check": {"per_latent_best_cos_sim": [0.093333, 0.088376, 0.094863, 0.098395, 0.092293, 0.097506, 0.091971, 0.087749], "per_latent_best_token_id": [128173, 141108, 510, 24, 10034, 23, 881, 134089], "max_cos_sim_over_all": 0.098395, "is_exact_embedding_of_some_token": false}}
+[   8] reasoner_forward           #  1 in=[1, 104, 1536] via=inputs_embeds attn_sum=104 pos_last5=[99, 100, 101, 102, 103] use_cache=True past_kv=None
+[   9] token_step   #  1 tok="'Jan'"              ids_len=97 emb_len=105 latents_so_far=8 pos_id=104 cache=False
+[  10] gate           is_prompt=False last_tok="'Jan'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  11] reasoner_forward           #  2 in=[1, 1, 1536] via=inputs_embeds attn_sum=105 pos_last5=[104] use_cache=True past_kv=104
+[  12] token_step   #  2 tok="'et'"               ids_len=98 emb_len=106 latents_so_far=8 pos_id=105 cache=True
+[  13] gate           is_prompt=False last_tok="'et'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  14] reasoner_forward           #  3 in=[1, 1, 1536] via=inputs_embeds attn_sum=106 pos_last5=[105] use_cache=True past_kv=105
+[  15] token_step   #  3 tok="'’s'"               ids_len=99 emb_len=107 latents_so_far=8 pos_id=106 cache=True
+[  16] gate           is_prompt=False last_tok="'’s'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  17] reasoner_forward           #  4 in=[1, 1, 1536] via=inputs_embeds attn_sum=107 pos_last5=[106] use_cache=True past_kv=106
+[  18] token_step   #  4 tok="' ducks'"           ids_len=100 emb_len=108 latents_so_far=8 pos_id=107 cache=True
+[  19] gate           is_prompt=False last_tok="' ducks'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  20] reasoner_forward           #  5 in=[1, 1, 1536] via=inputs_embeds attn_sum=108 pos_last5=[107] use_cache=True past_kv=107
+[  21] token_step   #  5 tok="' lay'"             ids_len=101 emb_len=109 latents_so_far=8 pos_id=108 cache=True
+[  22] gate           is_prompt=False last_tok="' lay'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  23] reasoner_forward           #  6 in=[1, 1, 1536] via=inputs_embeds attn_sum=109 pos_last5=[108] use_cache=True past_kv=108
+[  24] token_step   #  6 tok="' '"                ids_len=102 emb_len=110 latents_so_far=8 pos_id=109 cache=True
+[  25] gate           is_prompt=False last_tok="' '" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  26] reasoner_forward           #  7 in=[1, 1, 1536] via=inputs_embeds attn_sum=110 pos_last5=[109] use_cache=True past_kv=109
+[  27] token_step   #  7 tok="'1'"                ids_len=103 emb_len=111 latents_so_far=8 pos_id=110 cache=True
+[  28] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  29] reasoner_forward           #  8 in=[1, 1, 1536] via=inputs_embeds attn_sum=111 pos_last5=[110] use_cache=True past_kv=110
+[  30] token_step   #  8 tok="'6'"                ids_len=104 emb_len=112 latents_so_far=8 pos_id=111 cache=True
+[  31] gate           is_prompt=False last_tok="'6'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  32] reasoner_forward           #  9 in=[1, 1, 1536] via=inputs_embeds attn_sum=112 pos_last5=[111] use_cache=True past_kv=111
+[  33] token_step   #  9 tok="' eggs'"            ids_len=105 emb_len=113 latents_so_far=8 pos_id=112 cache=True
+[  34] gate           is_prompt=False last_tok="' eggs'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  35] reasoner_forward           # 10 in=[1, 1, 1536] via=inputs_embeds attn_sum=113 pos_last5=[112] use_cache=True past_kv=112
+[  36] token_step   # 10 tok="' per'"             ids_len=106 emb_len=114 latents_so_far=8 pos_id=113 cache=True
+[  37] gate           is_prompt=False last_tok="' per'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  38] reasoner_forward           # 11 in=[1, 1, 1536] via=inputs_embeds attn_sum=114 pos_last5=[113] use_cache=True past_kv=113
+[  39] token_step   # 11 tok="' day'"             ids_len=107 emb_len=115 latents_so_far=8 pos_id=114 cache=True
+[  40] gate           is_prompt=False last_tok="' day'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  41] reasoner_forward           # 12 in=[1, 1, 1536] via=inputs_embeds attn_sum=115 pos_last5=[114] use_cache=True past_kv=114
+[  42] token_step   # 12 tok="','"                ids_len=108 emb_len=116 latents_so_far=8 pos_id=115 cache=True
+[  43] trigger        #2 active=False logits=[0.0, 1.0] softmax=[0.268941, 0.731059] argmax=1 path=hardcoded_branch
+[  44] gate           is_prompt=False last_tok="','" delimiter=True -> 1 (candidate_accepted_insert)
+[  45] reasoner_to_weaver [1, 116, 1536] bfloat16 -> [1, 116, 1536] mean=-0.002069/0.002322 std=0.428949/0.264524 norm=181.063812/111.661583
+[  46] weaver_augment #2 bank=inference_query_latents K=8 ctx_len=116 weaver_in=[1, 124, 1536] concat=[context, query_latents] extract_lastK=True extract_firstK=False latent_norm=254.177612
+[  47] weaver_to_reasoner [1, 8, 1536] bfloat16 -> [1, 8, 1536] mean=-0.062473/-0.026107 std=2.292205/1.48322 norm=254.177612/164.435379
+[  48] reasoner_forward           # 13 in=[1, 124, 1536] via=inputs_embeds attn_sum=124 pos_last5=[119, 120, 121, 122, 123] use_cache=True past_kv=None
+[  49] token_step   # 13 tok="' so'"              ids_len=109 emb_len=125 latents_so_far=16 pos_id=124 cache=False
+[  50] gate           is_prompt=False last_tok="' so'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  51] reasoner_forward           # 14 in=[1, 1, 1536] via=inputs_embeds attn_sum=125 pos_last5=[124] use_cache=True past_kv=124
+[  52] token_step   # 14 tok="' she'"             ids_len=110 emb_len=126 latents_so_far=16 pos_id=125 cache=True
+[  53] gate           is_prompt=False last_tok="' she'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  54] reasoner_forward           # 15 in=[1, 1, 1536] via=inputs_embeds attn_sum=126 pos_last5=[125] use_cache=True past_kv=125
+[  55] token_step   # 15 tok="' has'"             ids_len=111 emb_len=127 latents_so_far=16 pos_id=126 cache=True
+[  56] gate           is_prompt=False last_tok="' has'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  57] reasoner_forward           # 16 in=[1, 1, 1536] via=inputs_embeds attn_sum=127 pos_last5=[126] use_cache=True past_kv=126
+[  58] token_step   # 16 tok="' '"                ids_len=112 emb_len=128 latents_so_far=16 pos_id=127 cache=True
+[  59] gate           is_prompt=False last_tok="' '" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  60] reasoner_forward           # 17 in=[1, 1, 1536] via=inputs_embeds attn_sum=128 pos_last5=[127] use_cache=True past_kv=127
+[  61] token_step   # 17 tok="'1'"                ids_len=113 emb_len=129 latents_so_far=16 pos_id=128 cache=True
+[  62] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  63] reasoner_forward           # 18 in=[1, 1, 1536] via=inputs_embeds attn_sum=129 pos_last5=[128] use_cache=True past_kv=128
+[  64] token_step   # 18 tok="'6'"                ids_len=114 emb_len=130 latents_so_far=16 pos_id=129 cache=True
+[  65] gate           is_prompt=False last_tok="'6'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  66] reasoner_forward           # 19 in=[1, 1, 1536] via=inputs_embeds attn_sum=130 pos_last5=[129] use_cache=True past_kv=129
+[  67] token_step   # 19 tok="' -'"               ids_len=115 emb_len=131 latents_so_far=16 pos_id=130 cache=True
+[  68] gate           is_prompt=False last_tok="' -'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  69] reasoner_forward           # 20 in=[1, 1, 1536] via=inputs_embeds attn_sum=131 pos_last5=[130] use_cache=True past_kv=130
+[  70] token_step   # 20 tok="' '"                ids_len=116 emb_len=132 latents_so_far=16 pos_id=131 cache=True
+[  71] gate           is_prompt=False last_tok="' '" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  72] reasoner_forward           # 21 in=[1, 1, 1536] via=inputs_embeds attn_sum=132 pos_last5=[131] use_cache=True past_kv=131
+[  73] token_step   # 21 tok="'3'"                ids_len=117 emb_len=133 latents_so_far=16 pos_id=132 cache=True
+[  74] gate           is_prompt=False last_tok="'3'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  75] reasoner_forward           # 22 in=[1, 1, 1536] via=inputs_embeds attn_sum=133 pos_last5=[132] use_cache=True past_kv=132
+[  76] token_step   # 22 tok="' ='"               ids_len=118 emb_len=134 latents_so_far=16 pos_id=133 cache=True
+[  77] gate           is_prompt=False last_tok="' ='" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  78] reasoner_forward           # 23 in=[1, 1, 1536] via=inputs_embeds attn_sum=134 pos_last5=[133] use_cache=True past_kv=133
+[  79] token_step   # 23 tok="' <<'"              ids_len=119 emb_len=135 latents_so_far=16 pos_id=134 cache=True
+[  80] gate           is_prompt=False last_tok="' <<'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  81] reasoner_forward           # 24 in=[1, 1, 1536] via=inputs_embeds attn_sum=135 pos_last5=[134] use_cache=True past_kv=134
+[  82] token_step   # 24 tok="'1'"                ids_len=120 emb_len=136 latents_so_far=16 pos_id=135 cache=True
+[  83] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  84] reasoner_forward           # 25 in=[1, 1, 1536] via=inputs_embeds attn_sum=136 pos_last5=[135] use_cache=True past_kv=135
+[  85] token_step   # 25 tok="'6'"                ids_len=121 emb_len=137 latents_so_far=16 pos_id=136 cache=True
+[  86] gate           is_prompt=False last_tok="'6'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  87] reasoner_forward           # 26 in=[1, 1, 1536] via=inputs_embeds attn_sum=137 pos_last5=[136] use_cache=True past_kv=136
+[  88] token_step   # 26 tok="'-'"                ids_len=122 emb_len=138 latents_so_far=16 pos_id=137 cache=True
+[  89] gate           is_prompt=False last_tok="'-'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  90] reasoner_forward           # 27 in=[1, 1, 1536] via=inputs_embeds attn_sum=138 pos_last5=[137] use_cache=True past_kv=137
+[  91] token_step   # 27 tok="'3'"                ids_len=123 emb_len=139 latents_so_far=16 pos_id=138 cache=True
+[  92] gate           is_prompt=False last_tok="'3'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  93] reasoner_forward           # 28 in=[1, 1, 1536] via=inputs_embeds attn_sum=139 pos_last5=[138] use_cache=True past_kv=138
+[  94] token_step   # 28 tok="'='"                ids_len=124 emb_len=140 latents_so_far=16 pos_id=139 cache=True
+[  95] gate           is_prompt=False last_tok="'='" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  96] reasoner_forward           # 29 in=[1, 1, 1536] via=inputs_embeds attn_sum=140 pos_last5=[139] use_cache=True past_kv=139
+[  97] token_step   # 29 tok="'1'"                ids_len=125 emb_len=141 latents_so_far=16 pos_id=140 cache=True
+[  98] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[  99] reasoner_forward           # 30 in=[1, 1, 1536] via=inputs_embeds attn_sum=141 pos_last5=[140] use_cache=True past_kv=140
+[ 100] token_step   # 30 tok="'3'"                ids_len=126 emb_len=142 latents_so_far=16 pos_id=141 cache=True
+[ 101] gate           is_prompt=False last_tok="'3'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 102] reasoner_forward           # 31 in=[1, 1, 1536] via=inputs_embeds attn_sum=142 pos_last5=[141] use_cache=True past_kv=141
+[ 103] token_step   # 31 tok="'>>'"               ids_len=127 emb_len=143 latents_so_far=16 pos_id=142 cache=True
+[ 104] gate           is_prompt=False last_tok="'>>'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 105] reasoner_forward           # 32 in=[1, 1, 1536] via=inputs_embeds attn_sum=143 pos_last5=[142] use_cache=True past_kv=142
+[ 106] token_step   # 32 tok="'1'"                ids_len=128 emb_len=144 latents_so_far=16 pos_id=143 cache=True
+[ 107] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 108] reasoner_forward           # 33 in=[1, 1, 1536] via=inputs_embeds attn_sum=144 pos_last5=[143] use_cache=True past_kv=143
+[ 109] token_step   # 33 tok="'3'"                ids_len=129 emb_len=145 latents_so_far=16 pos_id=144 cache=True
+[ 110] gate           is_prompt=False last_tok="'3'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 111] reasoner_forward           # 34 in=[1, 1, 1536] via=inputs_embeds attn_sum=145 pos_last5=[144] use_cache=True past_kv=144
+[ 112] token_step   # 34 tok="' eggs'"            ids_len=130 emb_len=146 latents_so_far=16 pos_id=145 cache=True
+[ 113] gate           is_prompt=False last_tok="' eggs'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 114] reasoner_forward           # 35 in=[1, 1, 1536] via=inputs_embeds attn_sum=146 pos_last5=[145] use_cache=True past_kv=145
+[ 115] token_step   # 35 tok="' left'"            ids_len=131 emb_len=147 latents_so_far=16 pos_id=146 cache=True
+[ 116] gate           is_prompt=False last_tok="' left'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 117] reasoner_forward           # 36 in=[1, 1, 1536] via=inputs_embeds attn_sum=147 pos_last5=[146] use_cache=True past_kv=146
+[ 118] token_step   # 36 tok="' after'"           ids_len=132 emb_len=148 latents_so_far=16 pos_id=147 cache=True
+[ 119] gate           is_prompt=False last_tok="' after'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 120] reasoner_forward           # 37 in=[1, 1, 1536] via=inputs_embeds attn_sum=148 pos_last5=[147] use_cache=True past_kv=147
+[ 121] token_step   # 37 tok="' breakfast'"       ids_len=133 emb_len=149 latents_so_far=16 pos_id=148 cache=True
+[ 122] gate           is_prompt=False last_tok="' breakfast'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 123] reasoner_forward           # 38 in=[1, 1, 1536] via=inputs_embeds attn_sum=149 pos_last5=[148] use_cache=True past_kv=148
+[ 124] token_step   # 38 tok="'.\\n'"             ids_len=134 emb_len=150 latents_so_far=16 pos_id=149 cache=True
+[ 125] gate           is_prompt=False last_tok="'.\\n'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 126] reasoner_forward           # 39 in=[1, 1, 1536] via=inputs_embeds attn_sum=150 pos_last5=[149] use_cache=True past_kv=149
+[ 127] token_step   # 39 tok="'She'"              ids_len=135 emb_len=151 latents_so_far=16 pos_id=150 cache=True
+[ 128] gate           is_prompt=False last_tok="'She'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 129] reasoner_forward           # 40 in=[1, 1, 1536] via=inputs_embeds attn_sum=151 pos_last5=[150] use_cache=True past_kv=150
+[ 130] token_step   # 40 tok="' has'"             ids_len=136 emb_len=152 latents_so_far=16 pos_id=151 cache=True
+[ 131] gate           is_prompt=False last_tok="' has'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 132] reasoner_forward           # 41 in=[1, 1, 1536] via=inputs_embeds attn_sum=152 pos_last5=[151] use_cache=True past_kv=151
+[ 133] token_step   # 41 tok="' '"                ids_len=137 emb_len=153 latents_so_far=16 pos_id=152 cache=True
+[ 134] gate           is_prompt=False last_tok="' '" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 135] reasoner_forward           # 42 in=[1, 1, 1536] via=inputs_embeds attn_sum=153 pos_last5=[152] use_cache=True past_kv=152
+[ 136] token_step   # 42 tok="'1'"                ids_len=138 emb_len=154 latents_so_far=16 pos_id=153 cache=True
+[ 137] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 138] reasoner_forward           # 43 in=[1, 1, 1536] via=inputs_embeds attn_sum=154 pos_last5=[153] use_cache=True past_kv=153
+[ 139] token_step   # 43 tok="'3'"                ids_len=139 emb_len=155 latents_so_far=16 pos_id=154 cache=True
+[ 140] gate           is_prompt=False last_tok="'3'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 141] reasoner_forward           # 44 in=[1, 1, 1536] via=inputs_embeds attn_sum=155 pos_last5=[154] use_cache=True past_kv=154
+[ 142] token_step   # 44 tok="' -'"               ids_len=140 emb_len=156 latents_so_far=16 pos_id=155 cache=True
+[ 143] gate           is_prompt=False last_tok="' -'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 144] reasoner_forward           # 45 in=[1, 1, 1536] via=inputs_embeds attn_sum=156 pos_last5=[155] use_cache=True past_kv=155
+[ 145] token_step   # 45 tok="' '"                ids_len=141 emb_len=157 latents_so_far=16 pos_id=156 cache=True
+[ 146] gate           is_prompt=False last_tok="' '" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 147] reasoner_forward           # 46 in=[1, 1, 1536] via=inputs_embeds attn_sum=157 pos_last5=[156] use_cache=True past_kv=156
+[ 148] token_step   # 46 tok="'4'"                ids_len=142 emb_len=158 latents_so_far=16 pos_id=157 cache=True
+[ 149] gate           is_prompt=False last_tok="'4'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 150] reasoner_forward           # 47 in=[1, 1, 1536] via=inputs_embeds attn_sum=158 pos_last5=[157] use_cache=True past_kv=157
+[ 151] token_step   # 47 tok="' ='"               ids_len=143 emb_len=159 latents_so_far=16 pos_id=158 cache=True
+[ 152] gate           is_prompt=False last_tok="' ='" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 153] reasoner_forward           # 48 in=[1, 1, 1536] via=inputs_embeds attn_sum=159 pos_last5=[158] use_cache=True past_kv=158
+[ 154] token_step   # 48 tok="' <<'"              ids_len=144 emb_len=160 latents_so_far=16 pos_id=159 cache=True
+[ 155] gate           is_prompt=False last_tok="' <<'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 156] reasoner_forward           # 49 in=[1, 1, 1536] via=inputs_embeds attn_sum=160 pos_last5=[159] use_cache=True past_kv=159
+[ 157] token_step   # 49 tok="'1'"                ids_len=145 emb_len=161 latents_so_far=16 pos_id=160 cache=True
+[ 158] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 159] reasoner_forward           # 50 in=[1, 1, 1536] via=inputs_embeds attn_sum=161 pos_last5=[160] use_cache=True past_kv=160
+[ 160] token_step   # 50 tok="'3'"                ids_len=146 emb_len=162 latents_so_far=16 pos_id=161 cache=True
+[ 161] gate           is_prompt=False last_tok="'3'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 162] reasoner_forward           # 51 in=[1, 1, 1536] via=inputs_embeds attn_sum=162 pos_last5=[161] use_cache=True past_kv=161
+[ 163] token_step   # 51 tok="'-'"                ids_len=147 emb_len=163 latents_so_far=16 pos_id=162 cache=True
+[ 164] gate           is_prompt=False last_tok="'-'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 165] reasoner_forward           # 52 in=[1, 1, 1536] via=inputs_embeds attn_sum=163 pos_last5=[162] use_cache=True past_kv=162
+[ 166] token_step   # 52 tok="'4'"                ids_len=148 emb_len=164 latents_so_far=16 pos_id=163 cache=True
+[ 167] gate           is_prompt=False last_tok="'4'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 168] reasoner_forward           # 53 in=[1, 1, 1536] via=inputs_embeds attn_sum=164 pos_last5=[163] use_cache=True past_kv=163
+[ 169] token_step   # 53 tok="'='"                ids_len=149 emb_len=165 latents_so_far=16 pos_id=164 cache=True
+[ 170] gate           is_prompt=False last_tok="'='" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 171] reasoner_forward           # 54 in=[1, 1, 1536] via=inputs_embeds attn_sum=165 pos_last5=[164] use_cache=True past_kv=164
+[ 172] token_step   # 54 tok="'9'"                ids_len=150 emb_len=166 latents_so_far=16 pos_id=165 cache=True
+[ 173] gate           is_prompt=False last_tok="'9'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 174] reasoner_forward           # 55 in=[1, 1, 1536] via=inputs_embeds attn_sum=166 pos_last5=[165] use_cache=True past_kv=165
+[ 175] token_step   # 55 tok="'>>'"               ids_len=151 emb_len=167 latents_so_far=16 pos_id=166 cache=True
+[ 176] gate           is_prompt=False last_tok="'>>'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 177] reasoner_forward           # 56 in=[1, 1, 1536] via=inputs_embeds attn_sum=167 pos_last5=[166] use_cache=True past_kv=166
+[ 178] token_step   # 56 tok="'9'"                ids_len=152 emb_len=168 latents_so_far=16 pos_id=167 cache=True
+[ 179] gate           is_prompt=False last_tok="'9'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 180] reasoner_forward           # 57 in=[1, 1, 1536] via=inputs_embeds attn_sum=168 pos_last5=[167] use_cache=True past_kv=167
+[ 181] token_step   # 57 tok="' eggs'"            ids_len=153 emb_len=169 latents_so_far=16 pos_id=168 cache=True
+[ 182] gate           is_prompt=False last_tok="' eggs'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 183] reasoner_forward           # 58 in=[1, 1, 1536] via=inputs_embeds attn_sum=169 pos_last5=[168] use_cache=True past_kv=168
+[ 184] token_step   # 58 tok="' left'"            ids_len=154 emb_len=170 latents_so_far=16 pos_id=169 cache=True
+[ 185] gate           is_prompt=False last_tok="' left'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 186] reasoner_forward           # 59 in=[1, 1, 1536] via=inputs_embeds attn_sum=170 pos_last5=[169] use_cache=True past_kv=169
+[ 187] token_step   # 59 tok="' after'"           ids_len=155 emb_len=171 latents_so_far=16 pos_id=170 cache=True
+[ 188] gate           is_prompt=False last_tok="' after'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 189] reasoner_forward           # 60 in=[1, 1, 1536] via=inputs_embeds attn_sum=171 pos_last5=[170] use_cache=True past_kv=170
+[ 190] token_step   # 60 tok="' baking'"          ids_len=156 emb_len=172 latents_so_far=16 pos_id=171 cache=True
+[ 191] gate           is_prompt=False last_tok="' baking'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 192] reasoner_forward           # 61 in=[1, 1, 1536] via=inputs_embeds attn_sum=172 pos_last5=[171] use_cache=True past_kv=171
+[ 193] token_step   # 61 tok="' muff'"            ids_len=157 emb_len=173 latents_so_far=16 pos_id=172 cache=True
+[ 194] gate           is_prompt=False last_tok="' muff'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 195] reasoner_forward           # 62 in=[1, 1, 1536] via=inputs_embeds attn_sum=173 pos_last5=[172] use_cache=True past_kv=172
+[ 196] token_step   # 62 tok="'ins'"              ids_len=158 emb_len=174 latents_so_far=16 pos_id=173 cache=True
+[ 197] gate           is_prompt=False last_tok="'ins'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 198] reasoner_forward           # 63 in=[1, 1, 1536] via=inputs_embeds attn_sum=174 pos_last5=[173] use_cache=True past_kv=173
+[ 199] token_step   # 63 tok="' for'"             ids_len=159 emb_len=175 latents_so_far=16 pos_id=174 cache=True
+[ 200] gate           is_prompt=False last_tok="' for'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 201] reasoner_forward           # 64 in=[1, 1, 1536] via=inputs_embeds attn_sum=175 pos_last5=[174] use_cache=True past_kv=174
+[ 202] token_step   # 64 tok="' her'"             ids_len=160 emb_len=176 latents_so_far=16 pos_id=175 cache=True
+[ 203] gate           is_prompt=False last_tok="' her'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 204] reasoner_forward           # 65 in=[1, 1, 1536] via=inputs_embeds attn_sum=176 pos_last5=[175] use_cache=True past_kv=175
+[ 205] token_step   # 65 tok="' friends'"         ids_len=161 emb_len=177 latents_so_far=16 pos_id=176 cache=True
+[ 206] gate           is_prompt=False last_tok="' friends'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 207] reasoner_forward           # 66 in=[1, 1, 1536] via=inputs_embeds attn_sum=177 pos_last5=[176] use_cache=True past_kv=176
+[ 208] token_step   # 66 tok="'.\\n'"             ids_len=162 emb_len=178 latents_so_far=16 pos_id=177 cache=True
+[ 209] gate           is_prompt=False last_tok="'.\\n'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 210] reasoner_forward           # 67 in=[1, 1, 1536] via=inputs_embeds attn_sum=178 pos_last5=[177] use_cache=True past_kv=177
+[ 211] token_step   # 67 tok="'She'"              ids_len=163 emb_len=179 latents_so_far=16 pos_id=178 cache=True
+[ 212] gate           is_prompt=False last_tok="'She'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 213] reasoner_forward           # 68 in=[1, 1, 1536] via=inputs_embeds attn_sum=179 pos_last5=[178] use_cache=True past_kv=178
+[ 214] token_step   # 68 tok="' sells'"           ids_len=164 emb_len=180 latents_so_far=16 pos_id=179 cache=True
+[ 215] gate           is_prompt=False last_tok="' sells'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 216] reasoner_forward           # 69 in=[1, 1, 1536] via=inputs_embeds attn_sum=180 pos_last5=[179] use_cache=True past_kv=179
+[ 217] token_step   # 69 tok="' the'"             ids_len=165 emb_len=181 latents_so_far=16 pos_id=180 cache=True
+[ 218] gate           is_prompt=False last_tok="' the'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 219] reasoner_forward           # 70 in=[1, 1, 1536] via=inputs_embeds attn_sum=181 pos_last5=[180] use_cache=True past_kv=180
+[ 220] token_step   # 70 tok="' '"                ids_len=166 emb_len=182 latents_so_far=16 pos_id=181 cache=True
+[ 221] gate           is_prompt=False last_tok="' '" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 222] reasoner_forward           # 71 in=[1, 1, 1536] via=inputs_embeds attn_sum=182 pos_last5=[181] use_cache=True past_kv=181
+[ 223] token_step   # 71 tok="'9'"                ids_len=167 emb_len=183 latents_so_far=16 pos_id=182 cache=True
+[ 224] gate           is_prompt=False last_tok="'9'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 225] reasoner_forward           # 72 in=[1, 1, 1536] via=inputs_embeds attn_sum=183 pos_last5=[182] use_cache=True past_kv=182
+[ 226] token_step   # 72 tok="' eggs'"            ids_len=168 emb_len=184 latents_so_far=16 pos_id=183 cache=True
+[ 227] gate           is_prompt=False last_tok="' eggs'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 228] reasoner_forward           # 73 in=[1, 1, 1536] via=inputs_embeds attn_sum=184 pos_last5=[183] use_cache=True past_kv=183
+[ 229] token_step   # 73 tok="' for'"             ids_len=169 emb_len=185 latents_so_far=16 pos_id=184 cache=True
+[ 230] gate           is_prompt=False last_tok="' for'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 231] reasoner_forward           # 74 in=[1, 1, 1536] via=inputs_embeds attn_sum=185 pos_last5=[184] use_cache=True past_kv=184
+[ 232] token_step   # 74 tok="' $'"               ids_len=170 emb_len=186 latents_so_far=16 pos_id=185 cache=True
+[ 233] gate           is_prompt=False last_tok="' $'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 234] reasoner_forward           # 75 in=[1, 1, 1536] via=inputs_embeds attn_sum=186 pos_last5=[185] use_cache=True past_kv=185
+[ 235] token_step   # 75 tok="'2'"                ids_len=171 emb_len=187 latents_so_far=16 pos_id=186 cache=True
+[ 236] gate           is_prompt=False last_tok="'2'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 237] reasoner_forward           # 76 in=[1, 1, 1536] via=inputs_embeds attn_sum=187 pos_last5=[186] use_cache=True past_kv=186
+[ 238] token_step   # 76 tok="' each'"            ids_len=172 emb_len=188 latents_so_far=16 pos_id=187 cache=True
+[ 239] gate           is_prompt=False last_tok="' each'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 240] reasoner_forward           # 77 in=[1, 1, 1536] via=inputs_embeds attn_sum=188 pos_last5=[187] use_cache=True past_kv=187
+[ 241] token_step   # 77 tok="','"                ids_len=173 emb_len=189 latents_so_far=16 pos_id=188 cache=True
+[ 242] trigger        #3 active=False logits=[0.0, 1.0] softmax=[0.268941, 0.731059] argmax=1 path=hardcoded_branch
+[ 243] gate           is_prompt=False last_tok="','" delimiter=True -> 1 (candidate_accepted_insert)
+[ 244] reasoner_to_weaver [1, 189, 1536] bfloat16 -> [1, 189, 1536] mean=-0.002416/0.003078 std=0.4542/0.276873 norm=244.718765/149.184387
+[ 245] weaver_augment #3 bank=inference_query_latents K=8 ctx_len=189 weaver_in=[1, 197, 1536] concat=[context, query_latents] extract_lastK=True extract_firstK=False latent_norm=251.853958
+[ 246] weaver_to_reasoner [1, 8, 1536] bfloat16 -> [1, 8, 1536] mean=-0.065665/-0.02694 std=2.271144/1.462872 norm=251.853958/162.181808
+[ 247] token_step   # 78 tok="' so'"              ids_len=174 emb_len=198 latents_so_far=24 pos_id=197 cache=False
+[ 248] gate           is_prompt=False last_tok="' so'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 249] reasoner_forward           # 79 in=[1, 1, 1536] via=inputs_embeds attn_sum=198 pos_last5=[197] use_cache=True past_kv=197
+[ 250] token_step   # 79 tok="' she'"             ids_len=175 emb_len=199 latents_so_far=24 pos_id=198 cache=True
+[ 251] gate           is_prompt=False last_tok="' she'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 252] reasoner_forward           # 80 in=[1, 1, 1536] via=inputs_embeds attn_sum=199 pos_last5=[198] use_cache=True past_kv=198
+[ 253] token_step   # 80 tok="' makes'"           ids_len=176 emb_len=200 latents_so_far=24 pos_id=199 cache=True
+[ 254] gate           is_prompt=False last_tok="' makes'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 255] reasoner_forward           # 81 in=[1, 1, 1536] via=inputs_embeds attn_sum=200 pos_last5=[199] use_cache=True past_kv=199
+[ 256] token_step   # 81 tok="' '"                ids_len=177 emb_len=201 latents_so_far=24 pos_id=200 cache=True
+[ 257] gate           is_prompt=False last_tok="' '" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 258] reasoner_forward           # 82 in=[1, 1, 1536] via=inputs_embeds attn_sum=201 pos_last5=[200] use_cache=True past_kv=200
+[ 259] token_step   # 82 tok="'9'"                ids_len=178 emb_len=202 latents_so_far=24 pos_id=201 cache=True
+[ 260] gate           is_prompt=False last_tok="'9'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 261] reasoner_forward           # 83 in=[1, 1, 1536] via=inputs_embeds attn_sum=202 pos_last5=[201] use_cache=True past_kv=201
+[ 262] token_step   # 83 tok="' *'"               ids_len=179 emb_len=203 latents_so_far=24 pos_id=202 cache=True
+[ 263] gate           is_prompt=False last_tok="' *'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 264] reasoner_forward           # 84 in=[1, 1, 1536] via=inputs_embeds attn_sum=203 pos_last5=[202] use_cache=True past_kv=202
+[ 265] token_step   # 84 tok="' $'"               ids_len=180 emb_len=204 latents_so_far=24 pos_id=203 cache=True
+[ 266] gate           is_prompt=False last_tok="' $'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 267] reasoner_forward           # 85 in=[1, 1, 1536] via=inputs_embeds attn_sum=204 pos_last5=[203] use_cache=True past_kv=203
+[ 268] token_step   # 85 tok="'2'"                ids_len=181 emb_len=205 latents_so_far=24 pos_id=204 cache=True
+[ 269] gate           is_prompt=False last_tok="'2'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 270] reasoner_forward           # 86 in=[1, 1, 1536] via=inputs_embeds attn_sum=205 pos_last5=[204] use_cache=True past_kv=204
+[ 271] token_step   # 86 tok="' ='"               ids_len=182 emb_len=206 latents_so_far=24 pos_id=205 cache=True
+[ 272] gate           is_prompt=False last_tok="' ='" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 273] reasoner_forward           # 87 in=[1, 1, 1536] via=inputs_embeds attn_sum=206 pos_last5=[205] use_cache=True past_kv=205
+[ 274] token_step   # 87 tok="' $'"               ids_len=183 emb_len=207 latents_so_far=24 pos_id=206 cache=True
+[ 275] gate           is_prompt=False last_tok="' $'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 276] reasoner_forward           # 88 in=[1, 1, 1536] via=inputs_embeds attn_sum=207 pos_last5=[206] use_cache=True past_kv=206
+[ 277] token_step   # 88 tok="'<<'"               ids_len=184 emb_len=208 latents_so_far=24 pos_id=207 cache=True
+[ 278] gate           is_prompt=False last_tok="'<<'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 279] reasoner_forward           # 89 in=[1, 1, 1536] via=inputs_embeds attn_sum=208 pos_last5=[207] use_cache=True past_kv=207
+[ 280] token_step   # 89 tok="'9'"                ids_len=185 emb_len=209 latents_so_far=24 pos_id=208 cache=True
+[ 281] gate           is_prompt=False last_tok="'9'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 282] reasoner_forward           # 90 in=[1, 1, 1536] via=inputs_embeds attn_sum=209 pos_last5=[208] use_cache=True past_kv=208
+[ 283] token_step   # 90 tok="'*'"                ids_len=186 emb_len=210 latents_so_far=24 pos_id=209 cache=True
+[ 284] gate           is_prompt=False last_tok="'*'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 285] reasoner_forward           # 91 in=[1, 1, 1536] via=inputs_embeds attn_sum=210 pos_last5=[209] use_cache=True past_kv=209
+[ 286] token_step   # 91 tok="'2'"                ids_len=187 emb_len=211 latents_so_far=24 pos_id=210 cache=True
+[ 287] gate           is_prompt=False last_tok="'2'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 288] reasoner_forward           # 92 in=[1, 1, 1536] via=inputs_embeds attn_sum=211 pos_last5=[210] use_cache=True past_kv=210
+[ 289] token_step   # 92 tok="'='"                ids_len=188 emb_len=212 latents_so_far=24 pos_id=211 cache=True
+[ 290] gate           is_prompt=False last_tok="'='" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 291] reasoner_forward           # 93 in=[1, 1, 1536] via=inputs_embeds attn_sum=212 pos_last5=[211] use_cache=True past_kv=211
+[ 292] token_step   # 93 tok="'1'"                ids_len=189 emb_len=213 latents_so_far=24 pos_id=212 cache=True
+[ 293] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 294] reasoner_forward           # 94 in=[1, 1, 1536] via=inputs_embeds attn_sum=213 pos_last5=[212] use_cache=True past_kv=212
+[ 295] token_step   # 94 tok="'8'"                ids_len=190 emb_len=214 latents_so_far=24 pos_id=213 cache=True
+[ 296] gate           is_prompt=False last_tok="'8'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 297] reasoner_forward           # 95 in=[1, 1, 1536] via=inputs_embeds attn_sum=214 pos_last5=[213] use_cache=True past_kv=213
+[ 298] token_step   # 95 tok="'>>'"               ids_len=191 emb_len=215 latents_so_far=24 pos_id=214 cache=True
+[ 299] gate           is_prompt=False last_tok="'>>'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 300] reasoner_forward           # 96 in=[1, 1, 1536] via=inputs_embeds attn_sum=215 pos_last5=[214] use_cache=True past_kv=214
+[ 301] token_step   # 96 tok="'1'"                ids_len=192 emb_len=216 latents_so_far=24 pos_id=215 cache=True
+[ 302] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 303] reasoner_forward           # 97 in=[1, 1, 1536] via=inputs_embeds attn_sum=216 pos_last5=[215] use_cache=True past_kv=215
+[ 304] token_step   # 97 tok="'8'"                ids_len=193 emb_len=217 latents_so_far=24 pos_id=216 cache=True
+[ 305] gate           is_prompt=False last_tok="'8'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 306] reasoner_forward           # 98 in=[1, 1, 1536] via=inputs_embeds attn_sum=217 pos_last5=[216] use_cache=True past_kv=216
+[ 307] token_step   # 98 tok="' every'"           ids_len=194 emb_len=218 latents_so_far=24 pos_id=217 cache=True
+[ 308] gate           is_prompt=False last_tok="' every'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 309] reasoner_forward           # 99 in=[1, 1, 1536] via=inputs_embeds attn_sum=218 pos_last5=[217] use_cache=True past_kv=217
+[ 310] token_step   # 99 tok="' day'"             ids_len=195 emb_len=219 latents_so_far=24 pos_id=218 cache=True
+[ 311] gate           is_prompt=False last_tok="' day'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 312] reasoner_forward           #100 in=[1, 1, 1536] via=inputs_embeds attn_sum=219 pos_last5=[218] use_cache=True past_kv=218
+[ 313] token_step   #100 tok="' at'"              ids_len=196 emb_len=220 latents_so_far=24 pos_id=219 cache=True
+[ 314] gate           is_prompt=False last_tok="' at'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 315] reasoner_forward           #101 in=[1, 1, 1536] via=inputs_embeds attn_sum=220 pos_last5=[219] use_cache=True past_kv=219
+[ 316] token_step   #101 tok="' the'"             ids_len=197 emb_len=221 latents_so_far=24 pos_id=220 cache=True
+[ 317] gate           is_prompt=False last_tok="' the'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 318] reasoner_forward           #102 in=[1, 1, 1536] via=inputs_embeds attn_sum=221 pos_last5=[220] use_cache=True past_kv=220
+[ 319] token_step   #102 tok="' farmers'"         ids_len=198 emb_len=222 latents_so_far=24 pos_id=221 cache=True
+[ 320] gate           is_prompt=False last_tok="' farmers'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 321] reasoner_forward           #103 in=[1, 1, 1536] via=inputs_embeds attn_sum=222 pos_last5=[221] use_cache=True past_kv=221
+[ 322] token_step   #103 tok='"\'"'               ids_len=199 emb_len=223 latents_so_far=24 pos_id=222 cache=True
+[ 323] gate           is_prompt=False last_tok='"\'"' delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 324] reasoner_forward           #104 in=[1, 1, 1536] via=inputs_embeds attn_sum=223 pos_last5=[222] use_cache=True past_kv=222
+[ 325] token_step   #104 tok="' market'"          ids_len=200 emb_len=224 latents_so_far=24 pos_id=223 cache=True
+[ 326] gate           is_prompt=False last_tok="' market'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 327] reasoner_forward           #105 in=[1, 1, 1536] via=inputs_embeds attn_sum=224 pos_last5=[223] use_cache=True past_kv=223
+[ 328] token_step   #105 tok="'.\\\\'"            ids_len=201 emb_len=225 latents_so_far=24 pos_id=224 cache=True
+[ 329] gate           is_prompt=False last_tok="'.\\\\'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 330] reasoner_forward           #106 in=[1, 1, 1536] via=inputs_embeds attn_sum=225 pos_last5=[224] use_cache=True past_kv=224
+[ 331] token_step   #106 tok="'boxed'"            ids_len=202 emb_len=226 latents_so_far=24 pos_id=225 cache=True
+[ 332] gate           is_prompt=False last_tok="'boxed'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 333] reasoner_forward           #107 in=[1, 1, 1536] via=inputs_embeds attn_sum=226 pos_last5=[225] use_cache=True past_kv=225
+[ 334] token_step   #107 tok="'{'"                ids_len=203 emb_len=227 latents_so_far=24 pos_id=226 cache=True
+[ 335] gate           is_prompt=False last_tok="'{'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 336] reasoner_forward           #108 in=[1, 1, 1536] via=inputs_embeds attn_sum=227 pos_last5=[226] use_cache=True past_kv=226
+[ 337] token_step   #108 tok="'1'"                ids_len=204 emb_len=228 latents_so_far=24 pos_id=227 cache=True
+[ 338] gate           is_prompt=False last_tok="'1'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 339] reasoner_forward           #109 in=[1, 1, 1536] via=inputs_embeds attn_sum=228 pos_last5=[227] use_cache=True past_kv=227
+[ 340] token_step   #109 tok="'8'"                ids_len=205 emb_len=229 latents_so_far=24 pos_id=228 cache=True
+[ 341] gate           is_prompt=False last_tok="'8'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 342] reasoner_forward           #110 in=[1, 1, 1536] via=inputs_embeds attn_sum=229 pos_last5=[228] use_cache=True past_kv=228
+[ 343] token_step   #110 tok="'}'"                ids_len=206 emb_len=230 latents_so_far=24 pos_id=229 cache=True
+[ 344] gate           is_prompt=False last_tok="'}'" delimiter=False -> -100 (not_candidate_trigger_not_called)
+[ 345] reasoner_forward           #111 in=[1, 1, 1536] via=inputs_embeds attn_sum=230 pos_last5=[229] use_cache=True past_kv=229
+[ 346] token_step   #111 tok="'<|im_end|>'"       ids_len=207 emb_len=231 latents_so_far=24 pos_id=230 cache=True
+[ 347] generate_exit: {"output_input_ids_shape": [1, 207]}
+
+==============================================================================
+AUGMENTATION SUMMARY
+==============================================================================
+aug#0 prompt=True bank=prompt_query_latents ctx_len_fed_to_weaver=96 weaver_in=[1, 104, 1536] concat=[context, query_latents] extract_lastK=True
+aug#1 prompt=False bank=inference_query_latents ctx_len_fed_to_weaver=116 weaver_in=[1, 124, 1536] concat=[context, query_latents] extract_lastK=True
+aug#2 prompt=False bank=inference_query_latents ctx_len_fed_to_weaver=189 weaver_in=[1, 197, 1536] concat=[context, query_latents] extract_lastK=True
+
+==============================================================================
+PERSISTENCE CHECKS (are earlier latents still in the sequence?)
+==============================================================================
+{"checked_at_r2w_call": 2, "looking_for": "M0", "weaver_input_len": 116, "expected_slice": [96, 104], "slice_shape": [8, 1536], "still_present_bitwise_equal": true, "still_present_allclose": true, "max_abs_diff": 0.0, "fed_into_reasoner_to_weaver": true}
+{"checked_at_r2w_call": 3, "looking_for": "M0", "weaver_input_len": 189, "expected_slice": [96, 104], "slice_shape": [8, 1536], "still_present_bitwise_equal": true, "still_present_allclose": true, "max_abs_diff": 0.0, "fed_into_reasoner_to_weaver": true}
+{"checked_at_r2w_call": 3, "looking_for": "M1", "weaver_input_len": 189, "expected_slice": [116, 124], "slice_shape": [8, 1536], "still_present_bitwise_equal": true, "still_present_allclose": true, "max_abs_diff": 0.0, "fed_into_reasoner_to_weaver": true}
+
+==============================================================================
+FINAL SEQUENCE LAYOUT (positions in current_inputs_embeds)
+==============================================================================
+{"segment": "prompt_tokens", "start": 0, "end": 96}
+{"segment": "M0", "kind": "latent", "start": 96, "end": 104, "length": 8}
+{"segment": "M1", "kind": "latent", "start": 116, "end": 124, "length": 8}
+{"segment": "M2", "kind": "latent", "start": 189, "end": 197, "length": 8}
+
+==============================================================================
+PARAMETER GROUPS
+==============================================================================
+Weaver prompt_query_latents          tensors=   4 numel=      15,361 requires_grad=    15,361 used=   4 used_numel=      15,361 UNUSED=   0/           0 from_ckpt=   4 dtypes=['bfloat16']
+Weaver inference_query_latents       tensors=   4 numel=      15,361 requires_grad=    15,361 used=   4 used_numel=      15,361 UNUSED=   0/           0 from_ckpt=   4 dtypes=['bfloat16']
+Weaver base (non-LoRA)               tensors= 338 numel=1,543,714,304 requires_grad=         0 used= 337 used_numel=1,310,340,608 UNUSED=   1/ 233,373,696 from_ckpt=   0 dtypes=['bfloat16']
+                                       unused examples: ['weaver.model.base_model.model.model.embed_tokens.weight']
+Weaver LoRA                          tensors= 112 numel=   2,179,072 requires_grad= 2,179,072 used= 112 used_numel=   2,179,072 UNUSED=   0/           0 from_ckpt= 112 dtypes=['bfloat16']
+Trigger base (non-LoRA)              tensors= 338 numel=1,543,714,304 requires_grad=         0 used=   0 used_numel=           0 UNUSED= 338/1,543,714,304 from_ckpt=   0 dtypes=['bfloat16']
+                                       unused examples: ['trigger.model.base_model.model.model.embed_tokens.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.q_proj.base_layer.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.q_proj.base_layer.bias', 'trigger.model.base_model.model.model.layers.0.self_attn.k_proj.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.k_proj.bias', 'trigger.model.base_model.model.model.layers.0.self_attn.v_proj.base_layer.weight']
+Trigger LoRA                         tensors= 112 numel=   2,179,072 requires_grad= 2,179,072 used=   0 used_numel=           0 UNUSED= 112/   2,179,072 from_ckpt= 112 dtypes=['bfloat16']
+                                       unused examples: ['trigger.model.base_model.model.model.layers.0.self_attn.q_proj.lora_A.trigger.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.q_proj.lora_B.trigger.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.v_proj.lora_A.trigger.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.v_proj.lora_B.trigger.weight', 'trigger.model.base_model.model.model.layers.1.self_attn.q_proj.lora_A.trigger.weight', 'trigger.model.base_model.model.model.layers.1.self_attn.q_proj.lora_B.trigger.weight']
+Trigger output_layer (head)          tensors=   2 numel=       3,074 requires_grad=     3,074 used=   0 used_numel=           0 UNUSED=   2/       3,074 from_ckpt=   2 dtypes=['bfloat16']
+                                       unused examples: ['trigger.output_layer.weight', 'trigger.output_layer.bias']
+Reasoner (all)                       tensors= 338 numel=1,543,714,304 requires_grad=         0 used= 338 used_numel=1,543,714,304 UNUSED=   0/           0 from_ckpt=   0 dtypes=['bfloat16']
+reasoner_to_weaver projection        tensors=   2 numel=   2,360,832 requires_grad= 2,360,832 used=   2 used_numel=   2,360,832 UNUSED=   0/           0 from_ckpt=   2 dtypes=['bfloat16']
+weaver_to_reasoner projection        tensors=   2 numel=   2,360,832 requires_grad= 2,360,832 used=   2 used_numel=   2,360,832 UNUSED=   0/           0 from_ckpt=   2 dtypes=['bfloat16']
+
+SUMMARY: {"total_parameters": 4640256516, "parameters_used_in_this_inference": 2860986370, "parameters_loaded_but_unused": 1779270146, "pct_unused": 38.34, "note": "'used' = owning module executed a forward during this generate() call, or the tensor object was proven read by identity (bare nn.Parameter such as the query-latent banks). requires_grad is irrelevant to this determination."}
+
+==============================================================================
+RESULT
+==============================================================================
+Janet’s ducks lay 16 eggs per day, so she has 16 - 3 = <<16-3=13>>13 eggs left after breakfast.
+She has 13 - 4 = <<13-4=9>>9 eggs left after baking muffins for her friends.
+She sells the 9 eggs for $2 each, so she makes 9 * $2 = $<<9*2=18>>18 every day at the farmers' market.\boxed{18}

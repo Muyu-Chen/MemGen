@@ -1,0 +1,203 @@
+== PARAM SUMMARY ==
+{
+ "total_parameters": 4640256516,
+ "parameters_used_in_this_inference": 2860986370,
+ "parameters_loaded_but_unused": 1779270146,
+ "pct_unused": 38.34,
+ "note": "'used' = owning module executed a forward during this generate() call, or the tensor object was proven read by identity (bare nn.Parameter such as the query-latent banks). requires_grad is irrelevant to this determination."
+}
+
+== GROUPS ==
+Reasoner (all)                       tensors= 338 numel=1,543,714,304 req_grad=         0 used= 338 used_numel=1,543,714,304 UNUSED=   0/           0 from_ckpt=0
+Trigger LoRA                         tensors= 112 numel=   2,179,072 req_grad= 2,179,072 used=   0 used_numel=           0 UNUSED= 112/   2,179,072 from_ckpt=112
+     unused e.g. ['trigger.model.base_model.model.model.layers.0.self_attn.q_proj.lora_A.trigger.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.q_proj.lora_B.trigger.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.v_proj.lora_A.trigger.weight']
+Trigger base (non-LoRA)              tensors= 338 numel=1,543,714,304 req_grad=         0 used=   0 used_numel=           0 UNUSED= 338/1,543,714,304 from_ckpt=0
+     unused e.g. ['trigger.model.base_model.model.model.embed_tokens.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.q_proj.base_layer.weight', 'trigger.model.base_model.model.model.layers.0.self_attn.q_proj.base_layer.bias']
+Trigger output_layer (head)          tensors=   2 numel=       3,074 req_grad=     3,074 used=   0 used_numel=           0 UNUSED=   2/       3,074 from_ckpt=2
+     unused e.g. ['trigger.output_layer.weight', 'trigger.output_layer.bias']
+Weaver LoRA                          tensors= 112 numel=   2,179,072 req_grad= 2,179,072 used= 112 used_numel=   2,179,072 UNUSED=   0/           0 from_ckpt=112
+Weaver base (non-LoRA)               tensors= 338 numel=1,543,714,304 req_grad=         0 used= 337 used_numel=1,310,340,608 UNUSED=   1/ 233,373,696 from_ckpt=0
+     unused e.g. ['weaver.model.base_model.model.model.embed_tokens.weight']
+Weaver inference_query_latents       tensors=   4 numel=      15,361 req_grad=    15,361 used=   4 used_numel=      15,361 UNUSED=   0/           0 from_ckpt=4
+Weaver prompt_query_latents          tensors=   4 numel=      15,361 req_grad=    15,361 used=   4 used_numel=      15,361 UNUSED=   0/           0 from_ckpt=4
+reasoner_to_weaver projection        tensors=   2 numel=   2,360,832 req_grad= 2,360,832 used=   2 used_numel=   2,360,832 UNUSED=   0/           0 from_ckpt=2
+weaver_to_reasoner projection        tensors=   2 numel=   2,360,832 req_grad= 2,360,832 used=   2 used_numel=   2,360,832 UNUSED=   0/           0 from_ckpt=2
+
+== SHARES ==
+{
+ "reasoner_class": "Qwen2ForCausalLM",
+ "weaver_is_reasoner_object": false,
+ "trigger_is_reasoner_object": false,
+ "reasoner_param_names_matched_in_weaver": 226,
+ "of_which_share_same_memory_buffer": 0,
+ "reasoner_param_names_matched_in_trigger": 226,
+ "value_identical_at_probe": null,
+ "probe": "model.layers.0.self_attn.q_proj.weight",
+ "conclusion": "three INDEPENDENT parameter sets (no shared storage); values coincide because each was loaded from the same base checkpoint"
+}
+
+== LORA ==
+{
+ "weaver": {
+  "n_lora_target_modules": 56,
+  "n_modules_with_nonzero_delta": 56,
+  "n_modules_with_zero_delta": 0,
+  "all_zero_delta": false,
+  "example_zero_delta_module": null,
+  "example_nonzero_delta_module": "base_model.model.model.layers.0.self_attn.q_proj"
+ },
+ "trigger": {
+  "n_lora_target_modules": 56,
+  "n_modules_with_nonzero_delta": 0,
+  "n_modules_with_zero_delta": 56,
+  "all_zero_delta": true,
+  "example_zero_delta_module": "base_model.model.model.layers.0.self_attn.q_proj",
+  "example_nonzero_delta_module": null
+ }
+}
+weaver  delta ||B@A||_F: n=56 min=0.012986 max=0.074367 mean=0.04
+trigger delta ||B@A||_F: n=56 min=0.0 max=0.0
+weaver L0 q_proj: {"adapter": "weaver", "r": 16, "lora_A_shape": [16, 1536], "lora_B_shape": [1536, 16], "scaling": 2.0, "A_absmax": 0.026978, "B_absmax": 0.00145, "delta_frobenius_norm": 0.033997, "delta_is_all_zero": false}
+
+== MODULE MAP ==
+[
+ {
+  "attribute_path": "tokenizer",
+  "class": "Qwen2TokenizerFast",
+  "source_file": null,
+  "n_submodules_invoked": 0,
+  "total_submodule_forward_calls": 0,
+  "n_parameters": 0,
+  "directly_invoked": false,
+  "direct_call_count": 0,
+  "defined_at": "AutoTokenizer / ChatML template overridden by memgen/utils.py:CONVERSATION_TEMPLATE"
+ },
+ {
+  "attribute_path": "reasoner",
+  "class": "Qwen2ForCausalLM",
+  "source_file": null,
+  "n_submodules_invoked": 371,
+  "total_submodule_forward_calls": 41074,
+  "n_parameters": 1543714304,
+  "directly_invoked": true,
+  "direct_call_count": 111,
+  "defined_at": "memgen/model/modeling_memgen.py:104"
+ },
+ {
+  "attribute_path": "weaver",
+  "class": "MemGenWeaver",
+  "source_file": null,
+  "n_submodules_invoked": 597,
+  "total_submodule_forward_calls": 1791,
+  "n_parameters": 1545924098,
+  "directly_invoked": false,
+  "direct_call_count": 0,
+  "defined_at": "memgen/model/weaver.py:MemGenWeaver",
+  "extra_parameters": {
+   "prompt_query_latents": [
+    8,
+    1536
+   ],
+   "inference_query_latents": [
+    8,
+    1536
+   ],
+   "prompt_latent_ln": "nn.LayerNorm(1536)",
+   "inference_latent_ln": "nn.LayerNorm(1536)",
+   "prompt_latent_scale": [
+    1
+   ],
+   "inference_latent_scale": [
+    1
+   ]
+  }
+ },
+ {
+  "attribute_path": "weaver.model",
+  "class": "PeftModel",
+  "source_file": null,
+  "n_submodules_invoked": 594,
+  "total_submodule_forward_calls": 1782,
+  "n_parameters": 1545893376,
+  "directly_invoked": true,
+  "direct_call_count": 3,
+  "defined_at": "PeftModel wrapping the base LM (modeling_memgen.py:100)"
+ },
+ {
+  "attribute_path": "reasoner_to_weaver",
+  "class": "Linear",
+  "source_file": null,
+  "n_submodules_invoked": 1,
+  "total_submodule_forward_calls": 3,
+  "n_parameters": 2360832,
+  "directly_invoked": true,
+  "direct_call_count": 3,
+  "defined_at": "modeling_memgen.py:110 nn.Linear"
+ },
+ {
+  "attribute_path": "weaver_to_reasoner",
+  "class": "Linear",
+  "source_file": null,
+  "n_submodules_invoked": 1,
+  "total_submodule_forward_calls": 3,
+  "n_parameters": 2360832,
+  "directly_invoked": true,
+  "direct_call_count": 3,
+  "defined_at": "modeling_memgen.py:111 nn.Linear"
+ },
+ {
+  "attribute_path": "trigger",
+  "class": "MemGenTrigger",
+  "source_file": null,
+  "n_submodules_invoked": 1,
+  "total_submodule_forward_calls": 3,
+  "n_parameters": 1545896450,
+  "directly_invoked": true,
+  "direct_call_count": 3,
+  "defined_at": "memgen/model/trigger.py:MemGenTrigger"
+ },
+ {
+  "attribute_path": "trigger.model",
+  "class": "PeftModel",
+  "source_file": null,
+  "n_submodules_invoked": 0,
+  "total_submodule_forward_calls": 0,
+  "n_parameters": 1545893376,
+  "directly_invoked": false,
+  "direct_call_count": 0,
+  "defined_at": "PeftModel wrapping the base LM (modeling_memgen.py:101)"
+ },
+ {
+  "attribute_path": "trigger.output_layer",
+  "class": "Linear",
+  "source_file": null,
+  "n_submodules_invoked": 0,
+  "total_submodule_forward_calls": 0,
+  "n_parameters": 3074,
+  "directly_invoked": false,
+  "direct_call_count": 0,
+  "defined_at": "trigger.py:18 nn.Linear(hidden,2)"
+ }
+]
+
+== REASONER INPUT-SHAPE TIMELINE ==
+Counter({(1, 1, 1536): 108, (1, 104, 1536): 1, (1, 124, 1536): 1, (1, 197, 1536): 1})
+
+== first 6 token steps + the two aug steps ==
+   {"n": 1, "generated_token_id": 18315, "generated_token_text": "'Jan'", "cumulative_input_ids_len": 97, "cumulative_embeds_len": 105, "embeds_minus_ids": 8, "position_id_of_new_token": 104, "reasoner_logits_shape": [1, 104, 151936], "do_sample": false, "was_reasoner_input_len": 104, "reasoner_used_cache": false, "latent_block_inserted_before_this_step": {"label": "M0", "start": 96, "end": 104}}
+   {"n": 2, "generated_token_id": 295, "generated_token_text": "'et'", "cumulative_input_ids_len": 98, "cumulative_embeds_len": 106, "embeds_minus_ids": 8, "position_id_of_new_token": 105, "reasoner_logits_shape": [1, 1, 151936], "do_sample": false, "was_reasoner_input_len": 1, "reasoner_used_cache": true, "latent_block_inserted_before_this_step": null}
+   {"n": 3, "generated_token_id": 748, "generated_token_text": "'\u2019s'", "cumulative_input_ids_len": 99, "cumulative_embeds_len": 107, "embeds_minus_ids": 8, "position_id_of_new_token": 106, "reasoner_logits_shape": [1, 1, 151936], "do_sample": false, "was_reasoner_input_len": 1, "reasoner_used_cache": true, "latent_block_inserted_before_this_step": null}
+   {"n": 4, "generated_token_id": 77778, "generated_token_text": "' ducks'", "cumulative_input_ids_len": 100, "cumulative_embeds_len": 108, "embeds_minus_ids": 8, "position_id_of_new_token": 107, "reasoner_logits_shape": [1, 1, 151936], "do_sample": false, "was_reasoner_input_len": 1, "reasoner_used_cache": true, "latent_block_inserted_before_this_step": null}
+   {"n": 5, "generated_token_id": 10962, "generated_token_text": "' lay'", "cumulative_input_ids_len": 101, "cumulative_embeds_len": 109, "embeds_minus_ids": 8, "position_id_of_new_token": 108, "reasoner_logits_shape": [1, 1, 151936], "do_sample": false, "was_reasoner_input_len": 1, "reasoner_used_cache": true, "latent_block_inserted_before_this_step": null}
+   {"n": 6, "generated_token_id": 220, "generated_token_text": "' '", "cumulative_input_ids_len": 102, "cumulative_embeds_len": 110, "embeds_minus_ids": 8, "position_id_of_new_token": 109, "reasoner_logits_shape": [1, 1, 151936], "do_sample": false, "was_reasoner_input_len": 1, "reasoner_used_cache": true, "latent_block_inserted_before_this_step": null}
+   {"n": 12, "generated_token_id": 11, "generated_token_text": "','", "cumulative_input_ids_len": 108, "cumulative_embeds_len": 116, "embeds_minus_ids": 8, "position_id_of_new_token": 115, "reasoner_logits_shape": [1, 1, 151936], "do_sample": false, "was_reasoner_input_len": 1, "reasoner_used_cache": true, "latent_block_inserted_before_this_step": null}
+   {"n": 13, "generated_token_id": 773, "generated_token_text": "' so'", "cumulative_input_ids_len": 109, "cumulative_embeds_len": 125, "embeds_minus_ids": 16, "position_id_of_new_token": 124, "reasoner_logits_shape": [1, 124, 151936], "do_sample": false, "was_reasoner_input_len": 124, "reasoner_used_cache": false, "latent_block_inserted_before_this_step": {"label": "M1", "start": 116, "end": 124}}
+   {"n": 77, "generated_token_id": 11, "generated_token_text": "','", "cumulative_input_ids_len": 173, "cumulative_embeds_len": 189, "embeds_minus_ids": 16, "position_id_of_new_token": 188, "reasoner_logits_shape": [1, 1, 151936], "do_sample": false, "was_reasoner_input_len": 1, "reasoner_used_cache": true, "latent_block_inserted_before_this_step": null}
+   {"n": 78, "generated_token_id": 773, "generated_token_text": "' so'", "cumulative_input_ids_len": 174, "cumulative_embeds_len": 198, "embeds_minus_ids": 24, "position_id_of_new_token": 197, "reasoner_logits_shape": [1, 197, 151936], "do_sample": false, "was_reasoner_input_len": 197, "reasoner_used_cache": false, "latent_block_inserted_before_this_step": {"label": "M2", "start": 189, "end": 197}}
+
+last step: {"n": 111, "generated_token_id": 151645, "generated_token_text": "'<|im_end|>'", "cumulative_input_ids_len": 207, "cumulative_embeds_len": 231, "embeds_minus_ids": 24, "position_id_of_new_token": 230, "reasoner_logits_shape": [1, 1, 151936], "do_sample": false, "was_reasoner_input_len": 1, "reasoner_used_cache": true, "latent_block_inserted_before_this_step": null}
+
+== logits_shape at the 3 full re-forwards (does LM head run over latent rows?) ==
+  call 1 in [1, 104, 1536] logits None pos_last5 [99, 100, 101, 102, 103]
+  call 13 in [1, 124, 1536] logits None pos_last5 [119, 120, 121, 122, 123]
+  call 78 in [1, 197, 1536] logits None pos_last5 [192, 193, 194, 195, 196]

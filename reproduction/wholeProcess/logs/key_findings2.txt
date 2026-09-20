@@ -1,0 +1,25 @@
+hardware: {"cpu": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD", "cpu_name": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD", "physical_threads": 16, "torch_num_threads": 8, "ram": {"total_gib": 27.81, "available_gib": 14.33}, "device": "cpu", "cuda_available": false}
+git: {"commit": "7e067fa6429f8e8e88eaf9c468f093f6a0bdcae3", "commit_subject": "docs: correct MemGen data-flow description against source and add tensor trace", "branch": "main", "working_tree_dirty": false}
+software: {"python": "3.11.9", "torch": "2.7.1+cpu", "transformers": "4.55.4", "peft": "0.17.1", "platform": "Windows-10-10.0.26200-SP0"}
+generate_entry: n_pad 0 delim_ids [11, 13, 198] tokens 96 max_new {'class': 'GenerationConfig', 'max_new_tokens': 256, 'do_sample': False, 'temperature': 0.0, 'top_p': 1.0, 'top_k': 50, 'pad_token_id': 151643, 'eos_token_id': 151645, 'use_cache': True, 'weaver_do_sample': False, 'trigger_do_sample': False}
+first10_decoded: ["'<|im_start|>'", "'user'", "'\\n'", "'S'", "'olve'", "' the'", "' math'", "' problem'", "' with'", "' proper'"]
+last8_decoded: ['"\'"', "' market'", "'?\\n'", "'<|im_end|>'", "'\\n'", "'<|im_start|>'", "'assistant'", "'\\n'"]
+
+R2W#1 input per-row norms (token embeds): [0.426435, 0.976916, 1.21345, 1.077346, 1.048495, 0.721244]
+R2W#1 output per-row norms: [0.615185, 0.786333, 0.966699, 0.880651, 0.833133, 0.730364]
+W2R#1 output per-row norms (latents): [65.109795, 59.652073, 66.639015, 61.560532, 63.662605, 52.479797, 76.927094, 62.674709]
+
+weaver latent per-row norms:
+  #1 [103.624664, 94.788597, 101.488388, 94.351425, 94.079735, 79.879585, 123.570786, 101.376022]
+  #2 [92.247589, 92.509323, 79.752502, 84.035332, 82.466255, 104.642136, 93.702797, 87.094513]
+  #3 [88.565155, 92.799561, 78.515236, 83.902298, 82.179581, 101.622955, 94.580734, 88.002785]
+
+trigger calls: 3 gate events: 111
+module census totals for reasoner submodules: 41074
+
+R2W weight stats: {"name": "reasoner_to_weaver.weight", "shape": [1536, 1536], "dtype": "bfloat16", "device": "cpu", "numel": 2359296, "requires_grad": false, "data_ptr": 4274893357312, "mean": 1.1e-05, "std": 0.014738, "norm": 22.639538, "min": -0.026611, "max": 0.026611, "per
+W2R weight stats: {"name": "weaver_to_reasoner.weight", "shape": [1536, 1536], "dtype": "bfloat16", "device": "cpu", "numel": 2359296, "requires_grad": false, "data_ptr": 4274868191488, "mean": 6e-06, "std": 0.014732, "norm": 22.630423, "min": -0.027954, "max": 0.028076, "per_r
+
+reasoner first-call attention_mask_sum: [(1, [1, 104, 1536], 104), (13, [1, 124, 1536], 124), (78, [1, 197, 1536], 197)]
+
+lvq: {"per_latent_best_cos_sim": [0.093333, 0.088376, 0.094863, 0.098395, 0.092293, 0.097506, 0.091971, 0.087749], "per_latent_best_token_id": [128173, 141108, 510, 24, 10034, 23, 881, 134089], "max_cos_sim_over_all": 0.098395, "is_exact_embedding_of_some_token": false}

@@ -1,0 +1,120 @@
+{
+  "checkpoint_path": "E:\\MemoryProject\\MemGen\\Reproduct\\models\\memgen-checkpoints\\Qwen2.5-1.5B-Instruct\\gsm8k\\weaver-sft\\pn=1_pl=8_in=3_il=8\\model",
+  "hidden_size": 1536,
+  "projections": [
+    {
+      "tensor": "reasoner_to_weaver",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "weight_absmax": 0.026611,
+      "expected_init_absmax_bound": 0.025516,
+      "weight_std": 0.014738,
+      "expected_init_std": 0.014731,
+      "bias_absmax": 0.026001,
+      "exceeds_init_support": true,
+      "verdict": "moved_from_init"
+    },
+    {
+      "tensor": "weaver_to_reasoner",
+      "weight_shape": [
+        1536,
+        1536
+      ],
+      "weight_absmax": 0.028076,
+      "expected_init_absmax_bound": 0.025516,
+      "weight_std": 0.014732,
+      "expected_init_std": 0.014731,
+      "bias_absmax": 0.026123,
+      "exceeds_init_support": true,
+      "verdict": "moved_from_init"
+    }
+  ],
+  "trigger_head": {
+    "tensor": "output_layer",
+    "weight_shape": [
+      2,
+      1536
+    ],
+    "weight_absmax": 0.025513,
+    "expected_init_absmax_bound": 0.025516,
+    "weight_std": 0.01458,
+    "expected_init_std": 0.014731,
+    "bias_absmax": 0.024048,
+    "exceeds_init_support": false,
+    "verdict": "at_init"
+  },
+  "weaver_latent_ln": {
+    "prompt_latent_ln": {
+      "weight_equals_one_exactly": true,
+      "weight_max_deviation_from_one": 0.0,
+      "bias_absmax": 0.001999,
+      "init_values": "weight=1, bias=0 (nn.LayerNorm default)",
+      "verdict": "moved_from_init"
+    },
+    "inference_latent_ln": {
+      "weight_equals_one_exactly": false,
+      "weight_max_deviation_from_one": 0.003906,
+      "bias_absmax": 0.001419,
+      "init_values": "weight=1, bias=0 (nn.LayerNorm default)",
+      "verdict": "moved_from_init"
+    }
+  },
+  "weaver_query_latents": {
+    "prompt_query_latents": {
+      "shape": [
+        8,
+        1536
+      ],
+      "std": 0.998112,
+      "mean": -0.014024,
+      "row_norm_mean": 39.111,
+      "expected_row_norm_for_randn": 39.192,
+      "note": "nn.Parameter(torch.randn(K, hidden)) => indistinguishable from init by these statistics alone"
+    },
+    "inference_query_latents": {
+      "shape": [
+        8,
+        1536
+      ],
+      "std": 1.001197,
+      "mean": -0.011645,
+      "row_norm_mean": 39.233,
+      "expected_row_norm_for_randn": 39.192,
+      "note": "nn.Parameter(torch.randn(K, hidden)) => indistinguishable from init by these statistics alone"
+    }
+  },
+  "weaver_latent_scale": {
+    "prompt_latent_scale": {
+      "value": 1.0,
+      "init_value": 1.0,
+      "at_init": true
+    },
+    "inference_latent_scale": {
+      "value": 1.0,
+      "init_value": 1.0,
+      "at_init": true
+    }
+  },
+  "lora_adapters": {
+    "weaver": {
+      "n_tensors": 112,
+      "n_lora_B_tensors": 56,
+      "lora_B_all_zero": false,
+      "lora_B_absmax": 0.00300598,
+      "lora_A_absmax_mean": 0.02827,
+      "init_convention": "PEFT zero-inits lora_B => all-zero lora_B means the adapter never received a gradient update",
+      "verdict": "trained"
+    },
+    "trigger": {
+      "n_tensors": 112,
+      "n_lora_B_tensors": 56,
+      "lora_B_all_zero": true,
+      "lora_B_absmax": 0.0,
+      "lora_A_absmax_mean": 0.025513,
+      "init_convention": "PEFT zero-inits lora_B => all-zero lora_B means the adapter never received a gradient update",
+      "verdict": "never_trained"
+    }
+  }
+}

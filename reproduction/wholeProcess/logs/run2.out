@@ -1,0 +1,106 @@
+== environment ==
+{
+  "timestamp_utc": "2026-09-20T18:37:12Z",
+  "git": {
+    "repo_path": "E:\\MemoryProject\\MemGen\\Reproduct\\MemGen",
+    "commit": "7e067fa6429f8e8e88eaf9c468f093f6a0bdcae3",
+    "commit_subject": "docs: correct MemGen data-flow description against source and add tensor trace",
+    "branch": "main",
+    "working_tree_dirty": false,
+    "working_tree_changes": [],
+    "remotes": [
+      "origin\thttps://github.com/Muyu-Chen/MemGen.git (fetch)",
+      "origin\thttps://github.com/Muyu-Chen/MemGen.git (push)",
+      "upstream\thttps://github.com/bingreeky/MemGen.git (fetch)",
+      "upstream\thttps://github.com/bingreeky/MemGen.git (push)"
+    ]
+  },
+  "hardware": {
+    "cpu": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD",
+    "cpu_name": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD",
+    "physical_threads": 16,
+    "torch_num_threads": 8,
+    "ram": {
+      "total_gib": 27.81,
+      "available_gib": 13.99
+    },
+    "device": "cpu",
+    "cuda_available": false
+  },
+  "software": {
+    "python": "3.11.9",
+    "torch": "2.7.1+cpu",
+    "transformers": "4.55.4",
+    "peft": "0.17.1",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "model_sources": {
+    "base_model_local_path": "E:\\MemoryProject\\MemGen\\Reproduct\\models\\Qwen2.5-1.5B-Instruct",
+    "base_model_hub_id_in_official_yaml": "Qwen/Qwen2.5-1.5B-Instruct",
+    "checkpoint_local_path": "E:\\MemoryProject\\MemGen\\Reproduct\\models\\memgen-checkpoints\\Qwen2.5-1.5B-Instruct\\gsm8k\\weaver-sft\\pn=1_pl=8_in=3_il=8\\model",
+    "checkpoint_hub_repo": "Kana-s/MemGen",
+    "config_authority": "checkpoint config.json (MemGenConfig.from_pretrained)"
+  },
+  "inference_choices": {
+    "dtype_requested": "bfloat16",
+    "attn_implementation_requested": "eager",
+    "batch_size": 1,
+    "max_new_tokens": 256,
+    "official_max_response_length_in_yaml": 1024,
+    "deviations_from_official_code": [
+      "attn_implementation: flash_attention_2 -> eager (no CUDA on this host)",
+      "batch_size: 8 (interaction.batch_size in gsm8k.yaml) -> 1 (CPU runtime)",
+      "max_new_tokens: 1024 -> 256 (CPU runtime)"
+    ]
+  }
+}
+== build: MemGenConfig.from_pretrained(checkpoint) ==
+   config.prompt_latents_len = 8
+   config.inference_latents_len = 8
+   config.max_prompt_aug_num = 1
+   config.max_inference_aug_num = 3
+   config.trigger_active = False
+   config.weaver_lora_config = {'bias': 'none', 'lora_alpha': 32, 'lora_dropout': 0.1, 'r': 16, 'target_modules': ['q_proj', 'v_proj'], 'task_type': 'CAUSAL_LM'}
+   config.trigger_lora_config = {'bias': 'none', 'lora_alpha': 32, 'lora_dropout': 0.1, 'r': 16, 'target_modules': ['q_proj', 'v_proj'], 'task_type': 'CAUSAL_LM'}
+   config.torch_dtype(json) = torch.bfloat16
+== build: tokenizer (official from_config uses the BASE model tokenizer) ==
+== build: three INDEPENDENT base-model instances (official from_config does exactly three from_pretrained calls, modeling_memgen.py:715-717) ==
+   reasoner: Qwen2ForCausalLM loaded in 0.1s params=1,543,714,304
+   weaver: Qwen2ForCausalLM loaded in 0.0s params=1,543,714,304
+   trigger: Qwen2ForCausalLM loaded in 0.1s params=1,543,714,304
+== build: MemGenModel.from_pretrained (official loader) ==
+[timing] model construction: 4.4s  rss=497.2 MiB
+
+== Step A: prompt construction ==
+  raw question: "Janet¡¯s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?"
+  prompt builder: data/gsm8k/builder.py:GSM8KBuilder._preprocess (official code)
+  user content  : "Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \\boxed{}.Question: Janet¡¯s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\n"
+  chat template source: memgen/model/modeling_memgen.py:137 sets tokenizer.chat_template = CONVERSATION_TEMPLATE (memgen/utils.py)
+  final prompt text:
+<|im_start|>user
+Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \boxed{}.Question: Janet¡¯s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?
+<|im_end|>
+<|im_start|>assistant
+
+  tokenization: apply_chat_template(padding_side='left') as in runner.py:268-275
+  input_ids shape [1, 96], attention_mask sum 96
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+== generation config actually used ==
+  {"max_new_tokens": 256, "do_sample": false, "temperature": 0.0, "eos_token_id": 151645, "pad_token_id": 151643, "use_cache": true, "weaver_do_sample": false, "trigger_do_sample": false}
+
+== Step B onward: MemGenModel.generate ==
+
+[timing] generate: 18.6s for 111 traced steps
+completion (skip_special_tokens=True):
+Janet¡¯s ducks lay 16 eggs per day, so she has 16 - 3 = <<16-3=13>>13 eggs left after breakfast.
+She has 13 - 4 = <<13-4=9>>9 eggs left after baking muffins for her friends.
+She sells the 9 eggs for $2 each, so she makes 9 * $2 = $<<9*2=18>>18 every day at the farmers' market.\boxed{18}
+[written] E:\MemoryProject\MemGen\Reproduct\reproduction\wholeProcess\logs\environment.json
+[written] E:\MemoryProject\MemGen\Reproduct\reproduction\wholeProcess\logs\tensor_shapes.json
+[written] E:\MemoryProject\MemGen\Reproduct\reproduction\wholeProcess\logs\parameter_usage.json
+[written] E:\MemoryProject\MemGen\Reproduct\reproduction\wholeProcess\results\sample_output.json
+[written] E:\MemoryProject\MemGen\Reproduct\reproduction\wholeProcess\logs\full_trace.txt
+
+DONE
+{"prompt_aug": 1, "inference_aug": 2, "tokens": 111, "weaver_calls": 3, "trigger_calls": 3, "reasoner_calls": 111, "eos": true}

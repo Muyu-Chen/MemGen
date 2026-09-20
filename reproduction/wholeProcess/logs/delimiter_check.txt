@@ -1,0 +1,12 @@
+n_completion_token_ids: 111
+occurrences: ','=11 -> 2  '.'=13 -> 0  '
+'=198 -> 0
+
+steps whose token TEXT contains a period or newline but id is NOT in {11,13,198}:
+  step 38 id=   624 tok='.Ċ'
+  step 66 id=   624 tok='.Ċ'
+  step105 id=  7110 tok='.\\'
+  total such steps: 3
+
+full token list (first 40):
+['1:Jan', '2:et', '3:âĢĻs', '4:Ġducks', '5:Ġlay', '6:Ġ', '7:1', '8:6', '9:Ġeggs', '10:Ġper', '11:Ġday', '12:,', '13:Ġso', '14:Ġshe', '15:Ġhas', '16:Ġ', '17:1', '18:6', '19:Ġ-', '20:Ġ', '21:3', '22:Ġ=', '23:Ġ<<', '24:1', '25:6', '26:-', '27:3', '28:=', '29:1', '30:3', '31:>>', '32:1', '33:3', '34:Ġeggs', '35:Ġleft', '36:Ġafter', '37:Ġbreakfast', '38:.Ċ', '39:She', '40:Ġhas']
