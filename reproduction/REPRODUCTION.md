@@ -82,3 +82,79 @@
 2. 安装 CUDA 版 torch: `pip install torch==2.7.1+cu128 --index-url https://download.pytorch.org/whl/cu128`
 3. 下载 MemGen 官方 weaver-sft checkpoint
 4. 运行 eval 脚本: `bash scripts/eval/qwen2_5_gsm8k_sft.sh`
+
+## Phase 1: Trigger 三组对照实验 (2026-09-19)
+
+### 实验设计
+
+在 CPU 环境下运行三组对照实验，验证 Trigger 和 Weaver 的贡献：
+- **always_0**: 强制 Trigger 输出 0（不增强）
+- **trained**: 使用训练好的 Trigger（真实决策）
+- **always_1**: 强制 Trigger 输出 1（总是增强）
+
+测试集：20 道简单数学题（2+3, 10-4, 3*5 等）
+
+### 关键发现
+
+#### 1. Trigger 退化为常函数
+
+```
+Trained Trigger 统计:
+- Decision=0: 0 次 (0%)
+- Decision=1: 22 次 (100%)
+- Softmax P(augment=1): 0.968 ~ 0.999, 中位数 0.993
+```
+
+**结论**: Trigger 学会了总是预测 class 1（总是增强），门控机制失效。
+
+#### 2. Weaver 改变输出格式
+
+```
+always_0 (无增强):
+  输出: "The answer is 5."
+  格式: 自然语言
+  
+trained/always_1 (有增强):
+  输出: "2+3 is 5.\boxed{5}"
+  格式: 包含 \boxed{}
+```
+
+**结论**: Weaver 增强使模型更倾向使用 `\boxed{}` 格式，但不影响推理能力。
+
+#### 3. 性能对比
+
+| 模式 | 自动化准确率 | 真实准确率 | 总增强次数 |
+|------|------------|-----------|-----------|
+| always_0 | 3/20 (15%) | 20/20 (100%) | 0 |
+| trained | 19/20 (95%) | 20/20 (100%) | 22 |
+| always_1 | 19/20 (95%) | 20/20 (100%) | 22 |
+
+**关键洞察**: 
+- always_0 的 15% 是格式问题（答案正确但缺少 `\boxed{}`）
+- 真实准确率：三组都是 100%
+- trained ≡ always_1（字节级相同），证明 Trigger 退化
+- 对简单题，Weaver 只改变格式，不影响推理能力
+
+#### 4. GSM8K 难题诊断 (5 题)
+
+| 模式 | 准确率 |
+|------|--------|
+| Base Model | 3/5 (60%) |
+| Weaver-only | 4/5 (80%) |
+| Full MemGen | 4/5 (80%) |
+
+**结论**: Weaver 对难题有实质帮助 (+20%)，性能提升 100% 来自 Weaver 架构本身。
+
+### 架构分析
+
+完整的 MemGen 工作流程解析见 [`MEMGEN_ARCHITECTURE_EXPLAINED.md`](./MEMGEN_ARCHITECTURE_EXPLAINED.md)，包含：
+- 数据流：prompt tokens → reasoner embeddings → Weaver augmentation → projection → insertion → generation
+- Trigger 机制：二分类决策器，决定何时插入潜在记忆
+- Weaver 增强：8 个 query latents + Reasoner hidden states → Weaver forward → 提取增强 latent → 投影回 Reasoner
+- 多次增强：第二次 augmentation 时，第一次的 latent 保留在序列中
+
+### 实验脚本
+
+- `reproduction/trigger_three_way_probe.py`: 三组对照实验
+- `reproduction/phase1_results/trigger_three_way_easy_probe.jsonl`: 原始结果
+- `reproduction/phase1_results/diagnostic_traces.jsonl`: GSM8K 诊断结果

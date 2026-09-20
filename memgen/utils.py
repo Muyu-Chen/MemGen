@@ -8,7 +8,10 @@ from typing import Optional, Callable, Dict, List
 
 from safetensors import safe_open
 import torch.nn as nn
-from torch.utils.tensorboard import SummaryWriter
+try:
+    from torch.utils.tensorboard import SummaryWriter
+except ImportError:
+    SummaryWriter = None
 
 
 # ===== chat template =====
