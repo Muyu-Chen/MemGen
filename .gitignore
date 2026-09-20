@@ -65,3 +65,7 @@ wandb/
 
 # TensorBoard
 runs/
+
+# HardBench uses runs/ for immutable raw answers and reproducible scored artifacts.
+!reproduction/hardbench/runs/
+!reproduction/hardbench/runs/**

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-20T22:02:11.135456+00:00",
+  "selection": {
+    "dataset": "gsm8k/main/test",
+    "rule": "count of gold <<...>> calculator annotations >= min_steps",
+    "min_steps": 6,
+    "seed": 20260920,
+    "eligible_count": 87,
+    "selected_count": 87,
+    "limit": 100
+  },
+  "few_shot_examples": [
+    {
+      "source_dataset": "gsm8k/main/train",
+      "source_index": 4316,
+      "question": "Cloud 9 Diving Company has taken individual bookings worth $12,000 and group bookings worth $16,000. Some people have cancelled at the last minute. $1600 has had to be returned to them. How much money has the sky diving company taken altogether?",
+      "raw_answer": "Cloud 9 earned $12,000 + $16,000 = $<<12000+16000=28000>>28,000 from bookings.\nAfter returning money due to cancellations, they had a final total of $28,000 - $1600 = $<<28000-1600=26400>>26,400.\n#### 26400"
+    },
+    {
+      "source_dataset": "gsm8k/main/train",
+      "source_index": 4292,
+      "question": "Jordan and Perry took a boat out to the lake to go fishing on a Monday morning. Jordan caught 4 fish and Perry caught double what Jordan caught. On the way back to shore, the boat tipped over and they lost one-fourth of their total catch. How many fish remain?",
+      "raw_answer": "Since Perry caught double what Jordan caught, Perry caught 2 * 4 = <<2*4=8>>8 fish.\nAltogether, they caught 8 + 4 = <<8+4=12>>12 fish.\nOn the way back to the shore, they lost 12 * 1/4 = <<12*1/4=3>>3 fish.\nThey have 12 - 3 = <<12-3=9>>9 fish remaining.\n#### 9"
+    },
+    {
+      "source_dataset": "gsm8k/main/train",
+      "source_index": 5167,
+      "question": "Malcolm works in a company where they normally pack 40 apples in a box, producing 50 full boxes per day. Operations went as normal in one week. But in the next week, they packed 500 fewer apples per day. What's the total number of apples packed in the two weeks?",
+      "raw_answer": "In the first week, each day they pack 40*50 = <<40*50=2000>>2000 apples\nThe total number of apples packed in the boxes is 2000*7 = <<2000*7=14000>>14000 apples in the first week.\nWhen 500 fewer apples were packed each day in the next week, the total became 2000-500 = <<2000-500=1500>>1500 apples per day.\nThe total number of apples packed in the boxes that week is 1500*7 = <<1500*7=10500>>10500 apples.\nThe total is 14000+10500 = <<14000+10500=24500>>24500 apples for the two weeks\n#### 24500"
+    }
+  ],
+  "few_shot_messages": [
+    {
+      "role": "user",
+      "content": "Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \\boxed{}.Question: Cloud 9 Diving Company has taken individual bookings worth $12,000 and group bookings worth $16,000. Some people have cancelled at the last minute. $1600 has had to be returned to them. How much money has the sky diving company taken altogether?\n"
+    },
+    {
+      "role": "assistant",
+      "content": "Cloud 9 earned $12,000 + $16,000 = $<<12000+16000=28000>>28,000 from bookings.\nAfter returning money due to cancellations, they had a final total of $28,000 - $1600 = $<<28000-1600=26400>>26,400.\\boxed{26400}"
+    },
+    {
+      "role": "user",
+      "content": "Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \\boxed{}.Question: Jordan and Perry took a boat out to the lake to go fishing on a Monday morning. Jordan caught 4 fish and Perry caught double what Jordan caught. On the way back to shore, the boat tipped over and they lost one-fourth of their total catch. How many fish remain?\n"
+    },
+    {
+      "role": "assistant",
+      "content": "Since Perry caught double what Jordan caught, Perry caught 2 * 4 = <<2*4=8>>8 fish.\nAltogether, they caught 8 + 4 = <<8+4=12>>12 fish.\nOn the way back to the shore, they lost 12 * 1/4 = <<12*1/4=3>>3 fish.\nThey have 12 - 3 = <<12-3=9>>9 fish remaining.\\boxed{9}"
+    },
+    {
+      "role": "user",
+      "content": "Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \\boxed{}.Question: Malcolm works in a company where they normally pack 40 apples in a box, producing 50 full boxes per day. Operations went as normal in one week. But in the next week, they packed 500 fewer apples per day. What's the total number of apples packed in the two weeks?\n"
+    },
+    {
+      "role": "assistant",
+      "content": "In the first week, each day they pack 40*50 = <<40*50=2000>>2000 apples\nThe total number of apples packed in the boxes is 2000*7 = <<2000*7=14000>>14000 apples in the first week.\nWhen 500 fewer apples were packed each day in the next week, the total became 2000-500 = <<2000-500=1500>>1500 apples per day.\nThe total number of apples packed in the boxes that week is 1500*7 = <<1500*7=10500>>10500 apples.\nThe total is 14000+10500 = <<14000+10500=24500>>24500 apples for the two weeks\\boxed{24500}"
+    }
+  ],
+  "manifest_file": "gsm8k_harder_min6_seed20260920.jsonl",
+  "manifest_sha256": "5b98b4d5821f8abc08a9202e4a9d54c238b48d0147516d21e6276edcfdef883c"
+}

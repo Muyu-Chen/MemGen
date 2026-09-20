@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-20T22:02:52.176595+00:00",
+  "runner": "run_base.py",
+  "conditions": [
+    "A_base_zero_shot",
+    "B_base_3shot"
+  ],
+  "manifest": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\manifests\\gsm8k_harder_min6_seed20260920.jsonl",
+  "manifest_sha256": "5b98b4d5821f8abc08a9202e4a9d54c238b48d0147516d21e6276edcfdef883c",
+  "model": "E:\\MemoryProject\\MemGen\\models\\Qwen2.5-1.5B-Instruct",
+  "dtype": "float32",
+  "threads": 8,
+  "max_new_tokens": 512,
+  "generation": "greedy"
+}

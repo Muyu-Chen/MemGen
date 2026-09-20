@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-20T21:50:39.412578+00:00",
+  "selection": {
+    "dataset": "gsm8k/main/test",
+    "rule": "count of gold <<...>> calculator annotations >= min_steps",
+    "min_steps": 4,
+    "seed": 20260920,
+    "eligible_count": 515,
+    "selected_count": 200,
+    "limit": 200
+  },
+  "few_shot_examples": [
+    {
+      "source_dataset": "gsm8k/main/train",
+      "source_index": 5987,
+      "question": "Marla is thinking about getting a canvas tote bag to avoid using plastic bags at the grocery store. If making the canvas bag released 600 pounds of carbon dioxide, each plastic bag released 4 ounces of carbon dioxide, and Marla uses eight bags per shopping trips, how many shopping trips will she have to make before the canvas bag is the lower-carbon solution? (There are 16 ounces in a pound.)",
+      "raw_answer": "First find how many ounces of carbon dioxide are released per shopping trip: 8 bags/trip * 4 oz/bag = <<8*4=32>>32 oz/trip\nThen divide that amount by the number of ounces per pound to find the pounds of carbon per shopping trip: 32 oz/trip / 16 oz/pound = <<32/16=2>>2 pounds/trip\nThen divide the amount of carbon used to make the tote bag by the amount of carbon saved per shopping trip to find the number of trips needed for the bag to be a better option: 600 pounds / 2 pounds/trip = <<600/2=300>>300 trips\n#### 300"
+    },
+    {
+      "source_dataset": "gsm8k/main/train",
+      "source_index": 2089,
+      "question": "Sophia ate 1/6 of her pie and she put the rest on the fridge. If the pie left in the fridge weighs 1200 grams, how many grams did Sophia eat?",
+      "raw_answer": "If Sophia ate 1/6 of the pie, then 6/6 - 1/6 = 5/6 is left in the fridge.\nLet x be the pie's original weight.\nThe current weight of the pie can be described by 5x/6=1200 grams\nSo, 5x=7200.\nAnd, the original weight is x = <<1440=1440>>1440 grams.\nSo, Sophia ate 1440 grams original - 1200 grams after= <<1440-1200=240>>240 grams of pie.\n#### 240"
+    },
+    {
+      "source_dataset": "gsm8k/main/train",
+      "source_index": 3910,
+      "question": "Mason is three times younger than Sydney and Sydney is six years younger than Mason's father. If Mason is 20 years old, how old is his father?",
+      "raw_answer": "Sydney is 20*3 = <<20*3=60>>60 years old.\nMason’s father is 60+6 = <<60+6=66>>66 years old.\n#### 66"
+    }
+  ],
+  "few_shot_messages": [
+    {
+      "role": "user",
+      "content": "Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \\boxed{}.Question: Marla is thinking about getting a canvas tote bag to avoid using plastic bags at the grocery store. If making the canvas bag released 600 pounds of carbon dioxide, each plastic bag released 4 ounces of carbon dioxide, and Marla uses eight bags per shopping trips, how many shopping trips will she have to make before the canvas bag is the lower-carbon solution? (There are 16 ounces in a pound.)\n"
+    },
+    {
+      "role": "assistant",
+      "content": "First find how many ounces of carbon dioxide are released per shopping trip: 8 bags/trip * 4 oz/bag = <<8*4=32>>32 oz/trip\nThen divide that amount by the number of ounces per pound to find the pounds of carbon per shopping trip: 32 oz/trip / 16 oz/pound = <<32/16=2>>2 pounds/trip\nThen divide the amount of carbon used to make the tote bag by the amount of carbon saved per shopping trip to find the number of trips needed for the bag to be a better option: 600 pounds / 2 pounds/trip = <<600/2=300>>300 trips\\boxed{300}"
+    },
+    {
+      "role": "user",
+      "content": "Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \\boxed{}.Question: Sophia ate 1/6 of her pie and she put the rest on the fridge. If the pie left in the fridge weighs 1200 grams, how many grams did Sophia eat?\n"
+    },
+    {
+      "role": "assistant",
+      "content": "If Sophia ate 1/6 of the pie, then 6/6 - 1/6 = 5/6 is left in the fridge.\nLet x be the pie's original weight.\nThe current weight of the pie can be described by 5x/6=1200 grams\nSo, 5x=7200.\nAnd, the original weight is x = <<1440=1440>>1440 grams.\nSo, Sophia ate 1440 grams original - 1200 grams after= <<1440-1200=240>>240 grams of pie.\\boxed{240}"
+    },
+    {
+      "role": "user",
+      "content": "Solve the math problem with proper reasoning, and make sure to put the FINAL ANSWER inside \\boxed{}.Question: Mason is three times younger than Sydney and Sydney is six years younger than Mason's father. If Mason is 20 years old, how old is his father?\n"
+    },
+    {
+      "role": "assistant",
+      "content": "Sydney is 20*3 = <<20*3=60>>60 years old.\nMason’s father is 60+6 = <<60+6=66>>66 years old.\\boxed{66}"
+    }
+  ],
+  "manifest_file": "gsm8k_hard_seed20260920.jsonl",
+  "manifest_sha256": "834b6a15d74b8b08a9da7998dfff435c507b68e93250f01cfaaadf67c0f68f49"
+}

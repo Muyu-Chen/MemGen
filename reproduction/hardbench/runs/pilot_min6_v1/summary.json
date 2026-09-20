@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "scored_at": "2026-09-20T23:15:25.255087+00:00",
+  "raw_sources": [
+    {
+      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\raw\\A_base_zero_shot.raw.jsonl",
+      "sha256": "23222e5eeacc5accbed7c53431dbbd10bedeeb812db7a5acdade7c5060272dc8",
+      "records": 10,
+      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\scored\\A_base_zero_shot.scored.jsonl"
+    },
+    {
+      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\raw\\B_base_3shot.raw.jsonl",
+      "sha256": "a686caa4615fecc14bb29af898bffb26b52411439a3cb0f6121c61bdfd9bdb1e",
+      "records": 10,
+      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\scored\\B_base_3shot.scored.jsonl"
+    },
+    {
+      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\raw\\D_memgen_official.raw.jsonl",
+      "sha256": "520dc7c9033ab443adcfdcdd028e2f42586ca1094cee25af74c8bc00046924b2",
+      "records": 10,
+      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\scored\\D_memgen_official.scored.jsonl"
+    },
+    {
+      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\raw\\R_memgen_random50_inference.raw.jsonl",
+      "sha256": "dc2d074913c17381887f297cf34439841d617860204e887bf0169e4e81d484d9",
+      "records": 10,
+      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\scored\\R_memgen_random50_inference.scored.jsonl"
+    }
+  ],
+  "conditions": {
+    "A_base_zero_shot": {
+      "n": 10,
+      "official_correct": 2.0,
+      "official_accuracy": 0.2,
+      "semantic_correct": 3,
+      "semantic_accuracy": 0.3,
+      "boxed_format_count": 8,
+      "boxed_format_rate": 0.8,
+      "official_semantic_disagreement_count": 1,
+      "official_semantic_disagreement_rate": 0.1,
+      "truncated_count": 1,
+      "mean_latency_seconds": 146.86667702000705,
+      "mean_generated_tokens": 400.7,
+      "mean_seconds_per_generated_token": 0.3665493500246494,
+      "mean_inference_augmentations": null,
+      "inference_augmentation_count_distribution": null
+    },
+    "B_base_3shot": {
+      "n": 10,
+      "official_correct": 1.0,
+      "official_accuracy": 0.1,
+      "semantic_correct": 4,
+      "semantic_accuracy": 0.4,
+      "boxed_format_count": 4,
+      "boxed_format_rate": 0.4,
+      "official_semantic_disagreement_count": 3,
+      "official_semantic_disagreement_rate": 0.3,
+      "truncated_count": 0,
+      "mean_latency_seconds": 85.96313118000107,
+      "mean_generated_tokens": 208.1,
+      "mean_seconds_per_generated_token": 0.4154725503781361,
+      "mean_inference_augmentations": null,
+      "inference_augmentation_count_distribution": null
+    },
+    "D_memgen_official": {
+      "n": 10,
+      "official_correct": 2.0,
+      "official_accuracy": 0.2,
+      "semantic_correct": 2,
+      "semantic_accuracy": 0.2,
+      "boxed_format_count": 10,
+      "boxed_format_rate": 1.0,
+      "official_semantic_disagreement_count": 0,
+      "official_semantic_disagreement_rate": 0.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 84.11610162999713,
+      "mean_generated_tokens": 208.5,
+      "mean_seconds_per_generated_token": 0.4049040704006284,
+      "mean_inference_augmentations": 2.4,
+      "inference_augmentation_count_distribution": {
+        "0": 2,
+        "3": 8
+      }
+    },
+    "R_memgen_random50_inference": {
+      "n": 10,
+      "official_correct": 3.0,
+      "official_accuracy": 0.3,
+      "semantic_correct": 3,
+      "semantic_accuracy": 0.3,
+      "boxed_format_count": 10,
+      "boxed_format_rate": 1.0,
+      "official_semantic_disagreement_count": 0,
+      "official_semantic_disagreement_rate": 0.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 84.6982453900011,
+      "mean_generated_tokens": 226.6,
+      "mean_seconds_per_generated_token": 0.3731895164247805,
+      "mean_inference_augmentations": 2.1,
+      "inference_augmentation_count_distribution": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 6
+      }
+    }
+  },
+  "pairwise": {
+    "A_base_zero_shot__vs__B_base_3shot": {
+      "official_compute_score": {
+        "n_paired": 10,
+        "preserved": 0,
+        "recovered": 1,
+        "regressed": 2,
+        "both_wrong": 7,
+        "net_gain": -1,
+        "mcnemar_exact_p": 1.0
+      },
+      "semantic_correct": {
+        "n_paired": 10,
+        "preserved": 3,
+        "recovered": 1,
+        "regressed": 0,
+        "both_wrong": 6,
+        "net_gain": 1,
+        "mcnemar_exact_p": 1.0
+      }
+    },
+    "A_base_zero_shot__vs__D_memgen_official": {
+      "official_compute_score": {
+        "n_paired": 10,
+        "preserved": 1,
+        "recovered": 1,
+        "regressed": 1,
+        "both_wrong": 7,
+        "net_gain": 0,
+        "mcnemar_exact_p": 1.0
+      },
+      "semantic_correct": {
+        "n_paired": 10,
+        "preserved": 1,
+        "recovered": 1,
+        "regressed": 2,
+        "both_wrong": 6,
+        "net_gain": -1,
+        "mcnemar_exact_p": 1.0
+      }
+    },
+    "A_base_zero_shot__vs__R_memgen_random50_inference": {
+      "official_compute_score": {
+        "n_paired": 10,
+        "preserved": 1,
+        "recovered": 2,
+        "regressed": 1,
+        "both_wrong": 6,
+        "net_gain": 1,
+        "mcnemar_exact_p": 1.0
+      },
+      "semantic_correct": {
+        "n_paired": 10,
+        "preserved": 2,
+        "recovered": 1,
+        "regressed": 1,
+        "both_wrong": 6,
+        "net_gain": 0,
+        "mcnemar_exact_p": 1.0
+      }
+    },
+    "B_base_3shot__vs__D_memgen_official": {
+      "official_compute_score": {
+        "n_paired": 10,
+        "preserved": 0,
+        "recovered": 2,
+        "regressed": 1,
+        "both_wrong": 7,
+        "net_gain": 1,
+        "mcnemar_exact_p": 1.0
+      },
+      "semantic_correct": {
+        "n_paired": 10,
+        "preserved": 2,
+        "recovered": 0,
+        "regressed": 2,
+        "both_wrong": 6,
+        "net_gain": -2,
+        "mcnemar_exact_p": 0.5
+      }
+    },
+    "B_base_3shot__vs__R_memgen_random50_inference": {
+      "official_compute_score": {
+        "n_paired": 10,
+        "preserved": 1,
+        "recovered": 2,
+        "regressed": 0,
+        "both_wrong": 7,
+        "net_gain": 2,
+        "mcnemar_exact_p": 0.5
+      },
+      "semantic_correct": {
+        "n_paired": 10,
+        "preserved": 3,
+        "recovered": 0,
+        "regressed": 1,
+        "both_wrong": 6,
+        "net_gain": -1,
+        "mcnemar_exact_p": 1.0
+      }
+    },
+    "D_memgen_official__vs__R_memgen_random50_inference": {
+      "official_compute_score": {
+        "n_paired": 10,
+        "preserved": 2,
+        "recovered": 1,
+        "regressed": 0,
+        "both_wrong": 7,
+        "net_gain": 1,
+        "mcnemar_exact_p": 1.0
+      },
+      "semantic_correct": {
+        "n_paired": 10,
+        "preserved": 2,
+        "recovered": 1,
+        "regressed": 0,
+        "both_wrong": 7,
+        "net_gain": 1,
+        "mcnemar_exact_p": 1.0
+      }
+    }
+  }
+}

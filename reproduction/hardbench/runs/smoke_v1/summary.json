@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "scored_at": "2026-09-20T22:00:38.455586+00:00",
+  "raw_sources": [
+    {
+      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\smoke_v1\\raw\\A_base_zero_shot.raw.jsonl",
+      "sha256": "87cdb49a75c4a72148a89ba2634f1bfaad27ec5a63e88f0f43ea7dda6536d06d",
+      "records": 1,
+      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\smoke_v1\\scored\\A_base_zero_shot.scored.jsonl"
+    },
+    {
+      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\smoke_v1\\raw\\B_base_3shot.raw.jsonl",
+      "sha256": "544aa1fd1ad98b6e7146de80824e0e045148a045aa96296849f37d0a4418af4a",
+      "records": 1,
+      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\smoke_v1\\scored\\B_base_3shot.scored.jsonl"
+    },
+    {
+      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\smoke_v1\\raw\\D_memgen_official.raw.jsonl",
+      "sha256": "096b917bd22da36096e27313855294bf6993cba9598606019b473f1cf89e1490",
+      "records": 1,
+      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\smoke_v1\\scored\\D_memgen_official.scored.jsonl"
+    }
+  ],
+  "conditions": {
+    "A_base_zero_shot": {
+      "n": 1,
+      "official_correct": 1.0,
+      "official_accuracy": 1.0,
+      "semantic_correct": 1,
+      "semantic_accuracy": 1.0,
+      "boxed_format_count": 1,
+      "boxed_format_rate": 1.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 186.08208079999895,
+      "mean_generated_tokens": 462.0,
+      "mean_inference_augmentations": null
+    },
+    "B_base_3shot": {
+      "n": 1,
+      "official_correct": 1.0,
+      "official_accuracy": 1.0,
+      "semantic_correct": 1,
+      "semantic_accuracy": 1.0,
+      "boxed_format_count": 1,
+      "boxed_format_rate": 1.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 159.54370889998972,
+      "mean_generated_tokens": 375.0,
+      "mean_inference_augmentations": null
+    },
+    "D_memgen_official": {
+      "n": 1,
+      "official_correct": 1.0,
+      "official_accuracy": 1.0,
+      "semantic_correct": 1,
+      "semantic_accuracy": 1.0,
+      "boxed_format_count": 1,
+      "boxed_format_rate": 1.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 181.13507680001203,
+      "mean_generated_tokens": 395.0,
+      "mean_inference_augmentations": 3.0
+    }
+  },
+  "pairwise": {
+    "A_base_zero_shot__vs__B_base_3shot": {
+      "official_compute_score": {
+        "n_paired": 1,
+        "preserved": 1,
+        "recovered": 0,
+        "regressed": 0,
+        "both_wrong": 0,
+        "net_gain": 0,
+        "mcnemar_exact_p": 1.0
+      },
+      "semantic_correct": {
+        "n_paired": 1,
+        "preserved": 1,
+        "recovered": 0,
+        "regressed": 0,
+        "both_wrong": 0,
+        "net_gain": 0,
+        "mcnemar_exact_p": 1.0
+      }
+    },
+    "A_base_zero_shot__vs__D_memgen_official": {
+      "official_compute_score": {
+        "n_paired": 1,
+        "preserved": 1,
+        "recovered": 0,
+        "regressed": 0,
+        "both_wrong": 0,
+        "net_gain": 0,
+        "mcnemar_exact_p": 1.0
+      },
+      "semantic_correct": {
+        "n_paired": 1,
+        "preserved": 1,
+        "recovered": 0,
+        "regressed": 0,
+        "both_wrong": 0,
+        "net_gain": 0,
+        "mcnemar_exact_p": 1.0
+      }
+    },
+    "B_base_3shot__vs__D_memgen_official": {
+      "official_compute_score": {
+        "n_paired": 1,
+        "preserved": 1,
+        "recovered": 0,
+        "regressed": 0,
+        "both_wrong": 0,
+        "net_gain": 0,
+        "mcnemar_exact_p": 1.0
+      },
+      "semantic_correct": {
+        "n_paired": 1,
+        "preserved": 1,
+        "recovered": 0,
+        "regressed": 0,
+        "both_wrong": 0,
+        "net_gain": 0,
+        "mcnemar_exact_p": 1.0
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-20T23:00:37.205871+00:00",
+  "runner": "run_memgen.py",
+  "condition": "R_memgen_random50_inference",
+  "manifest": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\manifests\\gsm8k_harder_min6_seed20260920.jsonl",
+  "manifest_sha256": "5b98b4d5821f8abc08a9202e4a9d54c238b48d0147516d21e6276edcfdef883c",
+  "base_model": "E:\\MemoryProject\\MemGen\\models\\Qwen2.5-1.5B-Instruct",
+  "checkpoint": "E:\\MemoryProject\\MemGen\\models\\memgen-checkpoints\\Qwen2.5-1.5B-Instruct\\gsm8k\\weaver-sft\\pn=1_pl=8_in=3_il=8\\model",
+  "dtype": "float32",
+  "threads": 8,
+  "max_new_tokens": 512,
+  "generation": "greedy",
+  "trigger_active": false,
+  "max_prompt_aug_num": 1,
+  "max_inference_aug_num": 3,
+  "gate_policy": "random50",
+  "random_probability": 0.5,
+  "random_seed": 20260920
+}
