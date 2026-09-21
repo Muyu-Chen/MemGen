@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "scored_at": "2026-09-21T14:18:43.397867+00:00",
+  "raw_sources": [
+    {
+      "path": "reproduction/hardbench/runs/released_gate_0810_depth1_v1/raw/Z7_memgen_released_gate_0810.raw.jsonl",
+      "sha256": "960b69fac179a70c5d21f0e6f29c785ce55d6b3747d6022daea29514d67b8fc6",
+      "records": 2,
+      "scored_path": "reproduction/hardbench/runs/released_gate_0810_depth1_v1/scored/Z7_memgen_released_gate_0810.scored.jsonl"
+    }
+  ],
+  "conditions": {
+    "Z7_memgen_released_gate_0810": {
+      "n": 2,
+      "official_correct": 1.0,
+      "official_accuracy": 0.5,
+      "semantic_correct": 1,
+      "semantic_accuracy": 0.5,
+      "boxed_format_count": 2,
+      "boxed_format_rate": 1.0,
+      "official_semantic_disagreement_count": 0,
+      "official_semantic_disagreement_rate": 0.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 166.44004384998698,
+      "mean_generated_tokens": 507.5,
+      "mean_seconds_per_generated_token": 0.33053144788162997,
+      "mean_inference_augmentations": 0.5,
+      "inference_augmentation_count_distribution": {
+        "0": 1,
+        "1": 1
+      }
+    }
+  },
+  "pairwise": {}
+}

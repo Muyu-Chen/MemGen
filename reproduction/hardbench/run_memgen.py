@@ -22,6 +22,7 @@ from common import (
     load_manifest,
     load_tokenizer,
     meta_path_for,
+    portable_path,
     resolve_torch_dtype,
     sha256_file,
     utc_now,
@@ -268,10 +269,10 @@ def main() -> None:
             "created_at": utc_now(),
             "runner": "run_memgen.py",
             "condition": condition,
-            "manifest": str(manifest_path),
+            "manifest": portable_path(manifest_path),
             "manifest_sha256": sha256_file(manifest_path),
-            "base_model": str(BASE_MODEL_PATH),
-            "checkpoint": str(CHECKPOINT_PATH),
+            "base_model": portable_path(BASE_MODEL_PATH),
+            "checkpoint": portable_path(CHECKPOINT_PATH),
             "dtype": args.dtype,
             "threads": args.threads,
             "max_new_tokens": args.max_new_tokens,
@@ -285,7 +286,7 @@ def main() -> None:
             ),
             "random_seed": args.random_seed if args.condition == "random50" else None,
             "policy_file": (
-                str(args.policy_file.resolve()) if args.policy_file is not None else None
+                portable_path(args.policy_file) if args.policy_file is not None else None
             ),
             "policy_sha256": (
                 sha256_file(args.policy_file.resolve())
@@ -386,8 +387,8 @@ def main() -> None:
             "truncated_at_max_new_tokens": len(token_ids) >= args.max_new_tokens and not eos_emitted,
             "latency_seconds": elapsed,
             "seconds_per_generated_token": elapsed / max(1, len(token_ids)),
-            "model_path": str(BASE_MODEL_PATH),
-            "checkpoint_path": str(CHECKPOINT_PATH),
+            "model_path": portable_path(BASE_MODEL_PATH),
+            "checkpoint_path": portable_path(CHECKPOINT_PATH),
             "dtype": args.dtype,
             "threads": args.threads,
             "max_new_tokens": args.max_new_tokens,

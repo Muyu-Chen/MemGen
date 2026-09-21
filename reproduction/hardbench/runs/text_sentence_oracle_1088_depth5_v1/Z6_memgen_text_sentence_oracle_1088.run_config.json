@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-21T13:09:29.802959+00:00",
+  "runner": "run_sentence_sequential_oracle.py",
+  "condition": "Z6_memgen_text_sentence_oracle_1088",
+  "manifest": "reproduction/hardbench/manifests/gsm8k_harder_min6_seed20260920.jsonl",
+  "manifest_sha256": "5b98b4d5821f8abc08a9202e4a9d54c238b48d0147516d21e6276edcfdef883c",
+  "plan_file": "reproduction/hardbench/plans/text_sentence_oracle_1088_depth5_v1.json",
+  "plan_sha256": "b6affe041227d33b4dc865075ddd7944632141d4e3f8f41cd9736bd22cbd4c1b",
+  "sample_ids": [
+    "gsm8k_test_1088"
+  ],
+  "planned_variants": 32,
+  "decision_depths": [
+    5
+  ],
+  "base_model": "../models/Qwen2.5-1.5B-Instruct",
+  "checkpoint": "../models/memgen-checkpoints/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft/pn=1_pl=8_in=3_il=8/model",
+  "dtype": "float32",
+  "threads": 8,
+  "max_new_tokens": 512,
+  "generation": "greedy",
+  "trigger_active": false,
+  "max_prompt_aug_num": 1,
+  "checkpoint_max_inference_aug_num": 3,
+  "diagnostic_max_inference_aug_num": 5,
+  "gate_policy": "dynamic_sentence_boundary_binary_sequence",
+  "candidate_detection": "decoded_last_token_suffix",
+  "paper_boundary_definition": "A delimiter-token set D (e.g. commas and periods); the trigger acts only when the current token belongs to D.",
+  "boundary_rule": "decoded comma/period/newline suffix, excluding numeric commas, numeric periods, blank lines, unclosed GSM8K calculator spans, and punctuation immediately following an unfinished arithmetic operator"
+}

@@ -127,3 +127,35 @@ N 原始事件中的候选数；运行器以 `(sample_id, candidate_ordinal)` �
 
 机器汇总写入 `analysis/trigger_evidence_v1.json`，总体研究判断见
 `TRIGGER_EVIDENCE_ANALYSIS.md`。
+
+## 动态 sentence-level sequential oracle
+
+固定 baseline 上的单点 sweep 不能覆盖 MemGen 的历史依赖：一次 invoke 会改变
+后续文本、候选节点和 hidden state。`run_sentence_sequential_oracle.py` 因此在每条
+实时轨迹上重新识别论文的 delimiter-token sentence boundary，再执行计划中的
+invoke/skip bit。
+
+候选保留论文/发布代码的 comma、period、newline，同时排除小数点、数字内部逗号、
+未闭合 `<<...>>` calculator span、空行和未完成算术。`--decoded-boundaries` 还会
+恢复 tokenizer 合并为 `'.\n'` 等单 token 时被发布版 token-ID equality 漏掉的句末。
+
+核心 campaign 对 8 个完整的 prompt-only 失败样本穷举 `2^3`，并对 5 个高信息量
+样本穷举 `2^5`，共 224 条策略。深度 5 是诊断实验，会把 checkpoint 的最大
+inference augmentation 从 3 临时提高到 5；原权重不变。代表性的运行、评分和汇总
+命令如下；其余 run 的精确参数保存在各自 `*.run_config.json`：
+
+```powershell
+..\.venv\Scripts\python.exe reproduction\hardbench\run_sentence_sequential_oracle.py `
+  --plan-file reproduction\hardbench\plans\text_sentence_oracle_depth3_screen_v1.json `
+  --run-dir reproduction\hardbench\runs\text_sentence_oracle_depth3_screen_v1 `
+  --condition-label Z3_memgen_text_sentence_oracle_screen --decoded-boundaries
+
+..\.venv\Scripts\python.exe reproduction\hardbench\score_results.py `
+  --run-dir reproduction\hardbench\runs\text_sentence_oracle_depth3_screen_v1
+
+..\.venv\Scripts\python.exe reproduction\hardbench\analyze_sentence_oracle_campaign.py
+```
+
+完整 source mapping、逐样本/逐深度结果与责任切分见
+`SENTENCE_ORACLE_CAMPAIGN_REPORT.md`。`0810` 的首节点 exact rescue 另做了发布版
+token-ID gate 可达性与后续调用稳定性验证，见 `ORACLE_0810_ROBUSTNESS_REPORT.md`。

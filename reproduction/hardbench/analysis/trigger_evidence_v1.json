@@ -1,44 +1,44 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T01:44:46.474842+00:00",
+  "generated_at": "2026-09-21T14:19:06.563510+00:00",
   "scope": {
-    "stored_generation_records": 105,
-    "total_generation_latency_seconds": 9739.374946400116,
+    "stored_generation_records": 108,
+    "total_generation_latency_seconds": 9990.084858600167,
     "source_files": [
       {
-        "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\scored\\A_base_zero_shot.scored.jsonl",
+        "path": "reproduction/hardbench/runs/pilot_min6_v1/scored/A_base_zero_shot.scored.jsonl",
         "sha256": "da79a5d25c6420326baf2f7b1f1d5400d5279d804517a131edf7dbc01652231a"
       },
       {
-        "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\scored\\B_base_3shot.scored.jsonl",
+        "path": "reproduction/hardbench/runs/pilot_min6_v1/scored/B_base_3shot.scored.jsonl",
         "sha256": "3c1e63e0bc33b1b04fa40664057e512c3f4d6d04d9d1f282d80958826bab621d"
       },
       {
-        "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\scored\\D_memgen_official.scored.jsonl",
+        "path": "reproduction/hardbench/runs/pilot_min6_v1/scored/D_memgen_official.scored.jsonl",
         "sha256": "0eafefd19672179844793bfee4b7b23080c0508f00b94a189fd6a664c6f02acb"
       },
       {
-        "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\pilot_min6_v1\\scored\\R_memgen_random50_inference.scored.jsonl",
+        "path": "reproduction/hardbench/runs/pilot_min6_v1/scored/R_memgen_random50_inference.scored.jsonl",
         "sha256": "2cab401728ed1fbf8c3492df9c1f6a55f5a47801f3fa8d92f3501cce9ca87533"
       },
       {
-        "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\trigger_intervention_v1\\scored\\N_memgen_no_inference.scored.jsonl",
-        "sha256": "5e97b6804ff4dff32ab116c98115a3b8547c1d9efa71f16d676220b077ab8191"
+        "path": "reproduction/hardbench/runs/trigger_intervention_v1/scored/N_memgen_no_inference.scored.jsonl",
+        "sha256": "2eec20b672080bc112fea021afcaa6e683d5a608b407d374873318514e629484"
       },
       {
-        "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\trigger_intervention_v1\\scored\\H_memgen_human_single.scored.jsonl",
+        "path": "reproduction/hardbench/runs/trigger_intervention_v1/scored/H_memgen_human_single.scored.jsonl",
         "sha256": "cc89c31baf526a32d07c7552176d41b9136f5e62a83cc75f0b143001b32b0ff8"
       },
       {
-        "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\single_candidate_sweep_v1\\sweep_analysis.json",
+        "path": "reproduction/hardbench/runs/single_candidate_sweep_v1/sweep_analysis.json",
         "sha256": "c889f7fffa2e4fefbf26e1950575096b887f5ee9ad69b5fd114df74e5423e295"
       },
       {
-        "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\single_candidate_sweep_v1\\scored\\X_memgen_single_candidate_sweep.scored.jsonl",
+        "path": "reproduction/hardbench/runs/single_candidate_sweep_v1/scored/X_memgen_single_candidate_sweep.scored.jsonl",
         "sha256": "5b70923e063289e0f9cd5bd110a9f136f7cf692bd5c1b0adb0c0e74bde31a26f"
       },
       {
-        "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\candidate_interaction_v1\\scored\\Y_memgen_candidate_interaction.scored.jsonl",
+        "path": "reproduction/hardbench/runs/candidate_interaction_v1/scored/Y_memgen_candidate_interaction.scored.jsonl",
         "sha256": "8609ac73a474cd1adaa0e814cfb063ec6a18773b54d49deef62806586f4f4d21"
       }
     ]
@@ -336,9 +336,9 @@
   "human_single_intervention": {
     "n_paired": 7,
     "baseline": {
-      "n": 7,
-      "semantic_correct": 1,
-      "semantic_accuracy": 0.14285714285714285,
+      "n": 10,
+      "semantic_correct": 2,
+      "semantic_accuracy": 0.2,
       "mean_inference_augmentations": 0.0
     },
     "human_single": {

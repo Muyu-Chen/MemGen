@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "scored_at": "2026-09-21T14:18:44.352816+00:00",
+  "raw_sources": [
+    {
+      "path": "reproduction/hardbench/runs/sentence_sequential_oracle_v1/raw/Z_memgen_sentence_sequential_oracle.raw.jsonl",
+      "sha256": "905b2f6db700a0d651a268080d533f77fb1694aa7e83d195e1488df63b4bfc25",
+      "records": 40,
+      "scored_path": "reproduction/hardbench/runs/sentence_sequential_oracle_v1/scored/Z_memgen_sentence_sequential_oracle.scored.jsonl"
+    }
+  ],
+  "conditions": {
+    "Z_memgen_sentence_sequential_oracle": {
+      "n": 40,
+      "official_correct": 0.0,
+      "official_accuracy": 0.0,
+      "semantic_correct": 0,
+      "semantic_accuracy": 0.0,
+      "boxed_format_count": 40,
+      "boxed_format_rate": 1.0,
+      "official_semantic_disagreement_count": 0,
+      "official_semantic_disagreement_rate": 0.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 96.12595978749596,
+      "mean_generated_tokens": 248.775,
+      "mean_seconds_per_generated_token": 0.3855378523684375,
+      "mean_inference_augmentations": 2.05,
+      "inference_augmentation_count_distribution": {
+        "0": 2,
+        "1": 12,
+        "2": 13,
+        "3": 9,
+        "4": 3,
+        "5": 1
+      }
+    }
+  },
+  "pairwise": {}
+}

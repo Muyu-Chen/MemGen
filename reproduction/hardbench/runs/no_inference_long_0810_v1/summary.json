@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "scored_at": "2026-09-21T14:18:42.426249+00:00",
+  "raw_sources": [
+    {
+      "path": "reproduction/hardbench/runs/no_inference_long_0810_v1/raw/N_memgen_no_inference.raw.jsonl",
+      "sha256": "1479513414dbf73e262edba4f8639c708b898b0d980cc35f0ea114ac2c8f4937",
+      "records": 1,
+      "scored_path": "reproduction/hardbench/runs/no_inference_long_0810_v1/scored/N_memgen_no_inference.scored.jsonl"
+    }
+  ],
+  "conditions": {
+    "N_memgen_no_inference": {
+      "n": 1,
+      "official_correct": 0.0,
+      "official_accuracy": 0.0,
+      "semantic_correct": 0,
+      "semantic_accuracy": 0.0,
+      "boxed_format_count": 1,
+      "boxed_format_rate": 1.0,
+      "official_semantic_disagreement_count": 0,
+      "official_semantic_disagreement_rate": 0.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 265.69322650000686,
+      "mean_generated_tokens": 810.0,
+      "mean_seconds_per_generated_token": 0.32801632901235417,
+      "mean_inference_augmentations": 0.0,
+      "inference_augmentation_count_distribution": {
+        "0": 1
+      }
+    }
+  },
+  "pairwise": {}
+}

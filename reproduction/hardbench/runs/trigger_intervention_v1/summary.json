@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "scored_at": "2026-09-20T23:55:19.266882+00:00",
+  "scored_at": "2026-09-21T14:18:41.504213+00:00",
   "raw_sources": [
     {
-      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\trigger_intervention_v1\\raw\\H_memgen_human_single.raw.jsonl",
+      "path": "reproduction/hardbench/runs/trigger_intervention_v1/raw/H_memgen_human_single.raw.jsonl",
       "sha256": "0fa265956abda80f3153beec6464100b211f2ef34730ad60a050ade27fa70ddf",
       "records": 7,
-      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\trigger_intervention_v1\\scored\\H_memgen_human_single.scored.jsonl"
+      "scored_path": "reproduction/hardbench/runs/trigger_intervention_v1/scored/H_memgen_human_single.scored.jsonl"
     },
     {
-      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\trigger_intervention_v1\\raw\\N_memgen_no_inference.raw.jsonl",
-      "sha256": "3a00ac7bcffef378b8f6834ec0c4486e05ce4d2a67b7db70d7f27b71119f2069",
-      "records": 7,
-      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\trigger_intervention_v1\\scored\\N_memgen_no_inference.scored.jsonl"
+      "path": "reproduction/hardbench/runs/trigger_intervention_v1/raw/N_memgen_no_inference.raw.jsonl",
+      "sha256": "8dddc82fd4d097e93928db06b2f0ba4f3d2adbe1fe4c5c8034d76740ea125534",
+      "records": 10,
+      "scored_path": "reproduction/hardbench/runs/trigger_intervention_v1/scored/N_memgen_no_inference.scored.jsonl"
     }
   ],
   "conditions": {
@@ -36,22 +36,22 @@
       }
     },
     "N_memgen_no_inference": {
-      "n": 7,
-      "official_correct": 1.0,
-      "official_accuracy": 0.14285714285714285,
-      "semantic_correct": 1,
-      "semantic_accuracy": 0.14285714285714285,
-      "boxed_format_count": 7,
-      "boxed_format_rate": 1.0,
+      "n": 10,
+      "official_correct": 2.0,
+      "official_accuracy": 0.2,
+      "semantic_correct": 2,
+      "semantic_accuracy": 0.2,
+      "boxed_format_count": 9,
+      "boxed_format_rate": 0.9,
       "official_semantic_disagreement_count": 0,
       "official_semantic_disagreement_rate": 0.0,
-      "truncated_count": 0,
-      "mean_latency_seconds": 75.12650158571445,
-      "mean_generated_tokens": 213.14285714285714,
-      "mean_seconds_per_generated_token": 0.35381904809376635,
+      "truncated_count": 1,
+      "mean_latency_seconds": 77.65954233000521,
+      "mean_generated_tokens": 225.3,
+      "mean_seconds_per_generated_token": 0.34768717078244826,
       "mean_inference_augmentations": 0.0,
       "inference_augmentation_count_distribution": {
-        "0": 7
+        "0": 10
       }
     }
   },

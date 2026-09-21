@@ -11,7 +11,7 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Any
 
-from common import read_jsonl, sha256_file, utc_now, write_json, write_jsonl
+from common import portable_path, read_jsonl, sha256_file, utc_now, write_json, write_jsonl
 from data.utils.math_utils import (
     compute_score,
     first_boxed_only_string,
@@ -218,10 +218,10 @@ def main() -> None:
         write_jsonl(output, scored_records)
         raw_sources.append(
             {
-                "path": str(raw_file),
+                "path": portable_path(raw_file),
                 "sha256": sha256_file(raw_file),
                 "records": len(raw_records),
-                "scored_path": str(output),
+                "scored_path": portable_path(output),
             }
         )
 

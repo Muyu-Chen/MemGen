@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "plan_name": "text_sentence_oracle_0754_v1",
+  "created_at": "2026-09-21",
+  "purpose": "Test whether paper-intended sentence boundaries can rescue a case where the released token-id delimiter implementation exposes only decimal-internal candidates.",
+  "sample_id": "gsm8k_test_0754",
+  "decision_depths": [3, 5],
+  "policy_enumeration": "lexicographic_binary",
+  "prompt_augmentation": "always_on",
+  "paper_boundary_definition": "A delimiter-token set D (e.g. commas and periods); the trigger acts only when the current token belongs to D.",
+  "boundary_detection": "decoded_last-token suffix plus full generated-prefix validation, allowing fused tokens such as period-newline that the released token-id equality check misses",
+  "inference_boundary_rule": "decoded comma/period/newline suffix, excluding numeric commas, numeric periods, blank lines, unclosed GSM8K calculator spans, and punctuation immediately following an unfinished arithmetic operator",
+  "depth_3_interpretation": "checkpoint-native maximum of three inference invocations",
+  "depth_5_interpretation": "diagnostic oracle with the same weights and inference limit temporarily raised from three to five",
+  "expected_variants": 40
+}

@@ -1,0 +1,1455 @@
+{
+  "schema_version": 1,
+  "analyzed_at": "2026-09-21T14:19:03.341352+00:00",
+  "condition": "Z2_memgen_text_sentence_oracle",
+  "sample_id": "gsm8k_test_0754",
+  "gold": "89",
+  "raw_path": "reproduction/hardbench/runs/text_sentence_oracle_0754_v1/raw/Z2_memgen_text_sentence_oracle.raw.jsonl",
+  "raw_sha256": "8a0da97b4b2483395addb97988d29d4465f79b331fd54b2c65747074259617ed",
+  "scored_path": "reproduction/hardbench/runs/text_sentence_oracle_0754_v1/scored/Z2_memgen_text_sentence_oracle.scored.jsonl",
+  "scored_sha256": "7d60a579171c68393488a26cc49e941f94e03322ef37c74c937d85b3696d769b",
+  "expected_total_policies": 40,
+  "observed_total_policies": 40,
+  "all_policy_horizons_reached": true,
+  "full_horizon_policy_count": 40,
+  "all_observed_prefixes_match_policies": true,
+  "invalid_accepted_boundary_count": 0,
+  "cross_depth_no_invoke_identical": true,
+  "total_latency_seconds": 3371.50465779996,
+  "depths": {
+    "3": {
+      "depth": 3,
+      "expected_policies": 8,
+      "observed_policies": 8,
+      "decision_horizon_reached": 8,
+      "unique_completion_count": 5,
+      "unique_prediction_count": 5,
+      "prediction_distribution": {
+        "107": 1,
+        "147": 1,
+        "67": 3,
+        "77": 1,
+        "963": 2
+      },
+      "correct_policy_count": 0,
+      "correct_policies": [],
+      "minimum_invocations_for_correct": null,
+      "checkpoint_native_correct_policies": [],
+      "expanded_budget_correct_policies": [],
+      "no_invoke_prediction": "67",
+      "no_invoke_correct": false,
+      "changed_vs_no_invoke_count": 5,
+      "best_absolute_error": "12",
+      "best_error_policies": [
+        "010"
+      ],
+      "by_invocation_count": {
+        "0": {
+          "policies": 1,
+          "correct": 0,
+          "horizon_reached": 1
+        },
+        "1": {
+          "policies": 3,
+          "correct": 0,
+          "horizon_reached": 3
+        },
+        "2": {
+          "policies": 3,
+          "correct": 0,
+          "horizon_reached": 3
+        },
+        "3": {
+          "policies": 1,
+          "correct": 0,
+          "horizon_reached": 1
+        }
+      },
+      "variants": [
+        {
+          "policy": "000",
+          "invocations": 0,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 0,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 193,
+          "latency_seconds": 77.81393599999137,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n"
+          ]
+        },
+        {
+          "policy": "001",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 193,
+          "latency_seconds": 79.88868520001415,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n"
+          ]
+        },
+        {
+          "policy": "010",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "77",
+          "semantic_correct": false,
+          "absolute_error": "12",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 75.18750339996768,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n"
+          ]
+        },
+        {
+          "policy": "011",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "107",
+          "semantic_correct": false,
+          "absolute_error": "18",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 177,
+          "latency_seconds": 73.45758370001568,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n"
+          ]
+        },
+        {
+          "policy": "100",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 193,
+          "latency_seconds": 74.6357493000105,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n"
+          ]
+        },
+        {
+          "policy": "101",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "963",
+          "semantic_correct": false,
+          "absolute_error": "874",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 226,
+          "latency_seconds": 90.09761660004733,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n"
+          ]
+        },
+        {
+          "policy": "110",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "963",
+          "semantic_correct": false,
+          "absolute_error": "874",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 226,
+          "latency_seconds": 90.4059239999624,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n"
+          ]
+        },
+        {
+          "policy": "111",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "147",
+          "semantic_correct": false,
+          "absolute_error": "58",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 198,
+          "latency_seconds": 84.32154980004998,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n"
+          ]
+        }
+      ]
+    },
+    "5": {
+      "depth": 5,
+      "expected_policies": 32,
+      "observed_policies": 32,
+      "decision_horizon_reached": 32,
+      "unique_completion_count": 12,
+      "unique_prediction_count": 8,
+      "prediction_distribution": {
+        "1050": 3,
+        "107": 2,
+        "147": 2,
+        "261": 3,
+        "428": 1,
+        "67": 10,
+        "77": 8,
+        "963": 3
+      },
+      "correct_policy_count": 0,
+      "correct_policies": [],
+      "minimum_invocations_for_correct": null,
+      "checkpoint_native_correct_policies": [],
+      "expanded_budget_correct_policies": [],
+      "no_invoke_prediction": "67",
+      "no_invoke_correct": false,
+      "changed_vs_no_invoke_count": 26,
+      "best_absolute_error": "12",
+      "best_error_policies": [
+        "00010",
+        "00011",
+        "00110",
+        "00111",
+        "01000",
+        "01001",
+        "01010",
+        "01110"
+      ],
+      "by_invocation_count": {
+        "0": {
+          "policies": 1,
+          "correct": 0,
+          "horizon_reached": 1
+        },
+        "1": {
+          "policies": 5,
+          "correct": 0,
+          "horizon_reached": 5
+        },
+        "2": {
+          "policies": 10,
+          "correct": 0,
+          "horizon_reached": 10
+        },
+        "3": {
+          "policies": 10,
+          "correct": 0,
+          "horizon_reached": 10
+        },
+        "4": {
+          "policies": 5,
+          "correct": 0,
+          "horizon_reached": 5
+        },
+        "5": {
+          "policies": 1,
+          "correct": 0,
+          "horizon_reached": 1
+        }
+      },
+      "variants": [
+        {
+          "policy": "00000",
+          "invocations": 0,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 0,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 193,
+          "latency_seconds": 72.07731160003459,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n"
+          ]
+        },
+        {
+          "policy": "00001",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 193,
+          "latency_seconds": 76.30290690000402,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n"
+          ]
+        },
+        {
+          "policy": "00010",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "77",
+          "semantic_correct": false,
+          "absolute_error": "12",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 75.04613039997639,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "00011",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "77",
+          "semantic_correct": false,
+          "absolute_error": "12",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 79.84041659999639,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "00100",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 193,
+          "latency_seconds": 75.5055070000235,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n"
+          ]
+        },
+        {
+          "policy": "00101",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 193,
+          "latency_seconds": 80.78314120002324,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n"
+          ]
+        },
+        {
+          "policy": "00110",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "77",
+          "semantic_correct": false,
+          "absolute_error": "12",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 78.99150100001134,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "00111",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "77",
+          "semantic_correct": false,
+          "absolute_error": "12",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 83.84578209999017,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "01000",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "77",
+          "semantic_correct": false,
+          "absolute_error": "12",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 74.80070219998015,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "01001",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "77",
+          "semantic_correct": false,
+          "absolute_error": "12",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 79.12079479999375,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "01010",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "77",
+          "semantic_correct": false,
+          "absolute_error": "12",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 79.05153399996925,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "01011",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 83.79648009996163,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "01100",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "107",
+          "semantic_correct": false,
+          "absolute_error": "18",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 177,
+          "latency_seconds": 73.19262039999012,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 large stickers for 20 x 3 = <<20*3=60>>60 small buttons.\n"
+          ]
+        },
+        {
+          "policy": "01101",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "107",
+          "semantic_correct": false,
+          "absolute_error": "18",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 177,
+          "latency_seconds": 77.87716829997953,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 large stickers for 20 x 3 = <<20*3=60>>60 small buttons.\n"
+          ]
+        },
+        {
+          "policy": "01110",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "77",
+          "semantic_correct": false,
+          "absolute_error": "12",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 82.82586599997012,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "01111",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 4,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 191,
+          "latency_seconds": 87.39996459998656,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe has 20 x 3 = <<20*3=60>>60 small stickers left.\n"
+          ]
+        },
+        {
+          "policy": "10000",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 193,
+          "latency_seconds": 75.28475039999466,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n"
+          ]
+        },
+        {
+          "policy": "10001",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 193,
+          "latency_seconds": 81.57742340001278,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n"
+          ]
+        },
+        {
+          "policy": "10010",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 193,
+          "latency_seconds": 79.23773799999617,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\n"
+          ]
+        },
+        {
+          "policy": "10011",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 193,
+          "latency_seconds": 84.17496630002279,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe has 27 + 20 = <<27+20=47>>47 large buttons.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\n"
+          ]
+        },
+        {
+          "policy": "10100",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "963",
+          "semantic_correct": false,
+          "absolute_error": "874",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 226,
+          "latency_seconds": 90.53740250004921,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "10101",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "428",
+          "semantic_correct": false,
+          "absolute_error": "339",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 258,
+          "latency_seconds": 107.11504920001607,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "10110",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "963",
+          "semantic_correct": false,
+          "absolute_error": "874",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 226,
+          "latency_seconds": 95.15910699998494,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "10111",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 4,
+          "prediction": "261",
+          "semantic_correct": false,
+          "absolute_error": "172",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 170,
+          "latency_seconds": 79.61331210000208,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "11000",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "963",
+          "semantic_correct": false,
+          "absolute_error": "874",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 226,
+          "latency_seconds": 90.2937178000575,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "11001",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "261",
+          "semantic_correct": false,
+          "absolute_error": "172",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 170,
+          "latency_seconds": 74.76456620002864,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "11010",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "1050",
+          "semantic_correct": false,
+          "absolute_error": "961",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 257,
+          "latency_seconds": 106.41482449998148,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "11011",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 4,
+          "prediction": "261",
+          "semantic_correct": false,
+          "absolute_error": "172",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 170,
+          "latency_seconds": 79.72830839996459,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 small stickers for large buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "11100",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "147",
+          "semantic_correct": false,
+          "absolute_error": "58",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 198,
+          "latency_seconds": 84.187868399953,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "11101",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 4,
+          "prediction": "147",
+          "semantic_correct": false,
+          "absolute_error": "58",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 198,
+          "latency_seconds": 89.33871989999898,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\nShe has 27 + 60 = <<27+60=87>>87 small stickers.\n"
+          ]
+        },
+        {
+          "policy": "11110",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 4,
+          "prediction": "1050",
+          "semantic_correct": false,
+          "absolute_error": "961",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 283,
+          "latency_seconds": 121.05605879996438,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\nShe has 27 + 60 = <<27+60=87>>87 stickers left.\n"
+          ]
+        },
+        {
+          "policy": "11111",
+          "invocations": 5,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 5,
+          "prediction": "1050",
+          "semantic_correct": false,
+          "absolute_error": "961",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 283,
+          "latency_seconds": 126.75446969998302,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\n",
+            "Lorraine trades 30 x 0.9 = <<30*0.9=27>>27 small stickers for large buttons.\nShe trades 40 x 0.5 = <<40*0.5=20>>20 large stickers for large buttons.\nShe has 40 - 20 = <<40-20=20>>20 large stickers left.\nShe trades 20 x 3 = <<20*3=60>>60 large stickers for small buttons.\nShe has 27 + 60 = <<27+60=87>>87 stickers left.\n"
+          ]
+        }
+      ]
+    }
+  }
+}

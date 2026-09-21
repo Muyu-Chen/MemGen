@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "plan_name": "released_gate_0810_depth1_v1",
+  "created_at": "2026-09-21",
+  "purpose": "Check whether the clean first-boundary rescue found by decoded sentence detection is reachable through the released token-ID delimiter detector.",
+  "sample_ids": [
+    "gsm8k_test_0810"
+  ],
+  "decision_depths": [1],
+  "policy_enumeration": "lexicographic_binary",
+  "prompt_augmentation": "always_on",
+  "paper_boundary_definition": "A delimiter-token set D (e.g. commas and periods); the trigger acts only when the current token belongs to D.",
+  "boundary_detection": "released model._check_ends_with_delimiter token-ID equality",
+  "inference_boundary_rule": "the released checkpoint's exact delimiter token-ID equality check, without decoded suffix recovery",
+  "max_new_tokens": 1024,
+  "expected_variants": 2
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "scored_at": "2026-09-21T14:18:49.849633+00:00",
+  "raw_sources": [
+    {
+      "path": "reproduction/hardbench/runs/text_sentence_oracle_depth5_followup_v1/raw/Z4_memgen_text_sentence_oracle_depth5.raw.jsonl",
+      "sha256": "a1c927ea27181e2e70ee53ce2f36fc27f2bfa05a9b0ddfad6936307d9356d2e6",
+      "records": 64,
+      "scored_path": "reproduction/hardbench/runs/text_sentence_oracle_depth5_followup_v1/scored/Z4_memgen_text_sentence_oracle_depth5.scored.jsonl"
+    }
+  ],
+  "conditions": {
+    "Z4_memgen_text_sentence_oracle_depth5": {
+      "n": 64,
+      "official_correct": 0.0,
+      "official_accuracy": 0.0,
+      "semantic_correct": 0,
+      "semantic_accuracy": 0.0,
+      "boxed_format_count": 64,
+      "boxed_format_rate": 1.0,
+      "official_semantic_disagreement_count": 0,
+      "official_semantic_disagreement_rate": 0.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 106.35669755624713,
+      "mean_generated_tokens": 290.4375,
+      "mean_seconds_per_generated_token": 0.36974622199554497,
+      "mean_inference_augmentations": 2.3125,
+      "inference_augmentation_count_distribution": {
+        "0": 2,
+        "1": 14,
+        "2": 20,
+        "3": 19,
+        "4": 8,
+        "5": 1
+      }
+    }
+  },
+  "pairwise": {}
+}

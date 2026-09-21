@@ -1,0 +1,1173 @@
+{
+  "schema_version": 1,
+  "analyzed_at": "2026-09-21T14:19:05.272294+00:00",
+  "scope": "depth-5 dynamic sentence-level oracle follow-up on the two most promising depth-3 failures",
+  "raw_source": {
+    "path": "reproduction/hardbench/runs/text_sentence_oracle_depth5_followup_v1/raw/Z4_memgen_text_sentence_oracle_depth5.raw.jsonl",
+    "sha256": "a1c927ea27181e2e70ee53ce2f36fc27f2bfa05a9b0ddfad6936307d9356d2e6"
+  },
+  "scored_source": {
+    "path": "reproduction/hardbench/runs/text_sentence_oracle_depth5_followup_v1/scored/Z4_memgen_text_sentence_oracle_depth5.scored.jsonl",
+    "sha256": "ba95155091868ca846edfa37dbcefa7753a7fc74be32f2fff525454e2040a352"
+  },
+  "sample_count": 2,
+  "policy_count": 64,
+  "full_horizon_count": 40,
+  "correct_policy_count": 0,
+  "truncated_count": 0,
+  "all_observed_prefixes_match_policies": true,
+  "invalid_accepted_boundary_count": 0,
+  "total_latency_seconds": 6806.828643599816,
+  "samples": [
+    {
+      "sample_id": "gsm8k_test_0976",
+      "gold": "540",
+      "no_invoke_prediction": "750",
+      "policy_count": 32,
+      "full_horizon_count": 32,
+      "correct_policy_count": 0,
+      "correct_policies": [],
+      "unique_completion_count": 12,
+      "unique_prediction_count": 7,
+      "prediction_distribution": {
+        "750": 7,
+        "705": 4,
+        "645": 13,
+        "570": 4,
+        "585": 1,
+        "600": 2,
+        "630": 1
+      },
+      "changed_completion_count": 29,
+      "best_absolute_error": "30",
+      "best_predictions": [
+        "570"
+      ],
+      "best_error_policies": [
+        "01001",
+        "11010",
+        "11011",
+        "11110"
+      ],
+      "variants": [
+        {
+          "policy": "00000",
+          "prediction": "750",
+          "semantic_correct": false,
+          "absolute_error": "210",
+          "completion_changed_vs_00000": false,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "inference_augmentations": 0,
+          "generated_token_count": 298
+        },
+        {
+          "policy": "00001",
+          "prediction": "705",
+          "semantic_correct": false,
+          "absolute_error": "165",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "00010",
+          "prediction": "705",
+          "semantic_correct": false,
+          "absolute_error": "165",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "00011",
+          "prediction": "750",
+          "semantic_correct": false,
+          "absolute_error": "210",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 298
+        },
+        {
+          "policy": "00100",
+          "prediction": "705",
+          "semantic_correct": false,
+          "absolute_error": "165",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "00101",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "00110",
+          "prediction": "750",
+          "semantic_correct": false,
+          "absolute_error": "210",
+          "completion_changed_vs_00000": false,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 298
+        },
+        {
+          "policy": "00111",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "01000",
+          "prediction": "705",
+          "semantic_correct": false,
+          "absolute_error": "165",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "01001",
+          "prediction": "570",
+          "semantic_correct": false,
+          "absolute_error": "30",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 367
+        },
+        {
+          "policy": "01010",
+          "prediction": "750",
+          "semantic_correct": false,
+          "absolute_error": "210",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 293
+        },
+        {
+          "policy": "01011",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "01100",
+          "prediction": "750",
+          "semantic_correct": false,
+          "absolute_error": "210",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 294
+        },
+        {
+          "policy": "01101",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            0,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "01110",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "01111",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "inference_augmentations": 4,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "10000",
+          "prediction": "750",
+          "semantic_correct": false,
+          "absolute_error": "210",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 297
+        },
+        {
+          "policy": "10001",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "10010",
+          "prediction": "585",
+          "semantic_correct": false,
+          "absolute_error": "45",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            1,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 380
+        },
+        {
+          "policy": "10011",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            1,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "10100",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "10101",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "10110",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "10111",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          "inference_augmentations": 4,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "11000",
+          "prediction": "645",
+          "semantic_correct": false,
+          "absolute_error": "105",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 360
+        },
+        {
+          "policy": "11001",
+          "prediction": "600",
+          "semantic_correct": false,
+          "absolute_error": "60",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 366
+        },
+        {
+          "policy": "11010",
+          "prediction": "570",
+          "semantic_correct": false,
+          "absolute_error": "30",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 367
+        },
+        {
+          "policy": "11011",
+          "prediction": "570",
+          "semantic_correct": false,
+          "absolute_error": "30",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          "inference_augmentations": 4,
+          "generated_token_count": 367
+        },
+        {
+          "policy": "11100",
+          "prediction": "750",
+          "semantic_correct": false,
+          "absolute_error": "210",
+          "completion_changed_vs_00000": false,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 298
+        },
+        {
+          "policy": "11101",
+          "prediction": "630",
+          "semantic_correct": false,
+          "absolute_error": "90",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          "inference_augmentations": 4,
+          "generated_token_count": 188
+        },
+        {
+          "policy": "11110",
+          "prediction": "570",
+          "semantic_correct": false,
+          "absolute_error": "30",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          "inference_augmentations": 4,
+          "generated_token_count": 366
+        },
+        {
+          "policy": "11111",
+          "prediction": "600",
+          "semantic_correct": false,
+          "absolute_error": "60",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "inference_augmentations": 5,
+          "generated_token_count": 366
+        }
+      ]
+    },
+    {
+      "sample_id": "gsm8k_test_0423",
+      "gold": "8",
+      "no_invoke_prediction": "9.33",
+      "policy_count": 32,
+      "full_horizon_count": 8,
+      "correct_policy_count": 0,
+      "correct_policies": [],
+      "unique_completion_count": 8,
+      "unique_prediction_count": 5,
+      "prediction_distribution": {
+        "9.33": 22,
+        "6.67": 3,
+        "9.333333333333334": 2,
+        "6.666666666666666": 1,
+        "12.67": 4
+      },
+      "changed_completion_count": 31,
+      "best_absolute_error": "1.33",
+      "best_predictions": [
+        "6.67",
+        "9.33"
+      ],
+      "best_error_policies": [
+        "00000",
+        "00001",
+        "00010",
+        "00011",
+        "00100",
+        "00101",
+        "00110",
+        "00111",
+        "01000",
+        "01001",
+        "01010",
+        "01011",
+        "01100",
+        "01101",
+        "01110",
+        "01111",
+        "10010",
+        "11000",
+        "11001",
+        "11010",
+        "11011",
+        "11100",
+        "11101",
+        "11110",
+        "11111"
+      ],
+      "variants": [
+        {
+          "policy": "00000",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": false,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "inference_augmentations": 0,
+          "generated_token_count": 266
+        },
+        {
+          "policy": "00001",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 269
+        },
+        {
+          "policy": "00010",
+          "prediction": "6.67",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 198
+        },
+        {
+          "policy": "00011",
+          "prediction": "6.67",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 198
+        },
+        {
+          "policy": "00100",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "00101",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "00110",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "00111",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "01000",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "01001",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "01010",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            1
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "01011",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            1
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "01100",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "01101",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "01110",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "01111",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "10000",
+          "prediction": "9.333333333333334",
+          "semantic_correct": false,
+          "absolute_error": "1.333333333333334",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 313
+        },
+        {
+          "policy": "10001",
+          "prediction": "9.333333333333334",
+          "semantic_correct": false,
+          "absolute_error": "1.333333333333334",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "inference_augmentations": 1,
+          "generated_token_count": 313
+        },
+        {
+          "policy": "10010",
+          "prediction": "6.67",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            1,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 401
+        },
+        {
+          "policy": "10011",
+          "prediction": "6.666666666666666",
+          "semantic_correct": false,
+          "absolute_error": "1.333333333333334",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            1,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 411
+        },
+        {
+          "policy": "10100",
+          "prediction": "12.67",
+          "semantic_correct": false,
+          "absolute_error": "4.67",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 399
+        },
+        {
+          "policy": "10101",
+          "prediction": "12.67",
+          "semantic_correct": false,
+          "absolute_error": "4.67",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 399
+        },
+        {
+          "policy": "10110",
+          "prediction": "12.67",
+          "semantic_correct": false,
+          "absolute_error": "4.67",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 399
+        },
+        {
+          "policy": "10111",
+          "prediction": "12.67",
+          "semantic_correct": false,
+          "absolute_error": "4.67",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          "inference_augmentations": 4,
+          "generated_token_count": 399
+        },
+        {
+          "policy": "11000",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "11001",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "inference_augmentations": 2,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "11010",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "11011",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "11100",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "11101",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "inference_augmentations": 3,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "11110",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "inference_augmentations": 4,
+          "generated_token_count": 183
+        },
+        {
+          "policy": "11111",
+          "prediction": "9.33",
+          "semantic_correct": false,
+          "absolute_error": "1.33",
+          "completion_changed_vs_00000": true,
+          "horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "inference_augmentations": 4,
+          "generated_token_count": 183
+        }
+      ]
+    }
+  ]
+}

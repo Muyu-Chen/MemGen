@@ -37,6 +37,11 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def portable_path(path: Path) -> str:
+    """Serialize a path relative to the repository, including sibling model assets."""
+    return Path(os.path.relpath(path.resolve(), REPO_ROOT)).as_posix()
+
+
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         return []

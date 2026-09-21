@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-21T14:19:05.928554+00:00",
+  "sample_id": "gsm8k_test_0810",
+  "gold": "310",
+  "sources": [
+    {
+      "path": "reproduction/hardbench/runs/released_gate_0810_depth1_v1/scored/Z7_memgen_released_gate_0810.scored.jsonl",
+      "sha256": "56ba50e65c326f99aa27c07578ee4a34259beb1f3c8ec7fb97bec527b4da9072"
+    },
+    {
+      "path": "reproduction/hardbench/runs/text_sentence_oracle_0810_depth5_rescue_branch_v1/scored/Z8_memgen_0810_rescue_stability.scored.jsonl",
+      "sha256": "2c68e34900301f89208e90f619b7b710cbf90930e0b83552d8e2999070096cea"
+    }
+  ],
+  "released_gate": {
+    "skip_correct": false,
+    "invoke_correct": true,
+    "completion_changed": true,
+    "variants": [
+      {
+        "policy": "0",
+        "prediction": "10737418240",
+        "correct": false,
+        "generated_token_count": 810,
+        "inference_augmentations": 0,
+        "horizon_reached": true,
+        "boundary_prefixes": [
+          "At the end of the first month,"
+        ]
+      },
+      {
+        "policy": "1",
+        "prediction": "310",
+        "correct": true,
+        "generated_token_count": 205,
+        "inference_augmentations": 1,
+        "horizon_reached": true,
+        "boundary_prefixes": [
+          "At the end of the first month,"
+        ]
+      }
+    ]
+  },
+  "decoded_depth5_rescue_branch": {
+    "policy_count": 16,
+    "correct_policy_count": 16,
+    "regressed_policy_count": 0,
+    "correct_policies": [
+      "10000",
+      "10001",
+      "10010",
+      "10011",
+      "10100",
+      "10101",
+      "10110",
+      "10111",
+      "11000",
+      "11001",
+      "11010",
+      "11011",
+      "11100",
+      "11101",
+      "11110",
+      "11111"
+    ],
+    "full_horizon_count": 16,
+    "truncated_count": 0,
+    "unique_completion_count": 3,
+    "prediction_distribution": {
+      "310": 16
+    }
+  },
+  "total_latency_seconds": 1523.1044620000757,
+  "all_observed_prefixes_match_policies": true
+}

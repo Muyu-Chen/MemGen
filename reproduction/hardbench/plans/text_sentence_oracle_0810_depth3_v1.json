@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "plan_name": "text_sentence_oracle_0810_depth3_v1",
+  "created_at": "2026-09-21",
+  "purpose": "Resolve the previously truncated pilot item at a 1024-token ceiling, then test every three-decision dynamic sentence-level invoke/skip policy if the full prompt-only trajectory remains wrong.",
+  "sample_ids": [
+    "gsm8k_test_0810"
+  ],
+  "decision_depths": [3],
+  "policy_enumeration": "lexicographic_binary",
+  "prompt_augmentation": "always_on",
+  "paper_boundary_definition": "A delimiter-token set D (e.g. commas and periods); the trigger acts only when the current token belongs to D.",
+  "boundary_detection": "decoded last-token suffix plus full generated-prefix validation, allowing fused sentence-ending tokens",
+  "inference_boundary_rule": "decoded comma/period/newline suffix, excluding numeric commas, numeric periods, blank lines, unclosed GSM8K calculator spans, and punctuation immediately following an unfinished arithmetic operator",
+  "depth_3_interpretation": "checkpoint-native maximum of three inference invocations",
+  "max_new_tokens": 1024,
+  "expected_variants": 8
+}

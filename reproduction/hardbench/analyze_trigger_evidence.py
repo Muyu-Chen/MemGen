@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from common import HARD_BENCH_ROOT, read_jsonl, sha256_file, utc_now, write_json
+from common import HARD_BENCH_ROOT, portable_path, read_jsonl, sha256_file, utc_now, write_json
 
 
 PILOT = HARD_BENCH_ROOT / "runs" / "pilot_min6_v1" / "scored"
@@ -182,7 +182,7 @@ def main() -> None:
                 record["latency_seconds"] for record in all_generation_records
             ),
             "source_files": [
-                {"path": str(path.resolve()), "sha256": sha256_file(path)}
+                {"path": portable_path(path), "sha256": sha256_file(path)}
                 for path in sources
             ],
         },

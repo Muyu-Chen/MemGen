@@ -1,0 +1,1386 @@
+{
+  "schema_version": 1,
+  "analyzed_at": "2026-09-21T14:19:02.380066+00:00",
+  "condition": "Z_memgen_sentence_sequential_oracle",
+  "sample_id": "gsm8k_test_0611",
+  "gold": "1450000",
+  "raw_path": "reproduction/hardbench/runs/sentence_sequential_oracle_v1/raw/Z_memgen_sentence_sequential_oracle.raw.jsonl",
+  "raw_sha256": "905b2f6db700a0d651a268080d533f77fb1694aa7e83d195e1488df63b4bfc25",
+  "scored_path": "reproduction/hardbench/runs/sentence_sequential_oracle_v1/scored/Z_memgen_sentence_sequential_oracle.scored.jsonl",
+  "scored_sha256": "2825075e26c9468059aa4cd37c9e26e05cd125e991746f6f73db805f803029e3",
+  "expected_total_policies": 40,
+  "observed_total_policies": 40,
+  "all_policy_horizons_reached": false,
+  "full_horizon_policy_count": 20,
+  "all_observed_prefixes_match_policies": true,
+  "invalid_accepted_boundary_count": 0,
+  "cross_depth_no_invoke_identical": true,
+  "total_latency_seconds": 3845.0383914998383,
+  "depths": {
+    "3": {
+      "depth": 3,
+      "expected_policies": 8,
+      "observed_policies": 8,
+      "decision_horizon_reached": 8,
+      "unique_completion_count": 3,
+      "unique_prediction_count": 3,
+      "prediction_distribution": {
+        "3875000": 1,
+        "4062500": 6,
+        "6003125": 1
+      },
+      "correct_policy_count": 0,
+      "correct_policies": [],
+      "minimum_invocations_for_correct": null,
+      "checkpoint_native_correct_policies": [],
+      "expanded_budget_correct_policies": [],
+      "no_invoke_prediction": "6003125",
+      "no_invoke_correct": false,
+      "changed_vs_no_invoke_count": 7,
+      "best_absolute_error": "2425000",
+      "best_error_policies": [
+        "111"
+      ],
+      "by_invocation_count": {
+        "0": {
+          "policies": 1,
+          "correct": 0,
+          "horizon_reached": 1
+        },
+        "1": {
+          "policies": 3,
+          "correct": 0,
+          "horizon_reached": 3
+        },
+        "2": {
+          "policies": 3,
+          "correct": 0,
+          "horizon_reached": 3
+        },
+        "3": {
+          "policies": 1,
+          "correct": 0,
+          "horizon_reached": 1
+        }
+      },
+      "variants": [
+        {
+          "policy": "000",
+          "invocations": 0,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 0,
+          "prediction": "6003125",
+          "semantic_correct": false,
+          "absolute_error": "4553125",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 286,
+          "latency_seconds": 110.98065179999685,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n"
+          ]
+        },
+        {
+          "policy": "001",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 87.95448740001302,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n"
+          ]
+        },
+        {
+          "policy": "010",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 86.40573730005417,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n"
+          ]
+        },
+        {
+          "policy": "011",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 90.37692070001503,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n"
+          ]
+        },
+        {
+          "policy": "100",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 85.9494886000175,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n"
+          ]
+        },
+        {
+          "policy": "101",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 89.56097160000354,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n"
+          ]
+        },
+        {
+          "policy": "110",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 88.8329509999603,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n"
+          ]
+        },
+        {
+          "policy": "111",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "3875000",
+          "semantic_correct": false,
+          "absolute_error": "2425000",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 92.72412369999802,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n"
+          ]
+        }
+      ]
+    },
+    "5": {
+      "depth": 5,
+      "expected_policies": 32,
+      "observed_policies": 32,
+      "decision_horizon_reached": 12,
+      "unique_completion_count": 7,
+      "unique_prediction_count": 7,
+      "prediction_distribution": {
+        "3875000": 2,
+        "4062500": 18,
+        "5158937.50": 1,
+        "5885625": 2,
+        "6003125": 2,
+        "6158937.5": 1,
+        "6168950": 6
+      },
+      "correct_policy_count": 0,
+      "correct_policies": [],
+      "minimum_invocations_for_correct": null,
+      "checkpoint_native_correct_policies": [],
+      "expanded_budget_correct_policies": [],
+      "no_invoke_prediction": "6003125",
+      "no_invoke_correct": false,
+      "changed_vs_no_invoke_count": 30,
+      "best_absolute_error": "2425000",
+      "best_error_policies": [
+        "11100",
+        "11101"
+      ],
+      "by_invocation_count": {
+        "0": {
+          "policies": 1,
+          "correct": 0,
+          "horizon_reached": 1
+        },
+        "1": {
+          "policies": 5,
+          "correct": 0,
+          "horizon_reached": 1
+        },
+        "2": {
+          "policies": 10,
+          "correct": 0,
+          "horizon_reached": 2
+        },
+        "3": {
+          "policies": 10,
+          "correct": 0,
+          "horizon_reached": 4
+        },
+        "4": {
+          "policies": 5,
+          "correct": 0,
+          "horizon_reached": 3
+        },
+        "5": {
+          "policies": 1,
+          "correct": 0,
+          "horizon_reached": 1
+        }
+      },
+      "variants": [
+        {
+          "policy": "00000",
+          "invocations": 0,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 0,
+          "prediction": "6003125",
+          "semantic_correct": false,
+          "absolute_error": "4553125",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 286,
+          "latency_seconds": 108.31016899994574,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,140,625\n"
+          ]
+        },
+        {
+          "policy": "00001",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "6003125",
+          "semantic_correct": false,
+          "absolute_error": "4553125",
+          "completion_changed_vs_no_invoke": false,
+          "generated_token_count": 286,
+          "latency_seconds": 120.67127729998901,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,140,625\n"
+          ]
+        },
+        {
+          "policy": "00010",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 89.3411749000079,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "00011",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 86.8340386999771,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "00100",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 83.55957619997207,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "00101",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 83.20392039994476,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "00110",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "6168950",
+          "semantic_correct": false,
+          "absolute_error": "4718950",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 286,
+          "latency_seconds": 105.08652090001851,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,196,450\n"
+          ]
+        },
+        {
+          "policy": "00111",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "6168950",
+          "semantic_correct": false,
+          "absolute_error": "4718950",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 286,
+          "latency_seconds": 120.91968120000092,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,196,450\n"
+          ]
+        },
+        {
+          "policy": "01000",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 100.15728420001687,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "01001",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 88.97637059999397,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "01010",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "6168950",
+          "semantic_correct": false,
+          "absolute_error": "4718950",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 286,
+          "latency_seconds": 108.52494730002945,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,196,450\n"
+          ]
+        },
+        {
+          "policy": "01011",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "6168950",
+          "semantic_correct": false,
+          "absolute_error": "4718950",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 286,
+          "latency_seconds": 124.54776250000577,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,196,450\n"
+          ]
+        },
+        {
+          "policy": "01100",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 87.46128769998904,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "01101",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 85.70343659998616,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "01110",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "6168950",
+          "semantic_correct": false,
+          "absolute_error": "4718950",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 286,
+          "latency_seconds": 109.51207910000812,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,196,450\n"
+          ]
+        },
+        {
+          "policy": "01111",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 4,
+          "prediction": "6168950",
+          "semantic_correct": false,
+          "absolute_error": "4718950",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 286,
+          "latency_seconds": 115.43317059997935,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,196,450\n"
+          ]
+        },
+        {
+          "policy": "10000",
+          "invocations": 1,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 81.8577457999927,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "10001",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 1,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 81.3160795000149,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "10010",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 86.01869679999072,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "10011",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            0,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 85.9556146999821,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "10100",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 85.33295860001817,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "10101",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 85.5214316000347,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "10110",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "6158937.5",
+          "semantic_correct": false,
+          "absolute_error": "4708937.5",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 297,
+          "latency_seconds": 112.69871520000743,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,196,437.50\n"
+          ]
+        },
+        {
+          "policy": "10111",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 4,
+          "prediction": "5158937.50",
+          "semantic_correct": false,
+          "absolute_error": "3708937.50",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 298,
+          "latency_seconds": 118.69917729997542,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,196,437.50\n"
+          ]
+        },
+        {
+          "policy": "11000",
+          "invocations": 2,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 84.68191359995399,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "11001",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "actual_inference_augmentations": 2,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 85.0372270999942,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "11010",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 89.68302960001165,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "11011",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 89.50433869997505,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,687,500\n"
+          ]
+        },
+        {
+          "policy": "11100",
+          "invocations": 3,
+          "checkpoint_native_policy": true,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "3875000",
+          "semantic_correct": false,
+          "absolute_error": "2425000",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 88.65729780000402,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,500,000\n"
+          ]
+        },
+        {
+          "policy": "11101",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": false,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 3,
+          "prediction": "3875000",
+          "semantic_correct": false,
+          "absolute_error": "2425000",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 230,
+          "latency_seconds": 88.81608779996168,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,500,000\n"
+          ]
+        },
+        {
+          "policy": "11110",
+          "invocations": 4,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          "actual_inference_augmentations": 4,
+          "prediction": "5885625",
+          "semantic_correct": false,
+          "absolute_error": "4435625",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 286,
+          "latency_seconds": 112.73946760001127,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,500,000\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,010,625\n"
+          ]
+        },
+        {
+          "policy": "11111",
+          "invocations": 5,
+          "checkpoint_native_policy": false,
+          "decision_horizon_reached": true,
+          "observed_policy_bits": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "actual_inference_augmentations": 5,
+          "prediction": "5885625",
+          "semantic_correct": false,
+          "absolute_error": "4435625",
+          "completion_changed_vs_no_invoke": true,
+          "generated_token_count": 286,
+          "latency_seconds": 117.49058049998712,
+          "boundary_reasons": [
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline",
+            "paper_delimiter_newline"
+          ],
+          "boundary_prefixes": [
+            "The first 5 months cost $100,000/month for a total of $500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,500,000\n",
+            "The first 5 months cost $100,000/month for a total of $500,000\nThe next 5 months cost $100,000/month * 1.5 = $150,000/month for a total of $750,000\nThe next 5 months cost $150,000/month * 1.5 = $225,000/month for a total of $1,125,000\nThe next 5 months cost $225,000/month * 1.5 = $337,500/month for a total of $1,500,000\nThe next 5 months cost $337,500/month * 1.5 = $506,250/month for a total of $2,010,625\n"
+          ]
+        }
+      ]
+    }
+  }
+}

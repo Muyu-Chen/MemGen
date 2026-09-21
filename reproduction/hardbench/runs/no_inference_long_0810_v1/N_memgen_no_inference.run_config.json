@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-21T12:39:57.499728+00:00",
+  "runner": "run_memgen.py",
+  "condition": "N_memgen_no_inference",
+  "manifest": "reproduction/hardbench/manifests/gsm8k_harder_min6_seed20260920.jsonl",
+  "manifest_sha256": "5b98b4d5821f8abc08a9202e4a9d54c238b48d0147516d21e6276edcfdef883c",
+  "base_model": "../models/Qwen2.5-1.5B-Instruct",
+  "checkpoint": "../models/memgen-checkpoints/Qwen2.5-1.5B-Instruct/gsm8k/weaver-sft/pn=1_pl=8_in=3_il=8/model",
+  "dtype": "float32",
+  "threads": 8,
+  "max_new_tokens": 1024,
+  "generation": "greedy",
+  "trigger_active": false,
+  "max_prompt_aug_num": 1,
+  "max_inference_aug_num": 3,
+  "gate_policy": "no_inference",
+  "random_probability": null,
+  "random_seed": null,
+  "policy_file": null,
+  "policy_sha256": null
+}

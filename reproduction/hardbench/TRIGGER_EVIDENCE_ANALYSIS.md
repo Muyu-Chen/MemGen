@@ -1,5 +1,10 @@
 # Trigger 全部证据综合分析
 
+> **2026-09-21 更新：** 本文封存的是 sentence-level oracle 之前的 108 条证据。
+> 后续 224 条动态句级策略已经改变了“完全没有可救样本”的判断：`0810` 在首个
+> 句级节点 invoke 后可 exact rescue。当前总判断请以
+> `SENTENCE_ORACLE_CAMPAIGN_REPORT.md` 和 `ORACLE_0810_ROBUSTNESS_REPORT.md` 为准。
+
 日期：2026-09-20
 
 ## 一句话判断
@@ -23,11 +28,11 @@
 | 数据 | 规模 | 目的 |
 |---|---:|---|
 | `pilot_min6_v1` | 10 题 × 4 条件 = 40 | A/S/B/C 总体对照 |
-| `trigger_intervention_v1` | 7 题 × N/H = 14 | 人工单点是否优于不触发 |
+| `trigger_intervention_v1` | N 10 条 + H 7 条 = 17 | 人工单点是否优于不触发 |
 | `single_candidate_sweep_v1` | 47 | 三道代表题的全部单点效用曲线 |
 | `candidate_interaction_v1` | 4 | `0710` 前三候选的二阶/三阶交互 |
 
-合计 105 条已封存生成记录，累计模型生成延迟 9,739.4 秒，约 162.3 分钟。
+合计 108 条已封存生成记录，累计模型生成延迟 9,990.1 秒，约 166.5 分钟。
 所有实验使用同一 checkpoint、greedy decoding 和独立评分。以下以 semantic exact
 为主指标，因为 Base/风格控制有未使用 `\boxed{}` 但数值正确的回答；官方格式评分
 在 A 和 S 上分别只计 2/10 与 1/10，而 semantic 分别为 3/10 与 4/10。
@@ -66,8 +71,10 @@ S 的 4/10 反而是本批最高，说明至少在这十题上，单纯 rational
 
 ## 2. Prompt memory 与 inference Trigger 不是同一个问题
 
-N 保持 prompt augmentation 开启、关闭全部 inference 调用。在从 B 失败题中选出的
-7 道可干预题上，N 与人工 H 都为 1/7；H 改变了 6/7 条完整推理和 3/7 个最终
+N 保持 prompt augmentation 开启、关闭全部 inference 调用，现已覆盖完整十题
+pilot，为 2/10；其中 `0810` 的原 512-token 记录截断，后续 1024-token 独立复跑
+确认其完整预测仍错误。人工 H 仍只覆盖从 B 失败题中预先选定的 7 道可干预题；
+在这 7 个配对样本上 N 与 H 都为 1/7。H 改变了 6/7 条完整推理和 3/7 个最终
 预测，但 exact recovery 为 0、regression 也为 0。
 
 `0063` 尤其关键：A/S 都正确得到 1596，而 N、H 和 C 都得到 966。也就是说错误
@@ -148,7 +155,8 @@ delimiter 事件：一个前缀停在 `4*2.`，另一个停在 `4*2.5 = $<<4*2.`
 先做一个很小但信息密度高的 Gate Sanitation v1：
 
 1. 实现 calculator-span / decimal / currency-aware 候选过滤和同 step cooldown。
-2. 在原 10 题上补全 prompt-only N（目前只覆盖 7 道 selected failure）。
+2. 使用现已补全的十题 prompt-only N，并用 `0810` 的 1024-token 完整复跑替换
+   截断轨迹进行后续分析。
 3. 比较 A、S、N、原 always、过滤后 always、random50，保持同一 manifest。
 4. 对过滤后仍错误的题重新做单点 sweep，统计：
    - N 错题中至少存在一个 exact-positive 点的比例；

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "plan_name": "text_sentence_oracle_0810_depth5_rescue_branch_v1",
+  "created_at": "2026-09-21",
+  "purpose": "Test whether the exact rescue caused by invoking at the first decoded sentence boundary remains stable under every combination of the next four dynamic decisions.",
+  "sample_ids": [
+    "gsm8k_test_0810"
+  ],
+  "decision_depths": [5],
+  "policy_prefixes": [
+    "1"
+  ],
+  "policy_enumeration": "lexicographic_binary restricted to the exact-positive first-decision branch",
+  "prompt_augmentation": "always_on",
+  "paper_boundary_definition": "A delimiter-token set D (e.g. commas and periods); the trigger acts only when the current token belongs to D.",
+  "boundary_detection": "decoded last-token suffix plus full generated-prefix validation, allowing fused sentence-ending tokens",
+  "inference_boundary_rule": "decoded comma/period/newline suffix, excluding numeric commas, numeric periods, blank lines, unclosed GSM8K calculator spans, and punctuation immediately following an unfinished arithmetic operator",
+  "depth_5_interpretation": "same checkpoint with the diagnostic inference-augmentation ceiling raised from three to five",
+  "expected_variants": 16
+}

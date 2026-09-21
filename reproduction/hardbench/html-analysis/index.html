@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MemGen HardBench Trigger 机制实验的静态综合分析。">
+  <title>MemGen Trigger 机制证据分析</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f1ea;
+      --paper: #fffdf8;
+      --ink: #17211d;
+      --muted: #66716c;
+      --line: #d8ddd7;
+      --line-strong: #b9c1ba;
+      --green: #176b4d;
+      --green-soft: #dceee5;
+      --teal: #177d80;
+      --teal-soft: #d9efef;
+      --amber: #9c6113;
+      --amber-soft: #f6e8c9;
+      --red: #a13c35;
+      --red-soft: #f5dedb;
+      --blue: #315f88;
+      --blue-soft: #dfeaf3;
+      --purple: #6b5688;
+      --purple-soft: #e9e2f1;
+      --shadow: 0 22px 55px rgba(29, 45, 37, .08);
+      --radius: 18px;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --serif: ui-serif, "Iowan Old Style", "STSong", "Songti SC", Georgia, serif;
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #101612;
+      --paper: #18201b;
+      --ink: #edf4ef;
+      --muted: #aab8b0;
+      --line: #334039;
+      --line-strong: #536159;
+      --green: #74d4aa;
+      --green-soft: #193b2d;
+      --teal: #75d9dc;
+      --teal-soft: #173638;
+      --amber: #efbf72;
+      --amber-soft: #41321a;
+      --red: #ee9189;
+      --red-soft: #442724;
+      --blue: #93bce0;
+      --blue-soft: #20364a;
+      --purple: #c2a9e1;
+      --purple-soft: #352b45;
+      --shadow: 0 22px 55px rgba(0, 0, 0, .25);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 12% -10%, color-mix(in srgb, var(--green) 9%, transparent), transparent 34rem),
+        radial-gradient(circle at 92% 10%, color-mix(in srgb, var(--teal) 7%, transparent), transparent 28rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.68;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    button { font: inherit; }
+    code {
+      font-family: var(--mono);
+      font-size: .9em;
+      background: color-mix(in srgb, var(--line) 46%, transparent);
+      padding: .12em .36em;
+      border-radius: 5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 86%, transparent);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(14px);
+    }
+    .topbar-inner {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 58px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+      font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--ink);
+      color: var(--paper);
+      font: 700 12px/1 var(--mono);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a {
+      border-radius: 999px;
+      color: var(--muted);
+      padding: 6px 10px;
+      text-decoration: none;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: background .18s ease, color .18s ease;
+    }
+    .nav a:hover,
+    .nav a.active { background: var(--paper); color: var(--ink); }
+    .top-actions { display: flex; gap: 6px; margin-left: auto; }
+    .icon-button {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+    .icon-button:hover { border-color: var(--line-strong); }
+
+    main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    .hero {
+      padding: 92px 0 64px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+      gap: 56px;
+      align-items: end;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      color: var(--green);
+      font: 700 12px/1.2 var(--mono);
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 34px; height: 2px; background: var(--green); }
+    h1, h2, h3 { margin: 0; letter-spacing: -.035em; line-height: 1.17; }
+    h1 { max-width: 820px; font-family: var(--serif); font-size: clamp(42px, 6vw, 76px); font-weight: 700; }
+    .hero-deck { max-width: 780px; margin: 25px 0 0; color: var(--muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.75; }
+    .hero-meta {
+      padding: 24px 0 2px;
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .meta-row { display: flex; justify-content: space-between; gap: 24px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .meta-row:last-child { border-bottom: 0; }
+    .meta-row span:first-child { color: var(--muted); }
+    .meta-row strong { text-align: right; font-variant-numeric: tabular-nums; }
+
+    .verdict {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 26px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+    }
+    .verdict::after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -120px;
+      bottom: -160px;
+      border: 52px solid color-mix(in srgb, var(--green) 58%, transparent);
+      border-radius: 50%;
+    }
+    .verdict-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 34px;
+      align-items: start;
+    }
+    .verdict-label { color: color-mix(in srgb, var(--paper) 68%, transparent); font: 700 12px/1.4 var(--mono); letter-spacing: .1em; }
+    .verdict h2 { max-width: 820px; font-family: var(--serif); font-size: clamp(25px, 4vw, 42px); font-weight: 600; }
+    .verdict p { max-width: 810px; margin: 20px 0 0; color: color-mix(in srgb, var(--paper) 76%, transparent); font-size: 17px; }
+    .verdict .decision { margin-top: 25px; display: inline-flex; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb, var(--green) 58%, transparent); color: var(--paper); font-weight: 700; }
+
+    .section { padding: 92px 0 20px; scroll-margin-top: 72px; }
+    .section-head {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 34px;
+      margin-bottom: 42px;
+      align-items: start;
+    }
+    .section-kicker { color: var(--green); font: 700 12px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; padding-top: 7px; }
+    .section h2 { font-family: var(--serif); font-size: clamp(30px, 4vw, 48px); font-weight: 600; }
+    .section-intro { max-width: 790px; margin: 14px 0 0; color: var(--muted); font-size: 17px; }
+
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .metric {
+      min-height: 144px;
+      padding: 22px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+    .metric-value { font: 700 clamp(30px, 4vw, 48px)/1 var(--serif); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+    .metric-label { margin-top: 10px; color: var(--muted); font-size: 13px; }
+    .metric-note { margin-top: 15px; font-size: 13px; }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+    .panel h3 { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+    .panel-caption { margin: 7px 0 24px; color: var(--muted); font-size: 13px; }
+    .split { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr); gap: 16px; margin-top: 16px; }
+    .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+
+    .bar-chart { display: grid; gap: 18px; }
+    .bar-row { display: grid; grid-template-columns: 164px minmax(0, 1fr) 52px; gap: 14px; align-items: center; }
+    .bar-label strong { display: block; font-size: 14px; }
+    .bar-label span { color: var(--muted); font-size: 12px; }
+    .track { height: 22px; background: color-mix(in srgb, var(--line) 54%, transparent); border-radius: 4px; overflow: hidden; }
+    .bar { height: 100%; width: var(--w); background: var(--bar, var(--green)); border-radius: 4px; }
+    .bar-value { font-family: var(--mono); font-size: 13px; text-align: right; }
+    .callout {
+      border-left: 4px solid var(--accent, var(--green));
+      background: var(--soft, var(--green-soft));
+      border-radius: 0 12px 12px 0;
+      padding: 18px 20px;
+      color: var(--ink);
+    }
+    .callout + .callout { margin-top: 12px; }
+    .callout strong { display: block; margin-bottom: 4px; }
+    .callout p { margin: 0; color: color-mix(in srgb, var(--ink) 78%, var(--muted)); font-size: 14px; }
+
+    .table-wrap { overflow-x: auto; margin-top: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    caption { text-align: left; margin-bottom: 12px; color: var(--muted); }
+    th { color: var(--muted); text-align: left; font-weight: 600; border-bottom: 1px solid var(--line-strong); padding: 11px 10px; white-space: nowrap; }
+    td { border-bottom: 1px solid var(--line); padding: 11px 10px; vertical-align: middle; font-variant-numeric: tabular-nums; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .num { text-align: right; }
+    .sample { font-family: var(--mono); font-size: 12px; }
+    .cell-result { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex: 0 0 auto; }
+    .ok .dot { background: var(--green); }
+    .muted { color: var(--muted); }
+    .best { background: var(--green-soft); }
+    .danger { background: var(--red-soft); }
+
+    .causal-flow { display: grid; grid-template-columns: 1fr 58px 1fr 58px 1fr; gap: 6px; align-items: stretch; }
+    .flow-node { min-height: 158px; padding: 20px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); }
+    .flow-node span { display: block; color: var(--muted); font: 700 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .flow-node strong { display: block; margin-top: 10px; font-size: 20px; }
+    .flow-node p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    .flow-arrow { display: grid; place-items: center; color: var(--line-strong); font-size: 26px; }
+    .flow-node.warn { border-color: color-mix(in srgb, var(--red) 44%, var(--line)); background: var(--red-soft); }
+
+    .progress-list { display: grid; gap: 16px; }
+    .progress-item { display: grid; grid-template-columns: 128px minmax(0, 1fr) 44px; gap: 12px; align-items: center; }
+    .progress-name { font-size: 13px; }
+    .progress-track { height: 14px; background: color-mix(in srgb, var(--line) 55%, transparent); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; width: var(--w); border-radius: 999px; background: var(--c, var(--green)); }
+    .progress-value { font-family: var(--mono); font-size: 12px; text-align: right; }
+
+    .zero-card {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      min-height: 260px;
+      background: var(--red-soft);
+      border: 1px solid color-mix(in srgb, var(--red) 28%, var(--line));
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+    .zero-card .big { font: 700 clamp(58px, 9vw, 96px)/1 var(--serif); color: var(--red); letter-spacing: -.07em; }
+    .zero-card strong { display: block; margin-top: 13px; }
+    .zero-card p { max-width: 370px; margin: 7px auto 0; color: var(--muted); font-size: 13px; }
+
+    .truth-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .58fr); gap: 16px; }
+    .truth-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .truth-cell { min-height: 112px; padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--green-soft); }
+    .truth-cell.bad { background: var(--red-soft); border-color: color-mix(in srgb, var(--red) 38%, var(--line)); }
+    .truth-set { font-family: var(--mono); font-weight: 700; }
+    .truth-answer { margin-top: 15px; font: 700 25px/1 var(--serif); }
+    .truth-status { margin-top: 7px; color: var(--muted); font-size: 12px; }
+    .expression {
+      margin-top: 20px;
+      padding: 22px;
+      overflow-x: auto;
+      background: color-mix(in srgb, var(--ink) 95%, #000);
+      color: var(--paper);
+      border-radius: 14px;
+      font: 15px/1.9 var(--mono);
+      white-space: nowrap;
+    }
+    .candidate { display: inline-block; position: relative; padding: 0 2px; }
+    .candidate::after { content: attr(data-label); position: absolute; left: 50%; transform: translateX(-50%); top: -1.35em; color: var(--amber); font-size: 10px; font-weight: 700; }
+    .candidate.c2 { background: color-mix(in srgb, var(--amber) 35%, transparent); }
+    .candidate.c3 { background: color-mix(in srgb, var(--red) 45%, transparent); }
+
+    .argument { counter-reset: item; display: grid; gap: 12px; }
+    .argument-item { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
+    .argument-item::before {
+      counter-increment: item;
+      content: counter(item, decimal-leading-zero);
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green-soft);
+      color: var(--green);
+      font: 700 12px/1 var(--mono);
+    }
+    .argument-item strong { display: block; }
+    .argument-item p { margin: 3px 0 0; color: var(--muted); font-size: 14px; }
+
+    .decision-table td:first-child { width: 38%; font-weight: 700; }
+    .decision-table .yes { color: var(--green); }
+    .decision-table .no { color: var(--red); }
+
+    .roadmap { display: grid; gap: 0; }
+    .roadmap-step { display: grid; grid-template-columns: 76px minmax(0, 1fr) 170px; gap: 18px; padding: 23px 0; border-bottom: 1px solid var(--line); align-items: start; }
+    .roadmap-step:last-child { border-bottom: 0; }
+    .step-no { color: var(--green); font: 700 13px/1.4 var(--mono); letter-spacing: .08em; }
+    .roadmap-step strong { display: block; }
+    .roadmap-step p { margin: 5px 0 0; color: var(--muted); font-size: 14px; }
+    .step-output { color: var(--muted); font-size: 12px; text-align: right; }
+
+    details { border-top: 1px solid var(--line); }
+    details:last-child { border-bottom: 1px solid var(--line); }
+    summary { padding: 17px 0; cursor: pointer; font-weight: 700; }
+    details p, details ul { color: var(--muted); font-size: 14px; }
+    details ul { padding-left: 20px; }
+    .source-list { display: grid; gap: 8px; margin-top: 16px; }
+    .source-list code { display: block; overflow-wrap: anywhere; padding: 9px 11px; }
+
+    footer { width: min(1180px, calc(100% - 32px)); margin: 100px auto 0; padding: 30px 0 48px; border-top: 1px solid var(--line-strong); color: var(--muted); display: flex; justify-content: space-between; gap: 24px; font-size: 12px; }
+    .reveal { opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .hero, .split, .truth-layout { grid-template-columns: 1fr; }
+      .hero { padding-top: 64px; gap: 34px; }
+      .verdict-grid, .section-head { grid-template-columns: 1fr; gap: 10px; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .three { grid-template-columns: 1fr; }
+      .causal-flow { grid-template-columns: 1fr; }
+      .flow-arrow { transform: rotate(90deg); min-height: 34px; }
+      .truth-grid { grid-template-columns: repeat(2, 1fr); }
+      .roadmap-step { grid-template-columns: 52px minmax(0, 1fr); }
+      .step-output { grid-column: 2; text-align: left; }
+    }
+    @media (max-width: 640px) {
+      main, .topbar-inner, footer { width: min(100% - 22px, 1180px); }
+      .brand span:last-child { display: none; }
+      .nav { order: 3; width: 100%; }
+      .topbar-inner { flex-wrap: wrap; padding: 9px 0; gap: 8px; }
+      .top-actions { margin-left: auto; }
+      .hero { padding-top: 46px; }
+      h1 { font-size: 42px; }
+      .verdict { padding: 28px; }
+      .section { padding-top: 72px; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+      .metric { min-height: 130px; padding: 18px; }
+      .panel { padding: 20px; }
+      .bar-row { grid-template-columns: 112px minmax(0, 1fr) 42px; gap: 9px; }
+      .bar-label span { display: none; }
+      .truth-grid { grid-template-columns: 1fr 1fr; }
+      .progress-item { grid-template-columns: 90px minmax(0, 1fr) 38px; }
+      footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+    @media print {
+      :root { --bg: #fff; --paper: #fff; --ink: #111; --muted: #555; --line: #ddd; --line-strong: #aaa; }
+      body { background: #fff; }
+      .topbar { display: none; }
+      main, footer { width: 100%; }
+      .hero { padding-top: 20px; }
+      .section { page-break-inside: avoid; padding-top: 48px; }
+      .panel, .metric, .verdict { box-shadow: none; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="brand-mark">MG</span><span>Trigger Evidence</span></div>
+      <nav class="nav" aria-label="报告章节">
+        <a href="#scope">范围</a>
+        <a href="#pilot">A/S/B/C</a>
+        <a href="#separation">因果拆分</a>
+        <a href="#sweep">单点穷举</a>
+        <a href="#interaction">候选交互</a>
+        <a href="#decision">判断</a>
+        <a href="#next">下一步</a>
+      </nav>
+      <div class="top-actions">
+        <button class="icon-button" id="themeButton" type="button" aria-label="切换明暗主题">◐</button>
+        <button class="icon-button" id="printButton" type="button" aria-label="打印或另存为 PDF">⎙</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">MemGen · HardBench · 2026-09-20</div>
+        <h1>Trigger 不是一个独立的二分类问题</h1>
+        <p class="hero-deck">105 条生成记录显示：memory invocation 的效用非单调、依赖调用历史；当前候选器还会在同一原子计算内部重复触发，产生可定位的高阶干扰。</p>
+      </div>
+      <aside class="hero-meta" aria-label="实验元数据">
+        <div class="meta-row"><span>生成记录</span><strong>105</strong></div>
+        <div class="meta-row"><span>模型生成延迟</span><strong>9,739.4 s</strong></div>
+        <div class="meta-row"><span>实验批次</span><strong>4</strong></div>
+        <div class="meta-row"><span>主指标</span><strong>Semantic exact</strong></div>
+      </aside>
+    </section>
+
+    <section class="verdict reveal" aria-labelledby="verdict-title">
+      <div class="verdict-grid">
+        <div class="verdict-label">CURRENT VERDICT</div>
+        <div>
+          <h2 id="verdict-title">当前证据不支持直接训练“逐候选、独立 invoke / skip”的 vanilla Trigger。</h2>
+          <p>更合理的目标是：只在语义完整的推理边界上，由带调用历史、预算和 verifier 信号的顺序控制器决定 <code>HOLD / INVOKE / STOP</code>。</p>
+          <span class="decision">先清洗 Gate，再决定是否训练 Trigger</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="scope">
+      <div class="section-head reveal">
+        <div class="section-kicker">01 · Evidence scope</div>
+        <div>
+          <h2>证据范围足以做机制判断，不足以声称总体效果</h2>
+          <p class="section-intro">四批实验都使用同一 checkpoint、greedy decoding 和独立评分。十题试点样本很小，因此下面的数字用于定位机制，而非显著性结论。</p>
+        </div>
+      </div>
+      <div class="metrics reveal">
+        <div class="metric"><div class="metric-value">40</div><div class="metric-label">A/S/B/C 试点记录</div><div class="metric-note">10 题 × 4 条件</div></div>
+        <div class="metric"><div class="metric-value">14</div><div class="metric-label">人工单点干预记录</div><div class="metric-note">7 题 × N/H</div></div>
+        <div class="metric"><div class="metric-value">47</div><div class="metric-label">单候选穷举变体</div><div class="metric-note">3 道代表题</div></div>
+        <div class="metric"><div class="metric-value">4</div><div class="metric-label">新增交互组合</div><div class="metric-note">补齐 0710 真值表</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="pilot">
+      <div class="section-head reveal">
+        <div class="section-kicker">02 · Pilot</div>
+        <div>
+          <h2>MemGen 改善格式，但没有提高十题总体正确率</h2>
+          <p class="section-intro">风格控制 S 得分最高。Always 相对零样本 Base 的 semantic exact 净变化为 −1；random50 只把结果拉回 Base 水平。</p>
+        </div>
+      </div>
+
+      <div class="split reveal">
+        <div class="panel">
+          <h3>Semantic exact accuracy</h3>
+          <p class="panel-caption">主指标；每组 n = 10。横条长度代表正确率。</p>
+          <div class="bar-chart" role="img" aria-label="A 为 30%，S 为 40%，B 为 20%，C 为 30%">
+            <div class="bar-row">
+              <div class="bar-label"><strong>A · Base zero-shot</strong><span>无 memory</span></div>
+              <div class="track"><div class="bar" style="--w:30%;--bar:var(--blue)"></div></div>
+              <div class="bar-value">3/10</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><strong>S · Base 3-shot</strong><span>风格控制</span></div>
+              <div class="track"><div class="bar" style="--w:40%;--bar:var(--green)"></div></div>
+              <div class="bar-value">4/10</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><strong>B · MemGen always</strong><span>均值 2.4 次调用</span></div>
+              <div class="track"><div class="bar" style="--w:20%;--bar:var(--red)"></div></div>
+              <div class="bar-value">2/10</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><strong>C · Random 50%</strong><span>均值 2.1 次调用</span></div>
+              <div class="track"><div class="bar" style="--w:30%;--bar:var(--amber)"></div></div>
+              <div class="bar-value">3/10</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="callout" style="--accent:var(--green);--soft:var(--green-soft)">
+            <strong>唯一净赢家：风格控制 S</strong>
+            <p>4/10，高于当前所有 memory 条件；说明改写 rationale 风格本身就是必须保留的强基线。</p>
+          </div>
+          <div class="callout" style="--accent:var(--red);--soft:var(--red-soft)">
+            <strong>Always：救回 1，破坏 2</strong>
+            <p>相对 A，B 救回 <code>0810</code>，但破坏 <code>0063</code> 与 <code>0710</code>，净变化 −1。</p>
+          </div>
+          <div class="callout" style="--accent:var(--amber);--soft:var(--amber-soft)">
+            <strong>Random50 不是稳定增益</strong>
+            <p>C 相对 B 救回 <code>0710</code>，但与 A 同为 3/10；更像减少部分伤害，而非解决错误。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel reveal" style="margin-top:16px">
+        <h3>十题配对明细</h3>
+        <p class="panel-caption">绿色为 semantic exact。预测数值保留原始评分结果。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Sample</th><th class="num">Gold</th><th class="num">A · zero-shot</th><th class="num">S · 3-shot</th><th class="num">B · always</th><th class="num">C · random50</th></tr></thead>
+            <tbody>
+              <tr><td class="sample">0063</td><td class="num">1,596</td><td class="num best"><span class="cell-result ok"><span class="dot"></span>1,596</span></td><td class="num best"><span class="cell-result ok"><span class="dot"></span>1,596</span></td><td class="num"><span class="cell-result"><span class="dot"></span>854</span></td><td class="num"><span class="cell-result"><span class="dot"></span>966</span></td></tr>
+              <tr><td class="sample">0106</td><td class="num">72</td><td class="num best"><span class="cell-result ok"><span class="dot"></span>72</span></td><td class="num best"><span class="cell-result ok"><span class="dot"></span>72</span></td><td class="num best"><span class="cell-result ok"><span class="dot"></span>72</span></td><td class="num best"><span class="cell-result ok"><span class="dot"></span>72</span></td></tr>
+              <tr><td class="sample">0423</td><td class="num">8</td><td class="num">6</td><td class="num">6</td><td class="num">0</td><td class="num">0</td></tr>
+              <tr><td class="sample">0611</td><td class="num">1,450,000</td><td class="num">812</td><td class="num">7,000,000</td><td class="num">1,250,000</td><td class="num">4,062,500</td></tr>
+              <tr><td class="sample">0710</td><td class="num">45</td><td class="num best"><span class="cell-result ok"><span class="dot"></span>45</span></td><td class="num best"><span class="cell-result ok"><span class="dot"></span>45</span></td><td class="num danger"><span class="cell-result"><span class="dot"></span>44.1</span></td><td class="num best"><span class="cell-result ok"><span class="dot"></span>45</span></td></tr>
+              <tr><td class="sample">0754</td><td class="num">89</td><td class="num">144</td><td class="num">90</td><td class="num">87</td><td class="num">455</td></tr>
+              <tr><td class="sample">0810</td><td class="num">310</td><td class="num">150</td><td class="num best"><span class="cell-result ok"><span class="dot"></span>310</span></td><td class="num best"><span class="cell-result ok"><span class="dot"></span>310</span></td><td class="num best"><span class="cell-result ok"><span class="dot"></span>310</span></td></tr>
+              <tr><td class="sample">0976</td><td class="num">540</td><td class="num">465</td><td class="num">465</td><td class="num">645</td><td class="num">750</td></tr>
+              <tr><td class="sample">1088</td><td class="num">30</td><td class="num">28.33</td><td class="num">28.33</td><td class="num">26.67</td><td class="num">28.33</td></tr>
+              <tr><td class="sample">1161</td><td class="num">170</td><td class="num">140</td><td class="num">140</td><td class="num">140</td><td class="num">140</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="separation">
+      <div class="section-head reveal">
+        <div class="section-kicker">03 · Causal split</div>
+        <div>
+          <h2>Prompt memory 与 inference Trigger 必须拆开测</h2>
+          <p class="section-intro"><code>0063</code> 表明，错误可以在第一次 inference invoke 之前就形成。因此“只学中途何时调用”无法覆盖全部退化来源。</p>
+        </div>
+      </div>
+
+      <div class="causal-flow reveal" aria-label="0063 的因果路径">
+        <div class="flow-node">
+          <span>Prompt off</span><strong>A / S → 1,596 ✓</strong><p>零样本和风格控制都得到正确答案。</p>
+        </div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-node warn">
+          <span>Prompt memory on</span><strong>N / H → 966 ✗</strong><p>即使 inference 调用关闭，答案已经错误。</p>
+        </div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-node warn">
+          <span>Inference policy</span><strong>C → 966 ✗</strong><p>改变中途 Trigger 时机无法修复 prompt 造成的偏移。</p>
+        </div>
+      </div>
+
+      <div class="three reveal">
+        <div class="metric"><div class="metric-value">1/7</div><div class="metric-label">N：prompt on，inference never</div><div class="metric-note">Semantic exact</div></div>
+        <div class="metric"><div class="metric-value">1/7</div><div class="metric-label">H：人工选择一次 invoke</div><div class="metric-note">Semantic exact</div></div>
+        <div class="metric"><div class="metric-value">0</div><div class="metric-label">H 相对 N 的 exact recovery</div><div class="metric-note">同时也没有 regression</div></div>
+      </div>
+
+      <div class="panel reveal" style="margin-top:16px">
+        <h3>人工单点改变了行为，但没有改变正确性</h3>
+        <p class="panel-caption">这说明模型对触发位置敏感；但“能改变输出”不等于“触发有用”。</p>
+        <div class="progress-list">
+          <div class="progress-item"><div class="progress-name">完整推理改变</div><div class="progress-track"><div class="progress-fill" style="--w:85.7%;--c:var(--purple)"></div></div><div class="progress-value">6/7</div></div>
+          <div class="progress-item"><div class="progress-name">最终预测改变</div><div class="progress-track"><div class="progress-fill" style="--w:42.9%;--c:var(--blue)"></div></div><div class="progress-value">3/7</div></div>
+          <div class="progress-item"><div class="progress-name">Exact recovery</div><div class="progress-track"><div class="progress-fill" style="--w:0%;--c:var(--green)"></div></div><div class="progress-value">0/7</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sweep">
+      <div class="section-head reveal">
+        <div class="section-kicker">04 · Single sweep</div>
+        <div>
+          <h2>单点位置影响很大，但错误题里没有 exact-positive 分支</h2>
+          <p class="section-intro">47 个候选全部实际触发。大多数会改变 completion，约一半让数值更接近 gold；可是在两道原本错误的题上，40 次尝试没有一次恢复正确。</p>
+        </div>
+      </div>
+
+      <div class="split reveal">
+        <div class="panel">
+          <h3>47 个单点变体的结果分布</h3>
+          <p class="panel-caption">“数值更接近”仅是描述性信号，不代表推理正确。</p>
+          <div class="progress-list">
+            <div class="progress-item"><div class="progress-name">Completion 改变</div><div class="progress-track"><div class="progress-fill" style="--w:80.9%;--c:var(--purple)"></div></div><div class="progress-value">38</div></div>
+            <div class="progress-item"><div class="progress-name">距离改善</div><div class="progress-track"><div class="progress-fill" style="--w:51.1%;--c:var(--green)"></div></div><div class="progress-value">24</div></div>
+            <div class="progress-item"><div class="progress-name">距离恶化</div><div class="progress-track"><div class="progress-fill" style="--w:23.4%;--c:var(--red)"></div></div><div class="progress-value">11</div></div>
+            <div class="progress-item"><div class="progress-name">距离持平</div><div class="progress-track"><div class="progress-fill" style="--w:25.5%;--c:var(--amber)"></div></div><div class="progress-value">12</div></div>
+            <div class="progress-item"><div class="progress-name">Exact correct</div><div class="progress-track"><div class="progress-fill" style="--w:14.9%;--c:var(--teal)"></div></div><div class="progress-value">7</div></div>
+          </div>
+          <div class="callout" style="margin-top:24px;--accent:var(--amber);--soft:var(--amber-soft)">
+            <strong>7 个 correct 全部来自本来就正确的 0710</strong>
+            <p>它们说明单点注入“没有破坏”正确答案，不是从错误状态中救回答案。</p>
+          </div>
+        </div>
+        <div class="zero-card">
+          <div>
+            <div class="big">0/40</div>
+            <strong>错误 baseline 的 exact rescue</strong>
+            <p><code>0611</code> 的 36 个候选与 <code>0754</code> 的 4 个候选，都没有产生正确答案。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel reveal" style="margin-top:16px">
+        <h3>为什么不能用“数值距离”训练 Trigger</h3>
+        <p class="panel-caption"><code>0611 / candidate #1</code> 是一个典型的假正例。</p>
+        <div class="split" style="margin-top:0">
+          <div class="callout" style="--accent:var(--green);--soft:var(--green-soft)">
+            <strong>表面看：误差缩小</strong>
+            <p>该点是 36 个候选中数值最接近 gold 的变体，容易被距离型标签判为“最优触发”。</p>
+          </div>
+          <div class="callout" style="--accent:var(--red);--soft:var(--red-soft)">
+            <strong>实际看：两个错误互相抵消</strong>
+            <p>模型仍把首五个月总 funding 误读为每月 funding，并写出错误算式 <code>750,000 × 5 = 375,000</code>。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="interaction">
+      <div class="section-head reveal">
+        <div class="section-kicker">05 · Interaction</div>
+        <div>
+          <h2>最小破坏集合严格是 {2,3}</h2>
+          <p class="section-intro"><code>0710</code> 的 N 与 7 个单点都正确。补齐前三候选的组合后，只有同时选择候选 2 和 3 才把 45 破坏成 44.1。</p>
+        </div>
+      </div>
+
+      <div class="truth-layout reveal">
+        <div class="panel">
+          <h3>前三候选的完整真值表</h3>
+          <p class="panel-caption">绿色为 45 ✓；红色为 44.1 ✗。</p>
+          <div class="truth-grid" role="img" aria-label="空集、所有单点、1加2、1加3正确；2加3和1加2加3错误">
+            <div class="truth-cell"><div class="truth-set">{ }</div><div class="truth-answer">45</div><div class="truth-status">正确 · no invoke</div></div>
+            <div class="truth-cell"><div class="truth-set">{1}</div><div class="truth-answer">45</div><div class="truth-status">正确 · 单点</div></div>
+            <div class="truth-cell"><div class="truth-set">{2}</div><div class="truth-answer">45</div><div class="truth-status">正确 · 单点</div></div>
+            <div class="truth-cell"><div class="truth-set">{3}</div><div class="truth-answer">45</div><div class="truth-status">正确 · 单点</div></div>
+            <div class="truth-cell"><div class="truth-set">{1,2}</div><div class="truth-answer">45</div><div class="truth-status">正确 · 双点</div></div>
+            <div class="truth-cell"><div class="truth-set">{1,3}</div><div class="truth-answer">45</div><div class="truth-status">正确 · 双点</div></div>
+            <div class="truth-cell bad"><div class="truth-set">{2,3}</div><div class="truth-answer">44.1</div><div class="truth-status">错误 · 最小破坏集</div></div>
+            <div class="truth-cell bad"><div class="truth-set">{1,2,3}</div><div class="truth-answer">44.1</div><div class="truth-status">错误 · 匹配 official always</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="callout" style="--accent:var(--red);--soft:var(--red-soft)">
+            <strong>不是“调用次数 ≥ 2”</strong>
+            <p><code>{1,2}</code> 与 <code>{1,3}</code> 同样调用两次，却保持正确。</p>
+          </div>
+          <div class="callout" style="--accent:var(--amber);--soft:var(--amber-soft)">
+            <strong>也不是单点有害</strong>
+            <p><code>{2}</code> 与 <code>{3}</code> 单独调用都安全，联合才破坏答案。</p>
+          </div>
+          <div class="callout" style="--accent:var(--purple);--soft:var(--purple-soft)">
+            <strong>这是历史依赖</strong>
+            <p>当前候选的 utility 不能脱离之前的调用序列独立判断。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel reveal" style="margin-top:16px">
+        <h3>候选 2 和 3 位于同一个原子计算内部</h3>
+        <p class="panel-caption">两个 delimiter 事件都切在 cinnamon-roll 的 <code>4 × 2.5</code> 计算中；这类候选本应被过滤。</p>
+        <div class="expression" aria-label="候选 2 停在 4 乘 2 点，候选 3 停在 4 乘 2 点 5 等于计算表达式内部">
+          ... cinnamon rolls cost $<span class="candidate c2" data-label="C2">4*2.</span>5 = $&lt;&lt;<span class="candidate c3" data-label="C3">4*2.</span>5=10&gt;&gt;10 ...
+        </div>
+        <div class="callout" style="margin-top:20px;--accent:var(--green);--soft:var(--green-soft)">
+          <strong>可操作结论</strong>
+          <p>禁止在小数、金额逗号与 <code>&lt;&lt;...&gt;&gt;</code> calculator span 内触发，并对同一步设置 cooldown，这次退化会被结构性消除。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="decision">
+      <div class="section-head reveal">
+        <div class="section-kicker">06 · Decision</div>
+        <div>
+          <h2>复现已经完成它最重要的任务：把问题定位清楚</h2>
+          <p class="section-intro">现阶段最有价值的不是给当前 Trigger 扩数据，而是先消除候选器制造的伪决策，并确认 Weaver 是否真的提供可救分支。</p>
+        </div>
+      </div>
+
+      <div class="split reveal">
+        <div class="panel">
+          <h3>证据支持什么</h3>
+          <div class="argument" style="margin-top:22px">
+            <div class="argument-item"><div><strong>位置有因果作用</strong><p>单点会显著改变 completion，多点会出现不可由单点预测的交互。</p></div></div>
+            <div class="argument-item"><div><strong>效用依赖历史</strong><p><code>{2}</code>、<code>{3}</code> 安全，<code>{2,3}</code> 有害。</p></div></div>
+            <div class="argument-item"><div><strong>候选质量是瓶颈</strong><p>同一原子运算内部连续触发，制造不必要的高阶干扰。</p></div></div>
+            <div class="argument-item"><div><strong>Prompt 与 inference 是两层控制</strong><p>部分错误在任何 inference invoke 发生前已经出现。</p></div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>证据尚不支持什么</h3>
+          <div class="table-wrap">
+            <table class="decision-table">
+              <tbody>
+                <tr><td class="no">× 独立二分类</td><td>当前候选 utility 非独立</td></tr>
+                <tr><td class="no">× 距离型标签</td><td>会把错误抵消标成正例</td></tr>
+                <tr><td class="no">× Prompt 永远开启</td><td><code>0063</code> 已给出反例</td></tr>
+                <tr><td class="no">× 调用次数代理</td><td>同次数可得到相反结果</td></tr>
+                <tr><td class="no">× 直接声称总体效果</td><td>n = 10，只适合机制发现</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="next">
+      <div class="section-head reveal">
+        <div class="section-kicker">07 · Next experiment</div>
+        <div>
+          <h2>Gate Sanitation v1</h2>
+          <p class="section-intro">用一个小而信息密度高的实验，先回答“过滤后是否存在稳定、可验证的 exact-positive signal”。只有答案为是，才进入 Trigger 训练。</p>
+        </div>
+      </div>
+
+      <div class="panel reveal">
+        <div class="roadmap">
+          <div class="roadmap-step"><div class="step-no">STEP 01</div><div><strong>清洗候选边界</strong><p>过滤 calculator span、小数和金额逗号内部候选；同一语义 step 最多调用一次。</p></div><div class="step-output">输出：filtered candidate manifest</div></div>
+          <div class="roadmap-step"><div class="step-no">STEP 02</div><div><strong>补全 prompt-only N</strong><p>在原始 10 题上全部运行，分离 prompt augmentation 与 inference invocation。</p></div><div class="step-output">输出：完整 prompt 因果对照</div></div>
+          <div class="roadmap-step"><div class="step-no">STEP 03</div><div><strong>同 manifest 六条件配对</strong><p>比较 A、S、N、original always、filtered always、random50。</p></div><div class="step-output">输出：paired net gain</div></div>
+          <div class="roadmap-step"><div class="step-no">STEP 04</div><div><strong>只对剩余错误题重跑 sweep</strong><p>记录 exact-positive 覆盖率、N 正题被破坏率、最小破坏交互率。</p></div><div class="step-output">输出：可训练性判断</div></div>
+          <div class="roadmap-step"><div class="step-no">GATE</div><div><strong>决定训练 Trigger 还是回头改 Weaver</strong><p>若过滤后仍几乎没有 exact-positive 分支，问题在 memory 内容/目标，而不在时机分类器。</p></div><div class="step-output">Go / No-go decision</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="appendix">
+      <div class="section-head reveal">
+        <div class="section-kicker">Appendix</div>
+        <div><h2>口径、限制与可审计来源</h2></div>
+      </div>
+      <div class="panel reveal">
+        <details open>
+          <summary>指标口径</summary>
+          <p>以 semantic exact 为主指标。Base 与风格控制有数值正确但未使用 <code>\boxed{}</code> 的回答，若采用官方格式评分，A/S 会分别从 3/10、4/10 降到 2/10、1/10，混淆模型能力与格式遵循。</p>
+        </details>
+        <details>
+          <summary>核心限制</summary>
+          <ul>
+            <li>试点仅 10 题，不能做显著性或总体泛化结论。</li>
+            <li>单点穷举集中在 3 道代表题；交互真值表集中在 <code>0710</code>。</li>
+            <li>当前数据足以否定若干过强假设，但还不足以估计清洗后的最终收益。</li>
+          </ul>
+        </details>
+        <details>
+          <summary>可审计产物</summary>
+          <div class="source-list">
+            <code>../analysis/trigger_evidence_v1.json</code>
+            <code>../runs/pilot_min6_v1/</code>
+            <code>../runs/trigger_intervention_v1/</code>
+            <code>../runs/single_candidate_sweep_v1/</code>
+            <code>../runs/candidate_interaction_v1/</code>
+            <code>../TRIGGER_EVIDENCE_ANALYSIS.md</code>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>MemGen HardBench · Trigger Evidence Analysis</span>
+    <span>静态单文件报告 · 数据截至 2026-09-20</span>
+  </footer>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const themeButton = document.getElementById('themeButton');
+      const printButton = document.getElementById('printButton');
+      const savedTheme = localStorage.getItem('memgen-analysis-theme');
+      const preferredDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && preferredDark)) root.dataset.theme = 'dark';
+
+      themeButton.addEventListener('click', () => {
+        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        localStorage.setItem('memgen-analysis-theme', next);
+      });
+      printButton.addEventListener('click', () => window.print());
+
+      const reveal = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            reveal.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.reveal').forEach((element) => reveal.observe(element));
+
+      const sections = [...document.querySelectorAll('main section[id]')];
+      const links = [...document.querySelectorAll('.nav a')];
+      const navById = new Map(links.map((link) => [link.getAttribute('href').slice(1), link]));
+      const activate = (id) => {
+        links.forEach((link) => link.classList.toggle('active', link === navById.get(id)));
+      };
+      const sectionObserver = new IntersectionObserver((entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) activate(visible[0].target.id);
+      }, { rootMargin: '-24% 0px -62% 0px', threshold: [0, .15, .5] });
+      sections.forEach((section) => sectionObserver.observe(section));
+    })();
+  </script>
+</body>
+</html>
