@@ -84,3 +84,28 @@ $sampleIds = @(
 ```
 
 完整样本列表、人工选择、逐题结果与局限见 `TRIGGER_INTERVENTION_REPORT.md`。
+
+## 单点候选穷举
+
+`single_candidate_sweep_v1` 对三道代表题的 N 轨迹候选点逐一做单次注入：
+`0710` 7 点、`0611` 36 点、`0754` 4 点，共 47 条反事实轨迹。计划会先核对
+N 原始事件中的候选数；运行器以 `(sample_id, candidate_ordinal)` 续跑，并验证每条
+轨迹恰好注入一次：
+
+```powershell
+..\.venv\Scripts\python.exe reproduction\hardbench\run_trigger_sweep.py `
+  --run-dir reproduction\hardbench\runs\single_candidate_sweep_v1 `
+  --time-budget-minutes 110 --max-new-tokens 512
+
+..\.venv\Scripts\python.exe reproduction\hardbench\score_results.py `
+  --run-dir reproduction\hardbench\runs\single_candidate_sweep_v1
+
+..\.venv\Scripts\python.exe reproduction\hardbench\analyze_trigger_sweep.py `
+  --run-dir reproduction\hardbench\runs\single_candidate_sweep_v1
+
+..\.venv\Scripts\python.exe reproduction\hardbench\plot_trigger_sweep.py `
+  --analysis reproduction\hardbench\runs\single_candidate_sweep_v1\sweep_analysis.json `
+  --output reproduction\hardbench\runs\single_candidate_sweep_v1\trigger_utility_curve.png
+```
+
+结论和逐题解释见 `TRIGGER_SWEEP_REPORT.md`。

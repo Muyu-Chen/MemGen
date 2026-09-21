@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "scored_at": "2026-09-21T01:24:32.197901+00:00",
+  "raw_sources": [
+    {
+      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\single_candidate_sweep_v1\\raw\\X_memgen_single_candidate_sweep.raw.jsonl",
+      "sha256": "484c48fe1c0025d9e921add3589c6ab22a71164c1b0af059db4a0a023569d667",
+      "records": 47,
+      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\single_candidate_sweep_v1\\scored\\X_memgen_single_candidate_sweep.scored.jsonl"
+    }
+  ],
+  "conditions": {
+    "X_memgen_single_candidate_sweep": {
+      "n": 47,
+      "official_correct": 7.0,
+      "official_accuracy": 0.14893617021276595,
+      "semantic_correct": 7,
+      "semantic_accuracy": 0.14893617021276595,
+      "boxed_format_count": 47,
+      "boxed_format_rate": 1.0,
+      "official_semantic_disagreement_count": 0,
+      "official_semantic_disagreement_rate": 0.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 91.01254817446882,
+      "mean_generated_tokens": 244.31914893617022,
+      "mean_seconds_per_generated_token": 0.3727887311971399,
+      "mean_inference_augmentations": 1.0,
+      "inference_augmentation_count_distribution": {
+        "1": 47
+      }
+    }
+  },
+  "pairwise": {}
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "plan_name": "single_candidate_sweep_v1",
+  "created_at": "2026-09-20",
+  "purpose": "Exhaust every N-condition inference candidate on three representative failures using exactly one inference memory invocation per counterfactual trajectory.",
+  "candidate_source": "runs/trigger_intervention_v1/raw/N_memgen_no_inference.raw.jsonl",
+  "selection_basis": "One case where N is correct and always-invoke is destructive, one where the human single intervention moved substantially toward gold but remained wrong, and one where it moved away from gold.",
+  "samples": [
+    {
+      "sample_id": "gsm8k_test_0710",
+      "role": "N-correct / always-invoke destructive",
+      "candidate_count": 7
+    },
+    {
+      "sample_id": "gsm8k_test_0611",
+      "role": "human single intervention moved closer but remained wrong",
+      "candidate_count": 36
+    },
+    {
+      "sample_id": "gsm8k_test_0754",
+      "role": "human single intervention moved farther from gold",
+      "candidate_count": 4
+    }
+  ]
+}

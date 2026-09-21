@@ -1,0 +1,631 @@
+{
+  "schema_version": 1,
+  "analyzed_at": "2026-09-21T01:24:39.125781+00:00",
+  "condition": "X_memgen_single_candidate_sweep",
+  "sweep_scored": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\single_candidate_sweep_v1\\scored\\X_memgen_single_candidate_sweep.scored.jsonl",
+  "sweep_scored_sha256": "5b70923e063289e0f9cd5bd110a9f136f7cf692bd5c1b0adb0c0e74bde31a26f",
+  "baseline_scored": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\trigger_intervention_v1\\scored\\N_memgen_no_inference.scored.jsonl",
+  "baseline_scored_sha256": "5e97b6804ff4dff32ab116c98115a3b8547c1d9efa71f16d676220b077ab8191",
+  "totals": {
+    "observed_variants": 47,
+    "intervention_reached": 47,
+    "correct_variants": 7,
+    "changed_vs_baseline": 38,
+    "distance_improved": 24,
+    "distance_worsened": 11,
+    "distance_equal": 12,
+    "distance_unknown": 0
+  },
+  "samples": [
+    {
+      "sample_id": "gsm8k_test_0710",
+      "role": "N-correct / always-invoke destructive",
+      "gold": "45",
+      "baseline_prediction": "45",
+      "baseline_correct": true,
+      "baseline_absolute_error": "0",
+      "planned_candidate_count": 7,
+      "observed_variant_count": 7,
+      "exact_correct_ordinals": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "best_absolute_error": "0",
+      "best_candidate_ordinals": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "changed_variant_count": 2,
+      "unique_predictions": [
+        "45"
+      ],
+      "variants": [
+        {
+          "candidate_ordinal": 1,
+          "prediction": "45",
+          "semantic_correct": true,
+          "absolute_error": "0",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": false,
+          "intervention_reached": true,
+          "latency_seconds": 71.90127840000787,
+          "generated_token_count": 186
+        },
+        {
+          "candidate_ordinal": 2,
+          "prediction": "45",
+          "semantic_correct": true,
+          "absolute_error": "0",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": false,
+          "intervention_reached": true,
+          "latency_seconds": 69.89272800000617,
+          "generated_token_count": 186
+        },
+        {
+          "candidate_ordinal": 3,
+          "prediction": "45",
+          "semantic_correct": true,
+          "absolute_error": "0",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": false,
+          "intervention_reached": true,
+          "latency_seconds": 70.00629309998476,
+          "generated_token_count": 186
+        },
+        {
+          "candidate_ordinal": 4,
+          "prediction": "45",
+          "semantic_correct": true,
+          "absolute_error": "0",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 76.6910743000044,
+          "generated_token_count": 205
+        },
+        {
+          "candidate_ordinal": 5,
+          "prediction": "45",
+          "semantic_correct": true,
+          "absolute_error": "0",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": false,
+          "intervention_reached": true,
+          "latency_seconds": 70.38016679999419,
+          "generated_token_count": 186
+        },
+        {
+          "candidate_ordinal": 6,
+          "prediction": "45",
+          "semantic_correct": true,
+          "absolute_error": "0",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 70.34181820001686,
+          "generated_token_count": 185
+        },
+        {
+          "candidate_ordinal": 7,
+          "prediction": "45",
+          "semantic_correct": true,
+          "absolute_error": "0",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": false,
+          "intervention_reached": true,
+          "latency_seconds": 71.03246839999338,
+          "generated_token_count": 186
+        }
+      ]
+    },
+    {
+      "sample_id": "gsm8k_test_0611",
+      "role": "human single intervention moved closer but remained wrong",
+      "gold": "1450000",
+      "baseline_prediction": "6003125",
+      "baseline_correct": false,
+      "baseline_absolute_error": "4553125",
+      "planned_candidate_count": 36,
+      "observed_variant_count": 36,
+      "exact_correct_ordinals": [],
+      "best_absolute_error": "175000",
+      "best_candidate_ordinals": [
+        1
+      ],
+      "changed_variant_count": 33,
+      "unique_predictions": [
+        "1625000",
+        "3062500",
+        "4062500",
+        "4231250",
+        "5103125",
+        "5163125",
+        "5503125",
+        "6002750",
+        "6003125",
+        "6062500",
+        "6063125",
+        "6281250",
+        "6531250",
+        "6562500",
+        "6593750"
+      ],
+      "variants": [
+        {
+          "candidate_ordinal": 1,
+          "prediction": "1625000",
+          "semantic_correct": false,
+          "absolute_error": "175000",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 77.08665900002234,
+          "generated_token_count": 208
+        },
+        {
+          "candidate_ordinal": 2,
+          "prediction": "3062500",
+          "semantic_correct": false,
+          "absolute_error": "1612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 84.43649170000572,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 3,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 85.03651679999894,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 4,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 84.94517620000988,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 5,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 84.91344659999595,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 6,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 84.86420859998907,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 7,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 84.97724119998747,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 8,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 85.04191020000144,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 9,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 85.51640559997759,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 10,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 85.20921790000284,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 11,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 85.27115789998788,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 12,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 85.50326309999218,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 13,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 85.52016499999445,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 14,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 85.35654619999696,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 15,
+          "prediction": "6593750",
+          "semantic_correct": false,
+          "absolute_error": "5143750",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 105.08371679999982,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 16,
+          "prediction": "6593750",
+          "semantic_correct": false,
+          "absolute_error": "5143750",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 105.12778589999652,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 17,
+          "prediction": "4231250",
+          "semantic_correct": false,
+          "absolute_error": "2781250",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 87.36509400000796,
+          "generated_token_count": 234
+        },
+        {
+          "candidate_ordinal": 18,
+          "prediction": "6593750",
+          "semantic_correct": false,
+          "absolute_error": "5143750",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 105.65975250001065,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 19,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 87.32535470000585,
+          "generated_token_count": 234
+        },
+        {
+          "candidate_ordinal": 20,
+          "prediction": "4062500",
+          "semantic_correct": false,
+          "absolute_error": "2612500",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 86.0787030000065,
+          "generated_token_count": 230
+        },
+        {
+          "candidate_ordinal": 21,
+          "prediction": "6531250",
+          "semantic_correct": false,
+          "absolute_error": "5081250",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 105.70511400001124,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 22,
+          "prediction": "6003125",
+          "semantic_correct": false,
+          "absolute_error": "4553125",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": false,
+          "intervention_reached": true,
+          "latency_seconds": 106.30959620000795,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 23,
+          "prediction": "6593750",
+          "semantic_correct": false,
+          "absolute_error": "5143750",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 106.0428350000002,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 24,
+          "prediction": "6281250",
+          "semantic_correct": false,
+          "absolute_error": "4831250",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 106.15137269999832,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 25,
+          "prediction": "6002750",
+          "semantic_correct": false,
+          "absolute_error": "4552750",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 107.57567740001832,
+          "generated_token_count": 290
+        },
+        {
+          "candidate_ordinal": 26,
+          "prediction": "6003125",
+          "semantic_correct": false,
+          "absolute_error": "4553125",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": false,
+          "intervention_reached": true,
+          "latency_seconds": 106.25770369998645,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 27,
+          "prediction": "5103125",
+          "semantic_correct": false,
+          "absolute_error": "3653125",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 106.31602500000736,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 28,
+          "prediction": "5103125",
+          "semantic_correct": false,
+          "absolute_error": "3653125",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 106.4421130999981,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 29,
+          "prediction": "5163125",
+          "semantic_correct": false,
+          "absolute_error": "3713125",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 106.52264850001666,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 30,
+          "prediction": "6063125",
+          "semantic_correct": false,
+          "absolute_error": "4613125",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 107.30912279998302,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 31,
+          "prediction": "5503125",
+          "semantic_correct": false,
+          "absolute_error": "4053125",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 107.1250238000066,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 32,
+          "prediction": "5103125",
+          "semantic_correct": false,
+          "absolute_error": "3653125",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 107.18309900001623,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 33,
+          "prediction": "6062500",
+          "semantic_correct": false,
+          "absolute_error": "4612500",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 107.23149750000448,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 34,
+          "prediction": "6003125",
+          "semantic_correct": false,
+          "absolute_error": "4553125",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": false,
+          "intervention_reached": true,
+          "latency_seconds": 106.85309759998927,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 35,
+          "prediction": "6562500",
+          "semantic_correct": false,
+          "absolute_error": "5112500",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 106.82209640002111,
+          "generated_token_count": 286
+        },
+        {
+          "candidate_ordinal": 36,
+          "prediction": "6003125",
+          "semantic_correct": false,
+          "absolute_error": "4553125",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 107.05218149998109,
+          "generated_token_count": 286
+        }
+      ]
+    },
+    {
+      "sample_id": "gsm8k_test_0754",
+      "role": "human single intervention moved farther from gold",
+      "gold": "89",
+      "baseline_prediction": "67",
+      "baseline_correct": false,
+      "baseline_absolute_error": "22",
+      "planned_candidate_count": 4,
+      "observed_variant_count": 4,
+      "exact_correct_ordinals": [],
+      "best_absolute_error": "18",
+      "best_candidate_ordinals": [
+        3
+      ],
+      "changed_variant_count": 3,
+      "unique_predictions": [
+        "107",
+        "40",
+        "67"
+      ],
+      "variants": [
+        {
+          "candidate_ordinal": 1,
+          "prediction": "40",
+          "semantic_correct": false,
+          "absolute_error": "49",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 71.83318379998673,
+          "generated_token_count": 192
+        },
+        {
+          "candidate_ordinal": 2,
+          "prediction": "40",
+          "semantic_correct": false,
+          "absolute_error": "49",
+          "distance_relation_vs_baseline": "worsened",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 72.09336479997728,
+          "generated_token_count": 192
+        },
+        {
+          "candidate_ordinal": 3,
+          "prediction": "107",
+          "semantic_correct": false,
+          "absolute_error": "18",
+          "distance_relation_vs_baseline": "improved",
+          "completion_changed_vs_baseline": true,
+          "intervention_reached": true,
+          "latency_seconds": 93.24568710001768,
+          "generated_token_count": 252
+        },
+        {
+          "candidate_ordinal": 4,
+          "prediction": "67",
+          "semantic_correct": false,
+          "absolute_error": "22",
+          "distance_relation_vs_baseline": "equal",
+          "completion_changed_vs_baseline": false,
+          "intervention_reached": true,
+          "latency_seconds": 72.95368420000887,
+          "generated_token_count": 193
+        }
+      ]
+    }
+  ]
+}
