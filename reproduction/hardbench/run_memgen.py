@@ -115,12 +115,15 @@ def install_random_inference_gate(model, sample_seed: int, probability: float):
     return original, events
 
 
-def install_deterministic_inference_gate(
-    model, mode: str, selected_candidate_ordinal: int | None = None
-):
-    """Install a prompt-on gate that records candidates and makes fixed decisions."""
-    if mode not in {"no_inference", "scheduled_single"}:
-        raise ValueError(f"unsupported deterministic gate mode: {mode}")
+def install_candidate_subset_gate(model, selected_candidate_ordinals: set[int]):
+    """Install a prompt-on gate that augments exactly the selected candidate ordinals."""
+    if any(not isinstance(ordinal, int) or ordinal < 1 for ordinal in selected_candidate_ordinals):
+        raise ValueError("selected candidate ordinals must be positive integers")
+    if len(selected_candidate_ordinals) > model.config.max_inference_aug_num:
+        raise ValueError(
+            "selected candidate count exceeds checkpoint max_inference_aug_num: "
+            f"{len(selected_candidate_ordinals)} > {model.config.max_inference_aug_num}"
+        )
     events: list[dict] = []
     original = model._should_augment
     candidate_ordinal = 0
@@ -158,13 +161,7 @@ def install_deterministic_inference_gate(
         candidate_indices = candidates.nonzero(as_tuple=True)[0]
         for batch_index in candidate_indices.tolist():
             candidate_ordinal += 1
-            decision = 0
-            if (
-                mode == "scheduled_single"
-                and selected_candidate_ordinal is not None
-                and candidate_ordinal == selected_candidate_ordinal
-            ):
-                decision = 1
+            decision = int(candidate_ordinal in selected_candidate_ordinals)
             aug_vector[batch_index] = decision
             visible_prefix = model.tokenizer.decode(
                 input_ids[batch_index].detach().cpu().tolist(),
@@ -183,6 +180,18 @@ def install_deterministic_inference_gate(
 
     model._should_augment = deterministic_should_augment
     return original, events
+
+
+def install_deterministic_inference_gate(
+    model, mode: str, selected_candidate_ordinal: int | None = None
+):
+    """Install the legacy no-inference or scheduled-single deterministic gate."""
+    if mode not in {"no_inference", "scheduled_single"}:
+        raise ValueError(f"unsupported deterministic gate mode: {mode}")
+    selected: set[int] = set()
+    if mode == "scheduled_single" and selected_candidate_ordinal is not None:
+        selected.add(selected_candidate_ordinal)
+    return install_candidate_subset_gate(model, selected)
 
 
 def load_model(tokenizer, dtype):

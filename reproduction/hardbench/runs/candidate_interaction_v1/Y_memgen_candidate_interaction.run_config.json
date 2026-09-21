@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-21T01:36:31.700892+00:00",
+  "runner": "run_trigger_interactions.py",
+  "condition": "Y_memgen_candidate_interaction",
+  "manifest": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\manifests\\gsm8k_harder_min6_seed20260920.jsonl",
+  "manifest_sha256": "5b98b4d5821f8abc08a9202e4a9d54c238b48d0147516d21e6276edcfdef883c",
+  "plan_file": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\plans\\candidate_interaction_v1.json",
+  "plan_sha256": "a4d7eb96868eb8f73d6cf07f0493ebc7b596cdb3675a5c3882c9052c369df06c",
+  "candidate_source": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\trigger_intervention_v1\\raw\\N_memgen_no_inference.raw.jsonl",
+  "candidate_source_sha256": "3a00ac7bcffef378b8f6834ec0c4486e05ce4d2a67b7db70d7f27b71119f2069",
+  "planned_variants": 4,
+  "base_model": "E:\\MemoryProject\\MemGen\\models\\Qwen2.5-1.5B-Instruct",
+  "checkpoint": "E:\\MemoryProject\\MemGen\\models\\memgen-checkpoints\\Qwen2.5-1.5B-Instruct\\gsm8k\\weaver-sft\\pn=1_pl=8_in=3_il=8\\model",
+  "dtype": "float32",
+  "threads": 8,
+  "max_new_tokens": 512,
+  "generation": "greedy",
+  "trigger_active": false,
+  "max_prompt_aug_num": 1,
+  "max_inference_aug_num": 3,
+  "gate_policy": "selected_candidate_subset"
+}

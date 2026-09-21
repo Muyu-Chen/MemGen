@@ -109,3 +109,21 @@ N 原始事件中的候选数；运行器以 `(sample_id, candidate_ordinal)` �
 ```
 
 结论和逐题解释见 `TRIGGER_SWEEP_REPORT.md`。
+
+## 候选交互与总体证据
+
+`candidate_interaction_v1` 对 `0710` 的前三个候选测试三种两两组合与三点组合，
+用于定位 repeated-injection 的最小破坏集合：
+
+```powershell
+..\.venv\Scripts\python.exe reproduction\hardbench\run_trigger_interactions.py `
+  --run-dir reproduction\hardbench\runs\candidate_interaction_v1
+
+..\.venv\Scripts\python.exe reproduction\hardbench\score_results.py `
+  --run-dir reproduction\hardbench\runs\candidate_interaction_v1
+
+..\.venv\Scripts\python.exe reproduction\hardbench\analyze_trigger_evidence.py
+```
+
+机器汇总写入 `analysis/trigger_evidence_v1.json`，总体研究判断见
+`TRIGGER_EVIDENCE_ANALYSIS.md`。

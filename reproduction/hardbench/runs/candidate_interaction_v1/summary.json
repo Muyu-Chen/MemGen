@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "scored_at": "2026-09-21T01:41:55.767835+00:00",
+  "raw_sources": [
+    {
+      "path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\candidate_interaction_v1\\raw\\Y_memgen_candidate_interaction.raw.jsonl",
+      "sha256": "6218ed5bf4a856367cfe544c8d646193a6221a7918d341e342a29179bf285784",
+      "records": 4,
+      "scored_path": "E:\\MemoryProject\\MemGen\\MemGen\\reproduction\\hardbench\\runs\\candidate_interaction_v1\\scored\\Y_memgen_candidate_interaction.scored.jsonl"
+    }
+  ],
+  "conditions": {
+    "Y_memgen_candidate_interaction": {
+      "n": 4,
+      "official_correct": 2.0,
+      "official_accuracy": 0.5,
+      "semantic_correct": 2,
+      "semantic_accuracy": 0.5,
+      "boxed_format_count": 4,
+      "boxed_format_rate": 1.0,
+      "official_semantic_disagreement_count": 0,
+      "official_semantic_disagreement_rate": 0.0,
+      "truncated_count": 0,
+      "mean_latency_seconds": 77.61866202500096,
+      "mean_generated_tokens": 193.75,
+      "mean_seconds_per_generated_token": 0.40119606688295006,
+      "mean_inference_augmentations": 2.25,
+      "inference_augmentation_count_distribution": {
+        "2": 3,
+        "3": 1
+      }
+    }
+  },
+  "pairwise": {}
+}
