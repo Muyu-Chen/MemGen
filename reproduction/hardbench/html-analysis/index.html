@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="MemGen HardBench Trigger 机制实验的静态综合分析。">
-  <title>MemGen Trigger 机制证据分析</title>
+  <meta name="description" content="MemGen HardBench 的交互式因果解释器：区分 Prompt、Trigger、Weaver 与历史依赖。">
+  <title>MemGen Trigger 因果解释器</title>
   <style>
     :root {
       color-scheme: light;
@@ -351,6 +351,54 @@
     .decision-table .yes { color: var(--green); }
     .decision-table .no { color: var(--red); }
 
+    .oracle-layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(270px, .55fr); gap: 16px; margin-top: 16px; }
+    .sample-picker, .case-picker { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 24px; }
+    .sample-button, .case-button, .policy-button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--paper) 94%, var(--line));
+      color: var(--muted);
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease;
+    }
+    .sample-button:hover, .case-button:hover, .policy-button:hover { border-color: var(--green); color: var(--ink); transform: translateY(-1px); }
+    .sample-button.active, .case-button.active, .policy-button.active { border-color: var(--green); background: var(--green-soft); color: var(--green); font-weight: 700; }
+    .sample-button { font: 700 12px/1 var(--mono); }
+    .diagnosis-card { min-height: 338px; border: 1px solid var(--line); border-radius: 16px; padding: 24px; background: color-mix(in srgb, var(--paper) 94%, var(--green-soft)); }
+    .diagnosis-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+    .diagnosis-title { font: 700 clamp(24px, 3vw, 36px)/1.12 var(--serif); }
+    .diagnosis-badge, .evidence-chip { display: inline-flex; align-items: center; border-radius: 999px; font: 700 11px/1 var(--mono); white-space: nowrap; }
+    .diagnosis-badge { padding: 8px 10px; background: var(--green-soft); color: var(--green); }
+    .diagnosis-badge[data-tone="amber"] { background: var(--amber-soft); color: var(--amber); }
+    .diagnosis-badge[data-tone="red"] { background: var(--red-soft); color: var(--red); }
+    .diagnosis-badge[data-tone="purple"] { background: var(--purple-soft); color: var(--purple); }
+    .diagnosis-summary { margin: 14px 0 0; color: var(--muted); }
+    .causal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 22px; }
+    .causal-card { border: 1px solid var(--line); border-radius: 12px; padding: 13px; background: var(--paper); }
+    .causal-card span { display: block; color: var(--muted); font: 700 10px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .07em; }
+    .causal-card strong { display: block; margin-top: 7px; font-size: 13px; }
+    .evidence-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 20px; }
+    .evidence-chip { padding: 7px 9px; background: color-mix(in srgb, var(--line) 42%, transparent); color: var(--ink); }
+    .routing-list { display: grid; gap: 10px; margin-top: 18px; }
+    .routing-item { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; padding: 13px; border: 1px solid var(--line); border-radius: 12px; }
+    .routing-no { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--green-soft); color: var(--green); font: 700 11px/1 var(--mono); }
+    .routing-item strong { display: block; font-size: 13px; }
+    .routing-item p { margin: 3px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .policy-explorer { margin-top: 16px; }
+    .policy-toolbar { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
+    .policy-grid { display: grid; grid-template-columns: repeat(8, minmax(62px, 1fr)); gap: 8px; margin-top: 20px; }
+    .policy-button { border-radius: 10px; padding: 11px 8px; font: 700 12px/1 var(--mono); }
+    .policy-button.good { border-color: color-mix(in srgb, var(--green) 55%, var(--line)); }
+    .policy-button.bad { border-color: color-mix(in srgb, var(--red) 45%, var(--line)); }
+    .policy-button.warn { border-color: color-mix(in srgb, var(--amber) 55%, var(--line)); }
+    .policy-detail { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: 18px; margin-top: 16px; padding: 22px; border-radius: 14px; background: color-mix(in srgb, var(--line) 30%, transparent); }
+    .policy-code { font: 700 clamp(32px, 5vw, 58px)/1 var(--mono); letter-spacing: .08em; }
+    .policy-facts { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
+    .policy-explanation strong { display: block; font-size: 17px; }
+    .policy-explanation p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .bit-legend { margin-top: 12px; color: var(--muted); font-size: 12px; }
+
     .roadmap { display: grid; gap: 0; }
     .roadmap-step { display: grid; grid-template-columns: 76px minmax(0, 1fr) 170px; gap: 18px; padding: 23px 0; border-bottom: 1px solid var(--line); align-items: start; }
     .roadmap-step:last-child { border-bottom: 0; }
@@ -372,11 +420,11 @@
     .reveal.visible { opacity: 1; transform: none; }
 
     @media (max-width: 900px) {
-      .hero, .split, .truth-layout { grid-template-columns: 1fr; }
+      .hero, .split, .truth-layout, .oracle-layout { grid-template-columns: 1fr; }
       .hero { padding-top: 64px; gap: 34px; }
       .verdict-grid, .section-head { grid-template-columns: 1fr; gap: 10px; }
       .metrics { grid-template-columns: repeat(2, 1fr); }
-      .three { grid-template-columns: 1fr; }
+      .three, .causal-grid { grid-template-columns: 1fr; }
       .causal-flow { grid-template-columns: 1fr; }
       .flow-arrow { transform: rotate(90deg); min-height: 34px; }
       .truth-grid { grid-template-columns: repeat(2, 1fr); }
@@ -400,6 +448,8 @@
       .bar-label span { display: none; }
       .truth-grid { grid-template-columns: 1fr 1fr; }
       .progress-item { grid-template-columns: 90px minmax(0, 1fr) 38px; }
+      .policy-grid { grid-template-columns: repeat(4, 1fr); }
+      .policy-detail { grid-template-columns: 1fr; }
       footer { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -422,13 +472,14 @@
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand"><span class="brand-mark">MG</span><span>Trigger Evidence</span></div>
+      <div class="brand"><span class="brand-mark">MG</span><span>Causal Interpreter</span></div>
       <nav class="nav" aria-label="报告章节">
         <a href="#scope">范围</a>
         <a href="#pilot">A/S/B/C</a>
         <a href="#separation">因果拆分</a>
         <a href="#sweep">单点穷举</a>
         <a href="#interaction">候选交互</a>
+        <a href="#oracle">Oracle 解释器</a>
         <a href="#decision">判断</a>
         <a href="#next">下一步</a>
       </nav>
@@ -442,14 +493,14 @@
   <main>
     <section class="hero">
       <div>
-        <div class="eyebrow">MemGen · HardBench · 2026-09-20</div>
-        <h1>Trigger 不是一个独立的二分类问题</h1>
-        <p class="hero-deck">105 条生成记录显示：memory invocation 的效用非单调、依赖调用历史；当前候选器还会在同一原子计算内部重复触发，产生可定位的高阶干扰。</p>
+        <div class="eyebrow">MemGen · HardBench · 2026-09-21</div>
+        <h1>从“有没有用”走向“为什么有用”</h1>
+        <p class="hero-deck">351 条封存轨迹把失败拆成四类：Prompt 先验污染、Trigger 时机错误、Weaver 无可救性，以及多次调用的历史依赖。现在我们已有一个干净、稳定、发布版可达的 exact-positive Trigger 样本。</p>
       </div>
       <aside class="hero-meta" aria-label="实验元数据">
-        <div class="meta-row"><span>生成记录</span><strong>105</strong></div>
-        <div class="meta-row"><span>模型生成延迟</span><strong>9,739.4 s</strong></div>
-        <div class="meta-row"><span>实验批次</span><strong>4</strong></div>
+        <div class="meta-row"><span>封存轨迹</span><strong>351</strong></div>
+        <div class="meta-row"><span>模型生成延迟</span><strong>≈ 32,320 s</strong></div>
+        <div class="meta-row"><span>动态 oracle 策略</span><strong>224</strong></div>
         <div class="meta-row"><span>主指标</span><strong>Semantic exact</strong></div>
       </aside>
     </section>
@@ -458,9 +509,9 @@
       <div class="verdict-grid">
         <div class="verdict-label">CURRENT VERDICT</div>
         <div>
-          <h2 id="verdict-title">当前证据不支持直接训练“逐候选、独立 invoke / skip”的 vanilla Trigger。</h2>
-          <p>更合理的目标是：只在语义完整的推理边界上，由带调用历史、预算和 verifier 信号的顺序控制器决定 <code>HOLD / INVOKE / STOP</code>。</p>
-          <span class="decision">先清洗 Gate，再决定是否训练 Trigger</span>
+          <h2 id="verdict-title">Trigger 确实能救题，但只在 Weaver 提供可救分支时成立。</h2>
+          <p><code>0810</code> 证明首个句级 invoke 可把 810-token 错误长链精确救回；其余 7 个完整失败样本在三步 oracle 下没有正例。正确做法不是统一归因，而是先判责，再路由给 Trigger、Weaver 或 Prompt。</p>
+          <span class="decision">训练 exact-positive；回流 no-rescue</span>
         </div>
       </div>
     </section>
@@ -469,15 +520,15 @@
       <div class="section-head reveal">
         <div class="section-kicker">01 · Evidence scope</div>
         <div>
-          <h2>证据范围足以做机制判断，不足以声称总体效果</h2>
-          <p class="section-intro">四批实验都使用同一 checkpoint、greedy decoding 和独立评分。十题试点样本很小，因此下面的数字用于定位机制，而非显著性结论。</p>
+          <h2>证据已从相关性推进到动态因果分支</h2>
+          <p class="section-intro">所有实验使用同一 checkpoint、greedy decoding 和独立评分。新 campaign 会在每条实时轨迹上重新识别句级节点，因此测到的是历史依赖的 sequential policy，而不是固定 baseline 的静态 subset。</p>
         </div>
       </div>
       <div class="metrics reveal">
-        <div class="metric"><div class="metric-value">40</div><div class="metric-label">A/S/B/C 试点记录</div><div class="metric-note">10 题 × 4 条件</div></div>
-        <div class="metric"><div class="metric-value">14</div><div class="metric-label">人工单点干预记录</div><div class="metric-note">7 题 × N/H</div></div>
-        <div class="metric"><div class="metric-value">47</div><div class="metric-label">单候选穷举变体</div><div class="metric-note">3 道代表题</div></div>
-        <div class="metric"><div class="metric-value">4</div><div class="metric-label">新增交互组合</div><div class="metric-note">补齐 0710 真值表</div></div>
+        <div class="metric"><div class="metric-value">108</div><div class="metric-label">前置机制证据</div><div class="metric-note">试点、人工单点、sweep、交互</div></div>
+        <div class="metric"><div class="metric-value">224</div><div class="metric-label">动态句级 oracle</div><div class="metric-note">64 条三步 + 160 条五步</div></div>
+        <div class="metric"><div class="metric-value">18</div><div class="metric-label">0810 稳健性压力测试</div><div class="metric-note">发布 gate 2 + rescue branch 16</div></div>
+        <div class="metric"><div class="metric-value">4</div><div class="metric-label">核心 exact-positive 策略</div><div class="metric-note">全部来自 0810</div></div>
       </div>
     </section>
 
@@ -580,7 +631,7 @@
       </div>
 
       <div class="three reveal">
-        <div class="metric"><div class="metric-value">1/7</div><div class="metric-label">N：prompt on，inference never</div><div class="metric-note">Semantic exact</div></div>
+        <div class="metric"><div class="metric-value">2/10</div><div class="metric-label">N：prompt on，inference never</div><div class="metric-note">十题已补全；0810 长链仍错误</div></div>
         <div class="metric"><div class="metric-value">1/7</div><div class="metric-label">H：人工选择一次 invoke</div><div class="metric-note">Semantic exact</div></div>
         <div class="metric"><div class="metric-value">0</div><div class="metric-label">H 相对 N 的 exact recovery</div><div class="metric-note">同时也没有 regression</div></div>
       </div>
@@ -699,12 +750,97 @@
       </div>
     </section>
 
+    <section class="section" id="oracle">
+      <div class="section-head reveal">
+        <div class="section-kicker">06 · Sequential oracle</div>
+        <div>
+          <h2>交互式判责：错误究竟应该归给谁</h2>
+          <p class="section-intro">先选样本查看归因，再进入策略显微镜。这里严格区分“输出被改变”“数值更接近”和“exact rescue”；只有最后一种才是可信的 Trigger utility 正标签。</p>
+        </div>
+      </div>
+
+      <div class="metrics reveal">
+        <div class="metric"><div class="metric-value">4/64</div><div class="metric-label">三步 exact-positive policies</div><div class="metric-note">只救回 1/8 个失败样本</div></div>
+        <div class="metric"><div class="metric-value">0/160</div><div class="metric-label">五步 exact-positive policies</div><div class="metric-note">5 个优先样本仍无救援</div></div>
+        <div class="metric"><div class="metric-value">152/224</div><div class="metric-label">完整到达名义深度</div><div class="metric-note">其余轨迹提前结束</div></div>
+        <div class="metric"><div class="metric-value">0</div><div class="metric-label">误接纳内部数字分隔符</div><div class="metric-note">小数、金额、calculator span 已过滤</div></div>
+      </div>
+
+      <div class="oracle-layout reveal">
+        <div class="panel">
+          <h3>样本归因选择器</h3>
+          <p class="panel-caption">点击样本，查看 Prompt / Weaver / Trigger 三层责任与直接证据。</p>
+          <div class="sample-picker" id="samplePicker" aria-label="选择要解释的样本">
+            <button class="sample-button" type="button" data-sample="0063">0063</button>
+            <button class="sample-button" type="button" data-sample="0423">0423</button>
+            <button class="sample-button" type="button" data-sample="0611">0611</button>
+            <button class="sample-button" type="button" data-sample="0754">0754</button>
+            <button class="sample-button active" type="button" data-sample="0810">0810</button>
+            <button class="sample-button" type="button" data-sample="0976">0976</button>
+            <button class="sample-button" type="button" data-sample="1088">1088</button>
+            <button class="sample-button" type="button" data-sample="1161">1161</button>
+          </div>
+          <div class="diagnosis-card" id="diagnosisCard" aria-live="polite">
+            <div class="diagnosis-top">
+              <div>
+                <div class="diagnosis-title" id="diagnosisTitle">0810 · Trigger-positive</div>
+                <p class="diagnosis-summary" id="diagnosisSummary"></p>
+              </div>
+              <span class="diagnosis-badge" id="diagnosisBadge" data-tone="green">可训练正例</span>
+            </div>
+            <div class="causal-grid">
+              <div class="causal-card"><span>Prompt</span><strong id="promptVerdict"></strong></div>
+              <div class="causal-card"><span>Weaver</span><strong id="weaverVerdict"></strong></div>
+              <div class="causal-card"><span>Trigger</span><strong id="triggerVerdict"></strong></div>
+            </div>
+            <div class="evidence-row" id="evidenceRow"></div>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <h3>判责准则</h3>
+          <p class="panel-caption">不要把每个错误都自动变成 Trigger 的训练样本。</p>
+          <div class="routing-list">
+            <div class="routing-item"><span class="routing-no">1</span><div><strong>Prompt-off 正确，prompt-on 已错</strong><p>优先归因 Prompt memory；中途 Trigger 很可能无权撤销。</p></div></div>
+            <div class="routing-item"><span class="routing-no">2</span><div><strong>Oracle 存在 exact-positive 路径</strong><p>说明 Weaver 有能力，Trigger 时机是可训练瓶颈。</p></div></div>
+            <div class="routing-item"><span class="routing-no">3</span><div><strong>Oracle 改变很多，但始终不 exact</strong><p>优先检查 Weaver 内容与推理表示，不用数值距离冒充标签。</p></div></div>
+            <div class="routing-item"><span class="routing-no">4</span><div><strong>相同后续 bit 因前史而结果不同</strong><p>需要有状态 controller；独立二分类会丢失关键变量。</p></div></div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="panel policy-explorer reveal">
+        <div class="policy-toolbar">
+          <div>
+            <h3>策略显微镜</h3>
+            <p class="panel-caption">点击 bit 串，看实际调用、可达前缀和结果如何随历史变化。</p>
+          </div>
+          <div class="case-picker" id="casePicker" aria-label="选择策略案例">
+            <button class="case-button active" type="button" data-case="0810">0810 · exact rescue</button>
+            <button class="case-button" type="button" data-case="1088">1088 · harmful interaction</button>
+          </div>
+        </div>
+        <div class="policy-grid" id="policyGrid"></div>
+        <div class="policy-detail" id="policyDetail" aria-live="polite">
+          <div>
+            <div class="policy-code" id="policyCode">100</div>
+            <div class="policy-facts" id="policyFacts"></div>
+            <div class="bit-legend">从左到右为动态句级决策；<code>1 = invoke</code>，<code>0 = skip</code>。未到达的后缀不产生实际决策。</div>
+          </div>
+          <div class="policy-explanation">
+            <strong id="policyHeadline"></strong>
+            <p id="policyNarrative"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="decision">
       <div class="section-head reveal">
-        <div class="section-kicker">06 · Decision</div>
+        <div class="section-kicker">07 · Decision</div>
         <div>
-          <h2>复现已经完成它最重要的任务：把问题定位清楚</h2>
-          <p class="section-intro">现阶段最有价值的不是给当前 Trigger 扩数据，而是先消除候选器制造的伪决策，并确认 Weaver 是否真的提供可救分支。</p>
+          <h2>不是“训练或不训练”，而是先按可救性分流</h2>
+          <p class="section-intro"><code>0810</code> 给出了真正的 Trigger utility 正标签；其他样本则说明，无正例的题应回流给 Weaver / Prompt，而不是强行给 gate 背锅。</p>
         </div>
       </div>
 
@@ -712,10 +848,10 @@
         <div class="panel">
           <h3>证据支持什么</h3>
           <div class="argument" style="margin-top:22px">
-            <div class="argument-item"><div><strong>位置有因果作用</strong><p>单点会显著改变 completion，多点会出现不可由单点预测的交互。</p></div></div>
-            <div class="argument-item"><div><strong>效用依赖历史</strong><p><code>{2}</code>、<code>{3}</code> 安全，<code>{2,3}</code> 有害。</p></div></div>
-            <div class="argument-item"><div><strong>候选质量是瓶颈</strong><p>同一原子运算内部连续触发，制造不必要的高阶干扰。</p></div></div>
-            <div class="argument-item"><div><strong>Prompt 与 inference 是两层控制</strong><p>部分错误在任何 inference invoke 发生前已经出现。</p></div></div>
+            <div class="argument-item"><div><strong>存在干净 Trigger 正例</strong><p><code>0810</code> 的第一位 bit 完全切分错/对，且发布版 gate 可复现。</p></div></div>
+            <div class="argument-item"><div><strong>正例可承受后续调用</strong><p>固定首位 invoke 后，16/16 个五步分支都保持 310。</p></div></div>
+            <div class="argument-item"><div><strong>效用依赖历史</strong><p><code>1088</code> 的 <code>011xx</code> 有害，<code>111xx</code> 却被早期调用保护。</p></div></div>
+            <div class="argument-item"><div><strong>Prompt 与 inference 是两层控制</strong><p><code>0063</code> 在任何 inference invoke 前已经从正确变错。</p></div></div>
           </div>
         </div>
         <div class="panel">
@@ -723,7 +859,8 @@
           <div class="table-wrap">
             <table class="decision-table">
               <tbody>
-                <tr><td class="no">× 独立二分类</td><td>当前候选 utility 非独立</td></tr>
+                <tr><td class="no">× 所有失败都归 Trigger</td><td>7/8 完整失败样本三步 oracle 无正例</td></tr>
+                <tr><td class="no">× 独立二分类</td><td>当前候选 utility 依赖历史</td></tr>
                 <tr><td class="no">× 距离型标签</td><td>会把错误抵消标成正例</td></tr>
                 <tr><td class="no">× Prompt 永远开启</td><td><code>0063</code> 已给出反例</td></tr>
                 <tr><td class="no">× 调用次数代理</td><td>同次数可得到相反结果</td></tr>
@@ -737,20 +874,20 @@
 
     <section class="section" id="next">
       <div class="section-head reveal">
-        <div class="section-kicker">07 · Next experiment</div>
+        <div class="section-kicker">08 · Next experiment</div>
         <div>
-          <h2>Gate Sanitation v1</h2>
-          <p class="section-intro">用一个小而信息密度高的实验，先回答“过滤后是否存在稳定、可验证的 exact-positive signal”。只有答案为是，才进入 Trigger 训练。</p>
+          <h2>Attribution-driven Training v1</h2>
+          <p class="section-intro">Gate sanitation 和可救性筛选已经找到首个稳定正例。下一步应围绕“可信标签如何扩展”，而不是回到盲目扩大逐点二分类数据。</p>
         </div>
       </div>
 
       <div class="panel reveal">
         <div class="roadmap">
-          <div class="roadmap-step"><div class="step-no">STEP 01</div><div><strong>清洗候选边界</strong><p>过滤 calculator span、小数和金额逗号内部候选；同一语义 step 最多调用一次。</p></div><div class="step-output">输出：filtered candidate manifest</div></div>
-          <div class="roadmap-step"><div class="step-no">STEP 02</div><div><strong>补全 prompt-only N</strong><p>在原始 10 题上全部运行，分离 prompt augmentation 与 inference invocation。</p></div><div class="step-output">输出：完整 prompt 因果对照</div></div>
-          <div class="roadmap-step"><div class="step-no">STEP 03</div><div><strong>同 manifest 六条件配对</strong><p>比较 A、S、N、original always、filtered always、random50。</p></div><div class="step-output">输出：paired net gain</div></div>
-          <div class="roadmap-step"><div class="step-no">STEP 04</div><div><strong>只对剩余错误题重跑 sweep</strong><p>记录 exact-positive 覆盖率、N 正题被破坏率、最小破坏交互率。</p></div><div class="step-output">输出：可训练性判断</div></div>
-          <div class="roadmap-step"><div class="step-no">GATE</div><div><strong>决定训练 Trigger 还是回头改 Weaver</strong><p>若过滤后仍几乎没有 exact-positive 分支，问题在 memory 内容/目标，而不在时机分类器。</p></div><div class="step-output">Go / No-go decision</div></div>
+          <div class="roadmap-step"><div class="step-no">STEP 01</div><div><strong>抽取 exact utility labels</strong><p>把 <code>0810</code> 的首节点作为正例；把同轨迹上的 skip 分支作为强负例，保留完整历史。</p></div><div class="step-output">输出：sequence-aware label schema</div></div>
+          <div class="roadmap-step"><div class="step-no">STEP 02</div><div><strong>解释 Weaver memory 内容</strong><p>对比 0810 rescue、0611/0754 no-rescue 与 1088 harmful memory，找出内容层差异。</p></div><div class="step-output">输出：memory quality taxonomy</div></div>
+          <div class="roadmap-step"><div class="step-no">STEP 03</div><div><strong>Prompt on/off 配对</strong><p>优先处理 <code>0063</code> 这类 prompt 先致错样本，避免把不可撤销偏移误标给 Trigger。</p></div><div class="step-output">输出：prompt causal labels</div></div>
+          <div class="roadmap-step"><div class="step-no">STEP 04</div><div><strong>训练有状态 controller</strong><p>输入调用历史、预算、当前 step 与 memory 摘要；目标为 <code>HOLD / INVOKE / STOP</code>。</p></div><div class="step-output">输出：stateful Trigger prototype</div></div>
+          <div class="roadmap-step"><div class="step-no">GATE</div><div><strong>只在可救覆盖率上升后扩规模</strong><p>若更多题仍无 oracle-positive 分支，继续改 Weaver；若正例稳定增长，再扩大 Trigger 训练。</p></div><div class="step-output">Attribution-aware go / no-go</div></div>
         </div>
       </div>
     </section>
@@ -769,18 +906,25 @@
           <summary>核心限制</summary>
           <ul>
             <li>试点仅 10 题，不能做显著性或总体泛化结论。</li>
-            <li>单点穷举集中在 3 道代表题；交互真值表集中在 <code>0710</code>。</li>
-            <li>当前数据足以否定若干过强假设，但还不足以估计清洗后的最终收益。</li>
+            <li>三步 oracle 覆盖全部 8 个完整 prompt-only 失败样本；五步只扩展 5 个高信息量样本。</li>
+            <li>五步实验临时把最大 inference augmentation 从 checkpoint 原生 3 提高到 5，权重未变。</li>
+            <li>当前数据足以做样本级判责，但仍不足以估计大规模总体收益。</li>
           </ul>
         </details>
         <details>
           <summary>可审计产物</summary>
           <div class="source-list">
             <code>../analysis/trigger_evidence_v1.json</code>
+            <code>../analysis/sentence_oracle_campaign_v1.json</code>
+            <code>../analysis/oracle_0810_robustness_v1.json</code>
             <code>../runs/pilot_min6_v1/</code>
             <code>../runs/trigger_intervention_v1/</code>
             <code>../runs/single_candidate_sweep_v1/</code>
             <code>../runs/candidate_interaction_v1/</code>
+            <code>../runs/text_sentence_oracle_0810_depth3_v1/</code>
+            <code>../runs/text_sentence_oracle_0810_depth5_rescue_branch_v1/</code>
+            <code>../SENTENCE_ORACLE_CAMPAIGN_REPORT.md</code>
+            <code>../ORACLE_0810_ROBUSTNESS_REPORT.md</code>
             <code>../TRIGGER_EVIDENCE_ANALYSIS.md</code>
           </div>
         </details>
@@ -789,8 +933,8 @@
   </main>
 
   <footer>
-    <span>MemGen HardBench · Trigger Evidence Analysis</span>
-    <span>静态单文件报告 · 数据截至 2026-09-20</span>
+    <span>MemGen HardBench · Causal Interpreter</span>
+    <span>交互式单文件报告 · 数据截至 2026-09-21</span>
   </footer>
 
   <script>
@@ -808,6 +952,128 @@
         localStorage.setItem('memgen-analysis-theme', next);
       });
       printButton.addEventListener('click', () => window.print());
+
+      const sampleData = {
+        '0063': {
+          title: '0063 · Prompt-risk', badge: '先处理 Prompt', tone: 'amber',
+          summary: 'Base 与风格控制都得到 1,596；prompt-on / inference-off 已变成 966。三步 oracle 改写了 7/8 条 completion，但 8/8 最终仍是 966。',
+          prompt: '高风险：注入后先致错', weaver: '未显示纠错能力', trigger: '不是主要责任',
+          evidence: ['gold 1,596', 'prompt-only 966', 'd3 exact 0/8', 'unique answers 1']
+        },
+        '0423': {
+          title: '0423 · Weaver no-rescue', badge: '回流 Weaver', tone: 'red',
+          summary: '调用能制造 5 种答案，但深度 3 与深度 5 都没有 exact。6.67 和 9.33 对 gold 8 等距，数值接近不能构成正标签。',
+          prompt: '可能参与偏移', weaver: '活跃但无 exact 分支', trigger: '无可学正例',
+          evidence: ['gold 8', 'd3 exact 0/8', 'd5 exact 0/32', 'best error 1.33']
+        },
+        '0611': {
+          title: '0611 · Strong no-rescue', badge: '回流 Weaver', tone: 'red',
+          summary: '36 个固定单点、8 个动态三步策略、32 个动态五步策略都没有救回。最接近答案的分支仍差 2,425,000。',
+          prompt: '错误已很深', weaver: '多分支仍不可救', trigger: '时机解释很弱',
+          evidence: ['gold 1,450,000', 'single 0/36', 'd3 0/8', 'd5 0/32']
+        },
+        '0754': {
+          title: '0754 · Detector fixed, still no-rescue', badge: '回流 Weaver', tone: 'red',
+          summary: '原 token-ID gate 只暴露小数内部伪候选；decoded detector 恢复 6 个真实句末后，三步与五步仍无 exact rescue。',
+          prompt: '未被单独排除', weaver: '真实句末仍无救援', trigger: '不是 detector 单因',
+          evidence: ['gold 89', 'best 77', 'd3 exact 0/8', 'd5 exact 0/32']
+        },
+        '0810': {
+          title: '0810 · Trigger-positive', badge: '可训练正例', tone: 'green',
+          summary: '首个句级节点 invoke 把 810-token 的“连续算 30 个月”错误长链缩成约 205 tokens，并精确得到 310。第一位 bit 完全切分错/对。',
+          prompt: '会诱发错误长链', weaver: '具备 exact 修复能力', trigger: '首节点是因果瓶颈',
+          evidence: ['gold 310', 'skip → 10,737,418,240', 'invoke → 310', '稳定性 16/16']
+        },
+        '0976': {
+          title: '0976 · Directional but not exact', badge: '弱信号，不能训练', tone: 'amber',
+          summary: '更多调用把预测从 750 推近到 570（gold 540），但 64 条三/五步策略都不 exact。方向性改善只能用于诊断。',
+          prompt: '可能偏置', weaver: '有方向但不到答案', trigger: '缺少 exact utility',
+          evidence: ['gold 540', 'prompt-only 750', 'd3 best 645', 'd5 best 570']
+        },
+        '1088': {
+          title: '1088 · History-dependent harm', badge: '训练安全策略', tone: 'purple',
+          summary: '没有策略得到 30，但 011xx 会进入 393–512-token harmful branch；相同后续动作放在 111xx 前史下则保持短轨迹。',
+          prompt: '非主要证据', weaver: '可造成组合伤害', trigger: '需建模调用历史',
+          evidence: ['gold 30', 'baseline 26.67', '011xx → 1.56 / 7', '111xx → 26.67']
+        },
+        '1161': {
+          title: '1161 · Weaver-inert', badge: '检查表示/Checkpoint', tone: 'red',
+          summary: '修复句末 detector 后，8 个三步策略仍产生同一个 completion、同一个答案 140。这里连“改变行为”的信号都没有。',
+          prompt: '可能已定型', weaver: '当前轨迹完全不敏感', trigger: '无可学习效用差',
+          evidence: ['gold 170', 'prediction 140 × 8', 'unique completions 1', 'changed 0/8']
+        }
+      };
+
+      const sampleButtons = [...document.querySelectorAll('.sample-button')];
+      const renderSample = (id) => {
+        const item = sampleData[id];
+        document.getElementById('diagnosisTitle').textContent = item.title;
+        document.getElementById('diagnosisSummary').textContent = item.summary;
+        const badge = document.getElementById('diagnosisBadge');
+        badge.textContent = item.badge;
+        badge.dataset.tone = item.tone;
+        document.getElementById('promptVerdict').textContent = item.prompt;
+        document.getElementById('weaverVerdict').textContent = item.weaver;
+        document.getElementById('triggerVerdict').textContent = item.trigger;
+        document.getElementById('evidenceRow').innerHTML = item.evidence.map((value) => `<span class="evidence-chip">${value}</span>`).join('');
+        sampleButtons.forEach((button) => button.classList.toggle('active', button.dataset.sample === id));
+      };
+      sampleButtons.forEach((button) => button.addEventListener('click', () => renderSample(button.dataset.sample)));
+
+      const policyCases = {
+        '0810': {
+          gold: '310', defaultPolicy: '100',
+          policies: [
+            { p: '000', y: '10,737,418,240', t: 810, a: 0, o: '000', c: 'bad', h: '跳过首节点，错误假设持续扩张', n: '模型把任务解释成连续 30 个月翻倍。后两个决策即使变化，也无法推翻首节点已经固定的轨迹。' },
+            { p: '001', y: '10,737,418,240', t: 810, a: 1, o: '001', c: 'bad', h: '晚到第三节点才调用，已经来不及', n: '实际调用发生，但 completion 与 000 逐 token 相同：改变时机太晚，Weaver 没能撤销早期月份范围错误。' },
+            { p: '010', y: '10,737,418,240', t: 810, a: 1, o: '010', c: 'bad', h: '第二节点调用仍无法回头', n: '这条策略说明“调用一次”本身不是充分条件；关键是必须在第一句级节点介入。' },
+            { p: '011', y: '10,737,418,240', t: 810, a: 2, o: '011', c: 'bad', h: '两个晚调用也不能替代一个早调用', n: '后两节点均 invoke，输出仍与 no-invoke 完全相同，排除了单纯调用剂量解释。' },
+            { p: '100', y: '310', t: 205, a: 1, o: '100', c: 'good', h: '首节点 invoke 是最小 exact rescue', n: 'Weaver 在 “At the end of the first month,” 后介入，模型随后只计算前五个月，并用 320 − 10 得到新增学生 310。' },
+            { p: '101', y: '310', t: 205, a: 2, o: '101', c: 'good', h: '首节点修复后，后续调用不破坏答案', n: '与 100 的 completion 相同，说明这条 rescue 不是脆弱的单次偶然。' },
+            { p: '110', y: '310', t: 205, a: 2, o: '110', c: 'good', h: '正确轨迹对第二次调用稳定', n: '首节点建立正确的月份范围后，后续 memory 没有把系统拉回长链。' },
+            { p: '111', y: '310', t: 204, a: 3, o: '111', c: 'good', h: '三次调用仍保持 exact', n: '发布 gate 的单步复核和额外 16 条五步压力测试也全部保持 310。' }
+          ]
+        },
+        '1088': {
+          gold: '30', defaultPolicy: '01100',
+          policies: [
+            { p: '00000', y: '26.67', t: 129, a: 0, o: '000', c: 'bad', h: '规划了五步，但轨迹只到第三节点', n: '后两位不可达，不应被当成真实决策。短轨迹保持 baseline 错误答案。' },
+            { p: '00100', y: '26.67', t: 134, a: 1, o: '001', c: 'bad', h: '输出变了，答案没有变', n: '这是“completion changed ≠ utility positive”的直接例子。' },
+            { p: '01100', y: '1.56', t: 393, a: 2, o: '01100', c: 'warn', h: '特定中段组合打开 harmful branch', n: '连续的第二、第三节点调用把短推理扩成长链，误差从 3.33 放大到 28.44。' },
+            { p: '01101', y: '7（截断）', t: 512, a: 3, o: '01101', c: 'warn', h: '在坏分支继续调用会放大失控', n: '第三次实际调用把生成推到 512-token 上限；尾部数字不能当成可靠答案。' },
+            { p: '10000', y: '26.67', t: 133, a: 1, o: '100', c: 'bad', h: '早期调用本身没有救对', n: '第一节点调用改变了 completion，却仍输出 26.67；它提供的是安全作用，不是 exact rescue。' },
+            { p: '11111', y: '26.67', t: 133, a: 3, o: '111', c: 'bad', h: '相同后续 11 因前史不同而不再有害', n: '最早节点的 invoke 改变了状态，使轨迹在第三节点后结束，从而阻止 011xx 的长链退化。这正是独立二分类无法表示的历史依赖。' }
+          ]
+        }
+      };
+
+      const caseButtons = [...document.querySelectorAll('.case-button')];
+      const policyGrid = document.getElementById('policyGrid');
+      let activeCase = '0810';
+      const renderPolicy = (policy) => {
+        const item = policyCases[activeCase].policies.find((entry) => entry.p === policy);
+        document.getElementById('policyCode').textContent = item.p;
+        document.getElementById('policyFacts').innerHTML = [
+          `预测 ${item.y}`,
+          `gold ${policyCases[activeCase].gold}`,
+          `${item.t} tokens`,
+          `实际 invoke ${item.a}`,
+          `观察前缀 ${item.o}`
+        ].map((value) => `<span class="evidence-chip">${value}</span>`).join('');
+        document.getElementById('policyHeadline').textContent = item.h;
+        document.getElementById('policyNarrative').textContent = item.n;
+        [...policyGrid.querySelectorAll('.policy-button')].forEach((button) => button.classList.toggle('active', button.dataset.policy === policy));
+      };
+      const renderCase = (id) => {
+        activeCase = id;
+        caseButtons.forEach((button) => button.classList.toggle('active', button.dataset.case === id));
+        policyGrid.innerHTML = policyCases[id].policies.map((item) => `<button type="button" class="policy-button ${item.c}" data-policy="${item.p}">${item.p}</button>`).join('');
+        policyGrid.querySelectorAll('.policy-button').forEach((button) => button.addEventListener('click', () => renderPolicy(button.dataset.policy)));
+        renderPolicy(policyCases[id].defaultPolicy);
+      };
+      caseButtons.forEach((button) => button.addEventListener('click', () => renderCase(button.dataset.case)));
+      renderSample('0810');
+      renderCase('0810');
 
       const reveal = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
